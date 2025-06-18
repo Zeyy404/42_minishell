@@ -1,9 +1,13 @@
 #include "minishell.h"
 
-int	main(void)
+int	main(int ac, char **av, char **envp)
 {
+	(void)ac;
+	(void)av;
 	char	*line;
+	t_data	data;
 
+	data.env = init_env(envp);
 	while (1)
 	{
 		line = readline("minishell$ ");
@@ -11,6 +15,8 @@ int	main(void)
 			break ;
 		if (*line)
 			add_history(line);
+		if (!strcmp(line, "env"))
+			print_env(data.env);
 		free(line);
 	}
 	return (0);

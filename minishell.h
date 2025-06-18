@@ -28,6 +28,7 @@ typedef struct s_token
 	struct s_token	*next;
 }					t_token;
 
+
 t_token				*new_token(t_token_type type, char *value);
 void				add_token(t_token **tokens, t_token *new_token);
 void				free_tokens(t_token *tokens);
@@ -70,4 +71,15 @@ typedef struct s_ast
 
 // parser
 
+
+//env
+typedef struct s_data
+{
+	char	**env;
+}	t_data;
+
+size_t	env_len(char **env);
+char	**init_env(char **envp);
+void	ft_putstr(char *str);
+void	print_env(char **envp);
 #endif
