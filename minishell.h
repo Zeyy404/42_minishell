@@ -50,7 +50,8 @@ typedef struct s_cmd
 	char			*infile;
 	char			*outfile;
 	int				append;
-	char			*here_doc;
+	int				here_doc;
+	char			*delimiter;
 }					t_cmd;
 
 typedef enum e_node_type
@@ -69,6 +70,8 @@ typedef struct s_ast
 	t_cmd			cmd;
 }					t_ast;
 
+t_ast *ast_new_node(t_node_type nt, t_ast *l, t_ast *r);
+
 // parser
 
 //env
@@ -81,4 +84,5 @@ size_t	env_len(char **env);
 char	**init_env(char **envp);
 void	ft_putstr(char *str);
 void	print_env(char **envp);
+
 #endif
