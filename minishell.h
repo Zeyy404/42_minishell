@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
+/*   Updated: 2025/06/19 17:15:42 by zsalih           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -27,7 +39,6 @@ typedef struct s_token
 	char			*value;
 	struct s_token	*next;
 }					t_token;
-
 
 t_token				*new_token(t_token_type type, char *value);
 void				add_token(t_token **tokens, t_token *new_token);
@@ -70,19 +81,19 @@ typedef struct s_ast
 	t_cmd			cmd;
 }					t_ast;
 
-t_ast *ast_new_node(t_node_type nt, t_ast *l, t_ast *r);
-
+t_ast				*ast_new_node(t_node_type nt, t_ast *l, t_ast *r);
+int					add_argv(char ***argv, int *argc, char *value);
 // parser
 
-//env
+// env
 typedef struct s_data
 {
-	char	**env;
-}	t_data;
+	char			**env;
+}					t_data;
 
-size_t	env_len(char **env);
-char	**init_env(char **envp);
-void	ft_putstr(char *str);
-void	print_env(char **envp);
+size_t				env_len(char **env);
+char				**init_env(char **envp);
+void				ft_putstr(char *str);
+void				print_env(char **envp);
 
 #endif
