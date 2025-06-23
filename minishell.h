@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/06/19 17:15:42 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/06/23 17:19:19 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,14 +86,16 @@ int					add_argv(char ***argv, int *argc, char *value);
 // parser
 
 // env
-typedef struct s_data
+typedef struct s_env
 {
-	char			**env;
-}					t_data;
+	char	*key;
+	char	*value;
+	struct	s_env *next;
+}					t_env;
 
-size_t				env_len(char **env);
-char				**init_env(char **envp);
-void				ft_putstr(char *str);
-void				print_env(char **envp);
+t_env	*get_env(char **envp);
+char	*get_key_value(char *envp, const char *code);
+t_env	*new_var(char *key, char *value);
+void	add_to_env(t_env **env, t_env *new_var);
 
 #endif

@@ -11,62 +11,83 @@
 /* ************************************************************************** */
 
 #include "../minishell.h"
-size_t	env_len(char **env)
+
+void	print_env(t_env *env)
 {
-	size_t	i;
+	t_env *tmp;
 
-	i = 0;
-	while (env[i])
+	tmp = env;
+	while (tmp)
 	{
-		i++;
-	}
-	return (i);
-}
-
-char	**init_env(char **envp)
-{
-	char	**copy_env;
-	size_t	i;
-	size_t	len;
-
-	len = env_len(envp);
-	copy_env = malloc((len + 1) * sizeof(char **));
-	if (!copy_env)
-	{
-		write(2, "Error\n allocating env copy\n", 28);
-		exit(1);
-	}
-	i = 0;
-	while (i < len)
-	{
-		copy_env[i] = ft_strdup(envp[i]);
-		i++;
-	}
-	copy_env[i] = NULL;
-	return (copy_env);
-}
-
-void	ft_putstr(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		write(1, &str[i], 1);
-		i++;
+		ft_putstr_fd(tmp->key, 1);
+		ft_putchar_fd('=', 1);
+		ft_putendl_fd(tmp->value, 1);
+		tmp = tmp->next;
 	}
 }
 
-void	print_env(char **envp)
+t_env	*get_env(char **envp)
+{
+	size_t	i;
+	t_env	*env;
+	char	*key;
+	char	*value;
+
+	env = NULL;
+	i = 0;
+	while(envp[i])
+	{
+		key = get_key_value(envp[i], "key");
+		value = get_key_value(envp[i], "value");
+		add_to_env(&env, new_var(key, value));
+		i++;
+	}
+	return(env);
+}
+
+char	*get_key_value(char *envp, const char *code)
 {
 	size_t	i;
 
+	if (!envp || !code)
+		return (NULL);
 	i = 0;
-	while (envp[i])
+	if (envp[i])
 	{
-		ft_putstr(envp[i]);
-		ft_putstr("\n");
+		while(envp[i] != '=')
+			i++;
+		if (!ft_strncmp(code, "key", 3))
+			return (ft_substr(envp, 0, i));
+		else
+		{
+			return (ft_substr(envp, i + 1, ft_strlen(envp)));
+		}
 		i++;
 	}
+	return (NULL);
+}
+t_env	*new_var(char *key, char *value)
+{
+	t_env *env_var;
+
+	env_var = malloc(sizeof(t_env));
+	env_var->key = key;
+	env_var->value = value;
+	env_var->next = NULL;
+	return (env_var);
+}
+
+void	add_to_env(t_env **env, t_env *new_var)
+{
+	t_env	*tmp;
+
+	if (!*env)
+	{
+		*env = new_var;
+		return ;
+	}
+	tmp = *env;
+	while(tmp->next)
+		tmp = tmp->next;
+	tmp->next = new_var;
 }
