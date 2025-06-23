@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/06/23 17:19:19 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/06/23 17:21:26 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,5 +97,9 @@ t_env	*get_env(char **envp);
 char	*get_key_value(char *envp, const char *code);
 t_env	*new_var(char *key, char *value);
 void	add_to_env(t_env **env, t_env *new_var);
+
+//expander
+char    *get_env_value(const char *name, t_env *env);
+int expand_word(t_ast *ast, t_env *env);
 
 #endif
