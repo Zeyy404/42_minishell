@@ -14,7 +14,7 @@
 
 void	print_env(t_env *env)
 {
-	t_env *tmp;
+	t_env	*tmp;
 
 	tmp = env;
 	while (tmp)
@@ -35,14 +35,14 @@ t_env	*get_env(char **envp)
 
 	env = NULL;
 	i = 0;
-	while(envp[i])
+	while (envp[i])
 	{
 		key = get_key_value(envp[i], "key");
 		value = get_key_value(envp[i], "value");
 		add_to_env(&env, new_var(key, value));
 		i++;
 	}
-	return(env);
+	return (env);
 }
 
 char	*get_key_value(char *envp, const char *code)
@@ -54,7 +54,7 @@ char	*get_key_value(char *envp, const char *code)
 	i = 0;
 	if (envp[i])
 	{
-		while(envp[i] != '=')
+		while (envp[i] != '=')
 			i++;
 		if (!ft_strncmp(code, "key", 3))
 			return (ft_substr(envp, 0, i));
@@ -66,9 +66,10 @@ char	*get_key_value(char *envp, const char *code)
 	}
 	return (NULL);
 }
+
 t_env	*new_var(char *key, char *value)
 {
-	t_env *env_var;
+	t_env	*env_var;
 
 	env_var = malloc(sizeof(t_env));
 	env_var->key = key;
@@ -87,7 +88,7 @@ void	add_to_env(t_env **env, t_env *new_var)
 		return ;
 	}
 	tmp = *env;
-	while(tmp->next)
+	while (tmp->next)
 		tmp = tmp->next;
 	tmp->next = new_var;
 }
