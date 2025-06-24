@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/06/23 17:21:26 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/06/24 12:03:39 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,11 @@ void	add_to_env(t_env **env, t_env *new_var);
 
 //expander
 char    *get_env_value(const char *name, t_env *env);
+void    get_bounds(char *arg, int *start, int *end);
+char    *join_before_after(char *arg, char *value, int start, int end);
+char *process_arg(char *arg, t_env *env);
+char *expand_tilde(char *arg, t_env *env);
+void expand_argv(char **argv, t_env *env);
 int expand_word(t_ast *ast, t_env *env);
 
 #endif
