@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenize_core.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/27 16:26:49 by zsalih            #+#    #+#             */
+/*   Updated: 2025/06/27 18:40:05 by zsalih           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 static int	skip_whitespace(const char *input, size_t *i)
@@ -36,7 +48,7 @@ t_token	*tokenize(const char *input)
 	return (tokens);
 }
 
-// Note: The following code is commented out for testing purposes.
+// // Note: The following code is commented out for testing purposes.
 // #include <stdio.h>
 
 // const char *token_type_to_str(t_token_type type)
@@ -57,8 +69,8 @@ t_token	*tokenize(const char *input)
 // {
 //      while (tokens)
 //     {
-//         printf("Token: Type [%s], Value [%s]\n",
-//                token_type_to_str(tokens->type), tokens->value);
+//         printf("Token: Type [%s], Value [%s]\n, Quotes [%d], DQuotes [%d]\n",
+//                token_type_to_str(tokens->type), tokens->value, tokens->quotes, tokens->dquotes);
 //         tokens = tokens->next;
 //     }
 // }

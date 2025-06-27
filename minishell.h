@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/06/24 12:07:27 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/06/27 16:19:07 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ typedef struct s_token
 {
 	t_token_type	type;
 	char			*value;
+	int				quotes;
+	int				dquotes;
 	struct s_token	*next;
 }					t_token;
 
