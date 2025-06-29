@@ -6,7 +6,7 @@
 /*   By: zsalih < zsalih@student.42abudhabi.ae>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/06/30 02:41:13 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/06/30 03:25:52 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ int					token_operators(const char *input, size_t *i,
 int					check_syntax(t_token *tokens);
 bool				ft_isops(char c);
 bool				ft_isspace(char c);
+int					is_redir(t_token_type t);
+int					is_logic_op(t_token_type t);
 // tokenizer
 
 // parser
@@ -75,6 +77,7 @@ typedef enum e_node_type
 	NODE_AND,
 	NODE_OR,
 	NODE_PIPE,
+	NODE_GROUP,
 }					t_node_type;
 
 typedef struct s_ast

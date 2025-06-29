@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   token_syntax.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: zsalih < zsalih@student.42abudhabi.ae>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 16:27:00 by zsalih            #+#    #+#             */
-/*   Updated: 2025/06/27 16:27:01 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/06/30 03:25:39 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static int	is_logic_op(t_token_type t)
+int	is_logic_op(t_token_type t)
 {
 	return (t == PIPE || t == AND_AND || t == OR_OR || t == AMPERSAND);
 }
 
-static int	is_redir(t_token_type t)
+int	is_redir(t_token_type t)
 {
 	return (t == REDIR_IN || t == REDIR_OUT || t == APPEND || t == HEREDOC);
 }
