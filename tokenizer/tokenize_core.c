@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_core.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: zsalih < zsalih@student.42abudhabi.ae>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 16:26:49 by zsalih            #+#    #+#             */
-/*   Updated: 2025/06/27 18:40:05 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/06/30 02:43:47 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,15 @@ static int	dispatch_token(const char *input, size_t *i, t_token **tokens)
 		return (token_quotes(input, i, tokens));
 	else if (ft_isops(input[*i]))
 		return (token_operators(input, i, tokens));
+	else if (input[*i] == '(' || input[*i] == ')')
+	{
+		if (input[*i] == '(')
+			add_token(tokens, new_token(LPAREN, ft_strdup("(")));
+		else
+			add_token(tokens, new_token(RPAREN, ft_strdup(")")));
+		(*i)++;
+		return (1);
+	}
 	else
 		return (token_word(input, i, tokens));
 }
