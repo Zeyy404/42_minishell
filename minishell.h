@@ -6,7 +6,7 @@
 /*   By: zsalih < zsalih@student.42abudhabi.ae>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/06/30 03:25:52 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/07/06 15:21:16 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <readline/readline.h>
 # include <stdbool.h>
 # include <stdlib.h>
+# include <unistd.h>
+# include <dirent.h>
 
 // tokenizer
 typedef enum e_token_type
@@ -114,5 +116,20 @@ char				*process_arg(char *arg, t_env *env);
 char				*expand_tilde(char *arg, t_env *env);
 void				expand_argv(char **argv, t_env *env);
 int					expand_word(t_ast *ast, t_env *env);
+
+// builtins
+
+typedef struct s_builtin
+{
+	char			*name;
+	int				(*f)(t_ast *ast, t_env *env);
+}					t_builtin;
+
+int					builtin_cd(t_ast *ast, t_env *env);
+int					builtin_pwd(t_ast *ast, t_env *env);
+int					builtin_echo(t_ast *ast, t_env *env);
+int					builtin_export(t_ast *ast, t_env *env);
+int					builtin_unset(t_ast *ast, t_env *env);
+int					builtin_exit(t_ast *ast, t_env *env);
 
 #endif
