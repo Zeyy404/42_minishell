@@ -3,56 +3,62 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: zsalih < zsalih@student.42abudhabi.ae>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 15:50:23 by zsalih            #+#    #+#             */
-/*   Updated: 2025/07/08 16:13:30 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/07/08 21:56:31 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	is_directory(const char *path)
+static int get_target(char **target, t_ast *ast, t_env **env)
 {
-	DIR	*dir;
+	char *home_dir;
+	char *prev_dir;
 
-	dir = opendir(path);
-	if (dir != NULL)
+	if (ast->cmd.argv[1] == NULL || ft_strcmp(ast->cmd.argv[1], "~") == 0)
 	{
-		closedir(dir);
-		return (1);
+		home_dir = env_get(*env, "HOME");
+		if (!home_dir)
+			return (ft_putendl_fd("cd: HOME not set", 2), 1);
+		*target = home_dir;
 	}
+	else if (ft_strcmp(ast->cmd.argv[1], "-") == 0)
+	{
+		prev_dir = env_get(*env, "OLDPWD");
+		if (!prev_dir)
+			return (ft_putendl_fd("cd: OLDPWD not set", 2), 1);
+		*target = prev_dir;
+		printf("%s\n", *target);
+	}
+	else
+		*target = ast->cmd.argv[1];
 	return (0);
 }
 
-int	builtin_cd(t_ast *ast, t_env *env)
+int	builtin_cd(t_ast *ast, t_env **env)
 {
-	char	*home;
+	char	*buf;
+	char	*target;
+	char	*new_pwd;
 
-	if (ast->cmd.argv[1] == NULL)
+	buf = getcwd(NULL, 0);
+	target = NULL;
+	if (get_target(&target, ast, env) != 0)
+		return (free(buf), 1);
+	if (chdir(target) != 0)
 	{
-		home = getenv("HOME");
-		if (!home)
-			return (2);
-		else
-			chdir(home);
+		ft_putstr_fd("cd: ", 2);
+		ft_putstr_fd(target, 2);
+		ft_putendl_fd(": No such file or directory", 2);
+		return (free(buf), 1);
 	}
-	if (ast->cmd.argv[2] != NULL)
+	if (buf)
 	{
-		ft_putendl_fd("cd: too many arguments\n", 2);
-		return (1);
+		env_set(env, "OLDPWD", buf);
+		free(buf);
 	}
-	if (!is_directory(ast->cmd.argv[1]))
-	{
-		ft_putendl_fd("cd: ", 2);
-        ft_putendl_fd(ast->cmd.argv[1], 2);
-        ft_putendl_fd(": Not a directory\n", 2);
-		return (1);
-	}
-	if (chdir(ast->cmd.argv[1]) != 0)
-	{
-		perror("cd");
-		return (1);
-	}
+	env_set(env, "PWD", getcwd(NULL, 0));
 	return (0);
 }
