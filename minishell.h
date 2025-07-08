@@ -6,7 +6,7 @@
 /*   By: zsalih < zsalih@student.42abudhabi.ae>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/07/06 15:21:16 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/07/08 21:55:24 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 # define MINISHELL_H
 
 # include "libft/libft.h"
+# include <dirent.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdbool.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include <dirent.h>
 
 // tokenizer
 typedef enum e_token_type
@@ -122,14 +122,17 @@ int					expand_word(t_ast *ast, t_env *env);
 typedef struct s_builtin
 {
 	char			*name;
-	int				(*f)(t_ast *ast, t_env *env);
+	int				(*f)(t_ast *, t_env **);
 }					t_builtin;
 
-int					builtin_cd(t_ast *ast, t_env *env);
-int					builtin_pwd(t_ast *ast, t_env *env);
-int					builtin_echo(t_ast *ast, t_env *env);
-int					builtin_export(t_ast *ast, t_env *env);
-int					builtin_unset(t_ast *ast, t_env *env);
-int					builtin_exit(t_ast *ast, t_env *env);
+int					builtin_cd(t_ast *ast, t_env **env);
+int					builtin_pwd(t_ast *ast, t_env **env);
+int					builtin_echo(t_ast *ast, t_env **env);
+int					builtin_export(t_ast *ast, t_env **env);
+int					builtin_unset(t_ast *ast, t_env **env);
+int					builtin_exit(t_ast *ast, t_env **env);
+void				assign_builtin(t_builtin *builtins);
+void				env_set(t_env **env, char *key, char *value);
+char				*env_get(t_env *env, const char *key);
 
 #endif
