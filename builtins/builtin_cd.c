@@ -1,4 +1,16 @@
-#include "minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin_cd.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/08 15:50:23 by zsalih            #+#    #+#             */
+/*   Updated: 2025/07/08 16:13:30 by zsalih           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../minishell.h"
 
 int	is_directory(const char *path)
 {
@@ -15,10 +27,15 @@ int	is_directory(const char *path)
 
 int	builtin_cd(t_ast *ast, t_env *env)
 {
+	char	*home;
+
 	if (ast->cmd.argv[1] == NULL)
 	{
-		ft_putendl_fd("cd: missing argument\n", 2);
-		return (1);
+		home = getenv("HOME");
+		if (!home)
+			return (2);
+		else
+			chdir(home);
 	}
 	if (ast->cmd.argv[2] != NULL)
 	{
