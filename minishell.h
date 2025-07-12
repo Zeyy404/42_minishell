@@ -6,7 +6,7 @@
 /*   By: zsalih < zsalih@student.42abudhabi.ae>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/07/08 21:55:24 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/07/12 17:46:38 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,5 +134,6 @@ int					builtin_exit(t_ast *ast, t_env **env);
 void				assign_builtin(t_builtin *builtins);
 void				env_set(t_env **env, char *key, char *value);
 char				*env_get(t_env *env, const char *key);
+int					is_valid_key(const char *str);
 
 #endif
