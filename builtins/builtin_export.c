@@ -6,7 +6,7 @@
 /*   By: zsalih < zsalih@student.42abudhabi.ae>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 22:25:33 by zsalih            #+#    #+#             */
-/*   Updated: 2025/07/08 23:01:05 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/07/12 17:47:04 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,6 @@ static void	print_export(t_env *env) // env need sorting first!! T-T
 		printf("\n");
 		cur = cur->next;
 	}
-}
-
-static int	is_valid_identifier(const char *str)
-{
-	if (!str || !(ft_isalpha(str[0]) || str[0] == '_'))
-		return (0);
-	for (int i = 1; str[i]; i++)
-	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (0);
-	}
-	return (1);
 }
 
 int	builtin_export(t_ast *ast, t_env **env)
@@ -60,7 +48,7 @@ int	builtin_export(t_ast *ast, t_env **env)
 			var_name = ft_substr(ast->cmd.argv[i], 0, equal_sign
 					- ast->cmd.argv[i]);
 			var_value = ft_strdup(equal_sign + 1);
-			if (!is_valid_identifier(var_name))
+			if (!is_valid_key(var_name))
 			{
 				ft_putstr_fd("export: `", 2);
 				ft_putstr_fd(var_name, 2);
@@ -76,7 +64,7 @@ int	builtin_export(t_ast *ast, t_env **env)
 		}
 		else
 		{
-			if (!is_valid_identifier(ast->cmd.argv[i]))
+			if (!is_valid_key(ast->cmd.argv[i]))
 			{
 				ft_putstr_fd("export: `", 2);
 				ft_putstr_fd(ast->cmd.argv[i], 2);
