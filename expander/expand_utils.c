@@ -6,17 +6,30 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 12:04:54 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/06/24 12:05:42 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/07/13 06:45:32 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+int	ft_strcmp(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	if (s1[i] == 0 && s2[i] == 0)
+		return (0);
+	while ((s1[i] == s2[i]) && (s1[i] != '\0' || s2[i] != '\0'))
+	{
+		i++;
+	}
+	return (s1[i] - s2[i]);
+}
 
 char	*get_env_value(const char *name, t_env *env)
 {
 	while (env)
 	{
-		if (!strcmp(name, env->key))
+		if (!ft_strcmp((char *)name, env->key))
 			return (ft_strdup(env->value));
 		env = env->next;
 	}

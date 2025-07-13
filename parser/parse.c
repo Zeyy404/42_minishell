@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih < zsalih@student.42abudhabi.ae>     +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:11:16 by zsalih            #+#    #+#             */
-/*   Updated: 2025/06/30 03:26:27 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/07/13 08:12:52 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,22 @@ t_ast	*parse_cmd(t_token **tokens)
 		if ((*tokens)->type == REDIR_IN)
 		{
 			*tokens = (*tokens)->next;
+			node->cmd.here_doc = 0;
 			node->cmd.infile = ft_strdup((*tokens)->value);
 		}
 		else if ((*tokens)->type == REDIR_OUT || (*tokens)->type == APPEND)
 		{
+			if ((*tokens)->type == REDIR_OUT)
+				node->cmd.append = 0;
+			else
+				node->cmd.append = 1;	
 			*tokens = (*tokens)->next;
-			node->cmd.append = 1;
 			node->cmd.outfile = ft_strdup((*tokens)->value);
 		}
 		else if ((*tokens)->type == HEREDOC)
 		{
 			*tokens = (*tokens)->next;
+			node->cmd.here_doc = 1;
 			node->cmd.delimiter = ft_strdup((*tokens)->value);
 		}
 		else if ((*tokens)->type == WORD)

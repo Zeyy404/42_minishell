@@ -10,7 +10,23 @@ FILES:= tokenizer/token_list.c \
 		tokenizer/tokenize_ops.c \
 		tokenizer/tokenize_quote.c \
 		tokenizer/tokenize_word.c \
+		parser/parse_utils.c \
+		parser/parse.c \
 		env/env.c \
+		expander/expand_utils.c \
+		expander/expander.c \
+		execution/execute_utils.c \
+		execution/execute_builtins.c \
+		execution/execute_redirects.c \
+		execution/execution.c \
+		builtins/builtin_cd.c \
+		builtins/builtin_echo.c \
+		builtins/builtin_exit.c \
+		builtins/builtin_export.c \
+		builtins/builtin_pwd.c \
+		builtins/builtin_unset.c \
+		builtins/builtin_env.c \
+		builtins/builtin_utils.c \
 		main.c
 
 HEADER:= minishell.h

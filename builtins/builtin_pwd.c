@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_pwd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih < zsalih@student.42abudhabi.ae>     +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 15:50:35 by zsalih            #+#    #+#             */
-/*   Updated: 2025/07/08 22:03:11 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/07/13 12:35:47 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	builtin_pwd(t_ast *ast, t_env **env)
 
 	(void)env;
 	(void)ast;
-	cwd = get_env("PWD");
+	cwd = env_get(*env, "PWD");
 	if (cwd == NULL)
 	{
 		perror("pwd");

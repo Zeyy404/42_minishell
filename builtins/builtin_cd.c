@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih < zsalih@student.42abudhabi.ae>     +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 15:50:23 by zsalih            #+#    #+#             */
-/*   Updated: 2025/07/08 21:56:31 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/07/13 15:16:25 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static int get_target(char **target, t_ast *ast, t_env **env)
+static int	get_target(char **target, t_ast *ast, t_env **env)
 {
-	char *home_dir;
-	char *prev_dir;
+	char	*home_dir;
+	char	*prev_dir;
 
 	if (ast->cmd.argv[1] == NULL || ft_strcmp(ast->cmd.argv[1], "~") == 0)
 	{
@@ -41,7 +41,6 @@ int	builtin_cd(t_ast *ast, t_env **env)
 {
 	char	*buf;
 	char	*target;
-	char	*new_pwd;
 
 	buf = getcwd(NULL, 0);
 	target = NULL;

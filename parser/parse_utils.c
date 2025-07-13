@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 12:26:34 by zsalih            #+#    #+#             */
-/*   Updated: 2025/06/19 16:55:47 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/07/13 06:40:38 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	add_argv(char ***argv, int *argc, char *value)
 	
 	new_argv = malloc(sizeof(char *) * ((*argc) + 2));
 	if (!new_argv)
-		return (NULL);
+		return (0);
 	i = 0;
 	while (i < (*argc))
 	{
@@ -41,9 +41,9 @@ int	add_argv(char ***argv, int *argc, char *value)
 		i++;
 	}
 	new_argv[i] = ft_strdup(value);
-	if (new_argv[i])
+	if (!new_argv[i])
 		return (free(new_argv), 0);
-	new_argv[i + 1] = '\0';
+	new_argv[i + 1] = NULL;
 	free(*argv); // free the previously allocated array of pointers!
 	*argv = new_argv;
 	(*argc)++;

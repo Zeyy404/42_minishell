@@ -1,15 +1,4 @@
-
 #include "../minishell.h"
-#include <fcntl.h>
-
-bool	is_builtin(char *cmd)
-{
-	return (!ft_strncmp(cmd, "echo", ft_strlen(cmd)) || !ft_strncmp(cmd, "cd",
-			ft_strlen(cmd)) || !ft_strncmp(cmd, "pwd", ft_strlen(cmd))
-		|| !ft_strncmp(cmd, "export", ft_strlen(cmd)) || !ft_strncmp(cmd,
-			"unset", ft_strlen(cmd)) || !ft_strncmp(cmd, "env", ft_strlen(cmd))
-		|| !ft_strncmp(cmd, "exit", ft_strlen(cmd)));
-}
 
 char *find_cmd_path(char *cmd, t_env *env)
 {
@@ -52,7 +41,12 @@ void	execution(t_ast *ast, t_env *env)
 	if (!ast)
 		return ;
 	if (ast->type == NODE_CMD)
-		execute_one_cmd(ast, env);
+	{
+		if (is_builtin(ast->cmd.argv[0]))
+			execute_builtins(ast, env, ast->cmd.argv[0]);
+		else
+			execute_one_cmd(ast, env);
+	}
 	else if (ast->type == NODE_PIPE)
 		execute_pipe(ast, env);
 }
@@ -66,7 +60,8 @@ void	execute_one_cmd(t_ast *ast, t_env *env)
 	pid = fork();
 	if (pid == 0)
 	{
-		execute_redirects(&ast->cmd);
+		execute_redirect_in(&ast->cmd);
+		execute_redirect_out(&ast->cmd);
 		cmd_path = find_cmd_path(ast->cmd.argv[0], env);
 		env_arr = env_to_char_array(env);
 		if (!cmd_path || !env_arr)
@@ -82,9 +77,7 @@ void	execute_one_cmd(t_ast *ast, t_env *env)
 		exit(1);
 	}
 	else
-	{
 		wait(NULL);
-	}
 }
 
 void	execute_pipe(t_ast *ast, t_env *env)
@@ -119,30 +112,4 @@ void	execute_pipe(t_ast *ast, t_env *env)
 	close(fd[1]);
 	waitpid(pid1, NULL, 0);
 	waitpid(pid2, NULL, 0);
-}
-
-void	execute_redirects(t_cmd *cmd)
-{
-	int fd;
-
-	printf("append int: %d\n", cmd->append);
-	if (cmd->outfile)
-	{
-		if (cmd->append == 1)
-			fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		else
-			fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd == -1)
-		{
-			printf("error\n");
-			exit(1);
-		}
-		if (dup2(fd, STDOUT_FILENO) == -1)
-		{
-			printf("error\n");
-			close(fd);
-			exit(1);
-		}
-		close(fd);
-	}
 }

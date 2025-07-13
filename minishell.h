@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih < zsalih@student.42abudhabi.ae>     +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/07/12 17:46:38 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/07/13 15:31:28 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@
 # include <stdbool.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <fcntl.h>
 
+int	g_exit_status = 0;
 // tokenizer
 typedef enum e_token_type
 {
@@ -93,6 +95,13 @@ typedef struct s_ast
 t_ast				*ast_new_node(t_node_type nt, t_ast *l, t_ast *r);
 int					add_argv(char ***argv, int *argc, char *value);
 // parser
+t_ast *ast_new_node(t_node_type nt, t_ast *l, t_ast *r);
+int	add_argv(char ***argv, int *argc, char *value);
+t_ast	*parse_cmd(t_token **tokens);
+t_ast	*parse_pipeline(t_token **tokens);
+t_ast	*parse_and_or(t_token **tokens);
+t_ast	*parse_group(t_token **tokens);
+t_ast	*parse(t_token **tokens);
 
 // env
 typedef struct s_env
@@ -101,21 +110,38 @@ typedef struct s_env
 	char			*value;
 	struct s_env	*next;
 }					t_env;
-
+void	print_env(t_env *env);
 t_env				*get_env(char **envp);
 char				*get_key_value(char *envp, const char *code);
 t_env				*new_var(char *key, char *value);
 void				add_to_env(t_env **env, t_env *new_var);
+void	free_env(t_env *env);
 
 // expander
-char				*get_env_value(const char *name, t_env *env);
-void				get_bounds(char *arg, int *start, int *end);
-char				*join_before_after(char *arg, char *value, int start,
-						int end);
-char				*process_arg(char *arg, t_env *env);
-char				*expand_tilde(char *arg, t_env *env);
-void				expand_argv(char **argv, t_env *env);
-int					expand_word(t_ast *ast, t_env *env);
+
+int	ft_strcmp(char *s1, char *s2);
+char	*get_env_value(const char *name, t_env *env);
+void	get_bounds(char *arg, int *start, int *end);
+char	*join_before_after(char *arg, char *value, int start, int end);
+char	*process_arg(char *arg, t_env *env);
+char	*expand_tilde(char *arg, t_env *env);
+void	expand_argv(char **argv, t_env *env);
+int	expand_word(t_ast *ast, t_env *env);
+
+//execution
+void	split_free(char **split);
+char *concat(char *path, char slash, char *cmd);
+char	**env_to_char_array(t_env *env);
+bool	is_builtin(char *cmd);
+char *find_cmd_path(char *cmd, t_env *env);
+void	execution(t_ast *ast, t_env *env);
+void	execute_one_cmd(t_ast *ast, t_env *env);
+void	execute_pipe(t_ast *ast, t_env *env);
+void	execute_redirect_in(t_cmd *cmd);
+void	execute_redirect_out(t_cmd *cmd);
+void	execute_herdoc(t_cmd *cmd);
+bool	is_builtin(char *cmd);
+void	execute_builtins(t_ast *ast, t_env *env, char *cmd);
 
 // builtins
 
@@ -135,5 +161,5 @@ void				assign_builtin(t_builtin *builtins);
 void				env_set(t_env **env, char *key, char *value);
 char				*env_get(t_env *env, const char *key);
 int					is_valid_key(const char *str);
-
+int					builtin_env(t_ast *ast, t_env **env);
 #endif
