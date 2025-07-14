@@ -1,4 +1,5 @@
 #include "../minishell.h"
+
 void	split_free(char **split)
 {
 	int	i;

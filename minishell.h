@@ -21,8 +21,9 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
+#include <sys/wait.h>
 
-int	g_exit_status = 0;
+extern int	g_exit_status;
 // tokenizer
 typedef enum e_token_type
 {

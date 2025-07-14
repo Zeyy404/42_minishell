@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
 int	ft_strcmp(char *s1, char *s2)
 {
 	int	i;
@@ -27,6 +28,8 @@ int	ft_strcmp(char *s1, char *s2)
 
 char	*get_env_value(const char *name, t_env *env)
 {
+	if (!ft_strcmp((char *)name, "?"))
+		return (ft_itoa(g_exit_status));
 	while (env)
 	{
 		if (!ft_strcmp((char *)name, env->key))
@@ -44,9 +47,14 @@ void	get_bounds(char *arg, int *start, int *end)
 	while (arg[i])
 	{
 		if (arg[i] == '$' && arg[i + 1]
-			&& (ft_isalpha(arg[i + 1]) || arg[i + 1] == '_'))
+			&& (ft_isalpha(arg[i + 1]) || arg[i + 1] == '_' || arg[i + 1] == '?'))
 		{
 			*start = i;
+			if (arg[i + 1] == '?')
+			{
+				*end = i + 2;
+				return ;
+			}
 			i++;
 			*end = i;
 			while (arg[*end] && (ft_isalnum(arg[*end]) || arg[*end] == '_'))

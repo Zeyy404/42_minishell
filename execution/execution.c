@@ -56,7 +56,9 @@ void	execute_one_cmd(t_ast *ast, t_env *env)
 	pid_t pid;
 	char *cmd_path;
 	char **env_arr;
+	int status;
 
+	status = 0;
 	pid = fork();
 	if (pid == 0)
 	{
@@ -77,7 +79,14 @@ void	execute_one_cmd(t_ast *ast, t_env *env)
 		exit(1);
 	}
 	else
-		wait(NULL);
+	{
+		wait(&status);
+		if (WIFEXITED(status))
+			g_exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			g_exit_status = 128 + WTERMSIG(status);
+	}
+	printf("exit status: %d\n", g_exit_status);
 }
 
 void	execute_pipe(t_ast *ast, t_env *env)
@@ -85,7 +94,11 @@ void	execute_pipe(t_ast *ast, t_env *env)
 	int	fd[2];
 	pid_t	pid1;
 	pid_t	pid2;
+	int status;
+	int status2;
 
+	status = 0;
+	status2 = 0;
 	if (!ast)
 		return ;
 	if (pipe(fd) == -1)
@@ -110,6 +123,14 @@ void	execute_pipe(t_ast *ast, t_env *env)
 	}
 	close(fd[0]);
 	close(fd[1]);
-	waitpid(pid1, NULL, 0);
-	waitpid(pid2, NULL, 0);
+	waitpid(pid1, &status, 0);
+	if (WIFEXITED(status))
+			g_exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			g_exit_status = 128 + WTERMSIG(status);
+	waitpid(pid2, &status, 0);
+	if (WIFEXITED(status2))
+			g_exit_status = WEXITSTATUS(status2);
+		else if (WIFSIGNALED(status2))
+			g_exit_status = 128 + WTERMSIG(status2);
 }

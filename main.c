@@ -1,6 +1,8 @@
 #include "minishell.h"
 #include "string.h"
 
+int g_exit_status = 0;
+
 int	main(int ac, char **av, char **envp)
 {
 	(void)ac;

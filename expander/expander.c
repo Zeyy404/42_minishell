@@ -17,6 +17,7 @@ void	expand_argv(char **argv, t_env *env)
 	int	i;
 
 	i = 0;
+
 	while (argv[i])
 	{
 		argv[i] = expand_tilde(argv[i], env);
