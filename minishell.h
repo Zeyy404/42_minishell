@@ -143,7 +143,8 @@ void	execute_redirect_out(t_cmd *cmd);
 void	execute_herdoc(t_cmd *cmd);
 bool	is_builtin(char *cmd);
 void	execute_builtins(t_ast *ast, t_env *env, char *cmd);
-
+void	execute_and_or(t_ast *ast, t_env *env);
+void	execute_group(t_ast *ast, t_env *env);
 // builtins
 
 typedef struct s_builtin

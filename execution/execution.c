@@ -49,6 +49,10 @@ void	execution(t_ast *ast, t_env *env)
 	}
 	else if (ast->type == NODE_PIPE)
 		execute_pipe(ast, env);
+	else if (ast->type == NODE_AND || ast->type == NODE_OR)
+		execute_and_or(ast, env);
+	else if (ast->type == NODE_GROUP)
+		execute_group(ast->left, env);
 }
 
 void	execute_one_cmd(t_ast *ast, t_env *env)
@@ -86,7 +90,6 @@ void	execute_one_cmd(t_ast *ast, t_env *env)
 		else if (WIFSIGNALED(status))
 			g_exit_status = 128 + WTERMSIG(status);
 	}
-	printf("exit status: %d\n", g_exit_status);
 }
 
 void	execute_pipe(t_ast *ast, t_env *env)
@@ -133,4 +136,48 @@ void	execute_pipe(t_ast *ast, t_env *env)
 			g_exit_status = WEXITSTATUS(status2);
 		else if (WIFSIGNALED(status2))
 			g_exit_status = 128 + WTERMSIG(status2);
+}
+
+void	execute_and_or(t_ast *ast, t_env *env)
+{
+	if (!ast)
+		return ;
+	if (ast->type == NODE_AND)
+	{
+		execution(ast->left, env);
+		if (g_exit_status == 0)
+			execution(ast->right, env);
+	}
+	else if (ast->type == NODE_OR)
+	{
+		execution(ast->left, env);
+		if (g_exit_status != 0)
+			execution(ast->right, env);
+	}
+}
+
+void	execute_group(t_ast *ast, t_env *env)
+{
+	int	status;
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		if (ast->cmd.delimiter || ast->cmd.infile || ast->cmd.outfile)
+		{
+			execute_redirect_in(&ast->cmd);
+			execute_redirect_out(&ast->cmd);
+		}
+		execution(ast->left, env);
+		exit(g_exit_status);
+	}
+	else
+	{
+		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			g_exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			g_exit_status = 128 + WTERMSIG(status);
+	}
 }
