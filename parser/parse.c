@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:11:16 by zsalih            #+#    #+#             */
-/*   Updated: 2025/07/13 08:12:52 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/07/18 17:35:20 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_ast	*parse_cmd(t_token **tokens)
 	if ((*tokens)->type == LPAREN)
     	return parse_group(tokens);
 	node = ast_new_node(NODE_CMD, NULL, NULL);
+	ft_memset(&node->cmd, 0, sizeof(t_cmd));
 	argv = NULL;
 	argc = 0;
 	if (!node)

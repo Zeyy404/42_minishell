@@ -40,6 +40,8 @@ BNAME:=
 
 all: $(LIBFT) $(NAME)
 
+debug: CFLAGS += -fsanitize=address -ggdb3
+debug: all
 
 %.o: %.c $(HEADER) $(BHEADER)
 	$(CC) $(CCFLAGS) -c $< -o $@

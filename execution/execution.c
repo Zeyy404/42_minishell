@@ -42,7 +42,7 @@ void	execution(t_ast *ast, t_env *env)
 		return ;
 	if (ast->type == NODE_CMD)
 	{
-		if (is_builtin(ast->cmd.argv[0]))
+		if (ast->cmd.argv && is_builtin(ast->cmd.argv[0]))
 			execute_builtins(ast, env, ast->cmd.argv[0]);
 		else
 			execute_one_cmd(ast, env);
