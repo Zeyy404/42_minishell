@@ -6,7 +6,7 @@
 /*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 15:50:45 by zsalih            #+#    #+#             */
-/*   Updated: 2025/07/19 21:39:28 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/07/19 23:26:21 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,14 @@ void	env_set(t_env **env, char *key, char *value)
 		}
 		tmp = tmp->next;
 	}
-	new = new_var(ft_strdup(key), ft_strdup(value));
+	new = new_var(key, value);
 	add_to_env(env, new);
 }
 
 char	*env_get(t_env *env, const char *key)
 {
+	if (!env)
+		return (NULL);
 	while (env)
 	{
 		if (ft_strncmp(env->key, key, ft_strlen(key)) == 0)

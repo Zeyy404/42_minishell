@@ -6,71 +6,60 @@
 /*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 22:25:33 by zsalih            #+#    #+#             */
-/*   Updated: 2025/07/19 16:32:00 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/07/19 23:11:38 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void free_env_arr(char **arr)
+static t_env	*sort_list(t_env *head)
 {
-	int i;
+	t_env	*current;
+	char	*tmp_key;
+	char	*tmp_value;
+	int		swapped;
 
-	i = 0;
-	while (arr[i])
+	if (!head)
+		return (NULL);
+	swapped = 1;
+	while (swapped)
 	{
-		free(arr[i]);
-		i++;
-	}
-}
-
-static void	sort_env_array(char **arr)
-{
-	int		i;
-	int		j;
-	char	*tmp;
-
-	i = 0;
-	while (arr[i])
-	{
-		j = i + 1;
-		while (arr[j])
+		swapped = 0;
+		current = head;
+		while (current && current->next)
 		{
-			if (ft_strcmp(arr[i], arr[j]) > 0)
+			if (ft_strcmp(current->key, current->next->key) > 0)
 			{
-				tmp = arr[j];
-				arr[j] = arr[i];
-				arr[i] = tmp;
+				tmp_key = current->key;
+				tmp_value = current->value;
+				current->key = current->next->key;
+				current->value = current->next->value;
+				current->next->key = tmp_key;
+				current->next->value = tmp_value;
+				swapped = 1;
 			}
-			j++;
+			current = current->next;
 		}
-		i++;
 	}
+	return (head);
 }
 
 static void	print_export(t_env *env)
 {
-	char *equal_sign;
-	char **env_arr;
-	int i;
+	t_env	*export;
+	int		i;
 
-	env_arr = env_to_char_array(env);
-	sort_env_array(env_arr);
+	
+	export = sort_list(env);
 	i = 0;
-	while (env_arr[i])
+	while (export)
 	{
-		equal_sign = ft_strchr(env_arr[i], '=');
-		if (equal_sign)
-		{
-			*equal_sign = '\0';
-			printf("declare -x %s=\"%s\"\n", env_arr[i], equal_sign + 1);
-			*equal_sign = '=';
-		}
+		if (export->value)
+			printf("declare -x %s=\"%s\"\n", export->key, export->value);
 		else
-			printf("declare -x %s\n", env_arr[i]);
-		i++;
+			printf("declare -x %s\n", export->key);
+		export = export->next;
 	}
-	free_env_arr(env_arr);
 }
 
 int	builtin_export(t_ast *ast, t_env **env)
@@ -117,7 +106,7 @@ int	builtin_export(t_ast *ast, t_env **env)
 				ft_putendl_fd("': not a valid identifier", 2);
 			}
 			else if (!env_get(*env, ast->cmd.argv[i]))
-				env_set(env, ft_strdup(ast->cmd.argv[i]), ft_strdup(""));
+				env_set(env, ft_strdup(ast->cmd.argv[i]), NULL);
 		}
 		i++;
 	}
