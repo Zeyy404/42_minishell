@@ -3,28 +3,74 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 22:25:33 by zsalih            #+#    #+#             */
-/*   Updated: 2025/07/13 15:17:55 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/07/19 16:32:00 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void	print_export(t_env *env) // env need sorting first!! T-T
+static void free_env_arr(char **arr)
 {
-	t_env *cur;
+	int i;
 
-	cur = env;
-	while (cur)
+	i = 0;
+	while (arr[i])
 	{
-		printf("declare -x %s", cur->key);
-		if (cur->value)
-			printf("=\"%s\"", cur->value);
-		printf("\n");
-		cur = cur->next;
+		free(arr[i]);
+		i++;
 	}
+}
+
+static void	sort_env_array(char **arr)
+{
+	int		i;
+	int		j;
+	char	*tmp;
+
+	i = 0;
+	while (arr[i])
+	{
+		j = i + 1;
+		while (arr[j])
+		{
+			if (ft_strcmp(arr[i], arr[j]) > 0)
+			{
+				tmp = arr[j];
+				arr[j] = arr[i];
+				arr[i] = tmp;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+static void	print_export(t_env *env)
+{
+	char *equal_sign;
+	char **env_arr;
+	int i;
+
+	env_arr = env_to_char_array(env);
+	sort_env_array(env_arr);
+	i = 0;
+	while (env_arr[i])
+	{
+		equal_sign = ft_strchr(env_arr[i], '=');
+		if (equal_sign)
+		{
+			*equal_sign = '\0';
+			printf("declare -x %s=\"%s\"\n", env_arr[i], equal_sign + 1);
+			*equal_sign = '=';
+		}
+		else
+			printf("declare -x %s\n", env_arr[i]);
+		i++;
+	}
+	free_env_arr(env_arr);
 }
 
 int	builtin_export(t_ast *ast, t_env **env)
