@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_unset.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih < zsalih@student.42abudhabi.ae>     +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 17:48:38 by zsalih            #+#    #+#             */
-/*   Updated: 2025/07/12 17:51:52 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/07/20 11:15:41 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,17 @@ static void	unset_env(t_env **env, const char *key)
 	}
 }
 
-int	builtin_unset(t_ast *ast, t_env **env)
+int	builtin_unset(t_shell *shell)
 {
 	int	i;
 
-	if (!ast || !ast->cmd.argv)
+	if (!shell->ast || !shell->ast->cmd.argv)
 		return (1);
 	i = 1;
-	while (ast->cmd.argv[i])
+	while (shell->ast->cmd.argv[i])
 	{
-		if (is_valid_key(ast->cmd.argv[i]))
-			unset_env(env, ast->cmd.argv[i]);
+		if (is_valid_key(shell->ast->cmd.argv[i]))
+			unset_env(&shell->env, shell->ast->cmd.argv[i]);
 		i++;
 	}
 	return (0);

@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 15:50:45 by zsalih            #+#    #+#             */
-/*   Updated: 2025/07/19 23:26:21 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/07/20 10:48:53 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	assign_builtin(t_builtin *builtins)
+void	assign_builtin(t_builtin *builtins, t_shell *shell)
 {
+	builtins->shell = shell;
 	builtins[0].name = "echo";
 	builtins[0].f = builtin_echo;
 	builtins[1].name = "cd";

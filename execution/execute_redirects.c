@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_redirects.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/20 07:43:42 by yalkhidi          #+#    #+#             */
+/*   Updated: 2025/07/20 07:44:04 by yalkhidi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 void	execute_redirect_out(t_cmd *cmd)
 {
-	int fd;
+	int	fd;
 
 	if (cmd->outfile)
 	{
@@ -27,7 +39,7 @@ void	execute_redirect_out(t_cmd *cmd)
 
 void	execute_redirect_in(t_cmd *cmd)
 {
-	int fd;
+	int	fd;
 
 	if (cmd->infile && cmd->here_doc == 0)
 	{
@@ -51,15 +63,15 @@ void	execute_redirect_in(t_cmd *cmd)
 
 void	execute_herdoc(t_cmd *cmd)
 {
-	int fd[2];
-	char *line;
+	int		fd[2];
+	char	*line;
 
 	if (pipe(fd) == -1)
 	{
 		printf("error\n");
 		exit(1);
 	}
-	while(1)
+	while (1)
 	{
 		line = readline("> ");
 		if (!line || ft_strcmp(line, cmd->delimiter) == 0)

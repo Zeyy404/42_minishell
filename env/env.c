@@ -81,9 +81,9 @@ void	add_to_env(t_env **env, t_env *new_var)
 
 void	free_env(t_env *env)
 {
-	t_env *tmp;
+	t_env	*tmp;
 
-	while(env)
+	while (env)
 	{
 		tmp = env->next;
 		free(env->value);

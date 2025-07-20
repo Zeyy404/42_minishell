@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 15:50:23 by zsalih            #+#    #+#             */
-/*   Updated: 2025/07/13 15:16:25 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/07/20 11:14:25 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,14 @@ static int	get_target(char **target, t_ast *ast, t_env **env)
 	return (0);
 }
 
-int	builtin_cd(t_ast *ast, t_env **env)
+int	builtin_cd(t_shell *shell)
 {
 	char	*buf;
 	char	*target;
 
 	buf = getcwd(NULL, 0);
 	target = NULL;
-	if (get_target(&target, ast, env) != 0)
+	if (get_target(&target, shell->ast, &shell->env) != 0)
 		return (free(buf), 1);
 	if (chdir(target) != 0)
 	{
@@ -55,9 +55,9 @@ int	builtin_cd(t_ast *ast, t_env **env)
 	}
 	if (buf)
 	{
-		env_set(env, "OLDPWD", buf);
+		env_set(&shell->env, "OLDPWD", buf);
 		free(buf);
 	}
-	env_set(env, "PWD", getcwd(NULL, 0));
+	env_set(&shell->env, "PWD", getcwd(NULL, 0));
 	return (0);
 }

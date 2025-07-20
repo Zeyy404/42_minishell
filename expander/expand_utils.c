@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 12:04:54 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/07/13 06:45:32 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/07/20 07:51:55 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ void	get_bounds(char *arg, int *start, int *end)
 	while (arg[i])
 	{
 		if (arg[i] == '$' && arg[i + 1]
-			&& (ft_isalpha(arg[i + 1]) || arg[i + 1] == '_' || arg[i + 1] == '?'))
+			&& (ft_isalpha(arg[i + 1]) || arg[i + 1] == '_'
+				|| arg[i + 1] == '?'))
 		{
 			*start = i;
 			if (arg[i + 1] == '?')
@@ -82,30 +83,6 @@ char	*join_before_after(char *arg, char *value, int start, int end)
 	free(after);
 	free(joined);
 	return (new);
-}
-
-char	*process_arg(char *arg, t_env *env)
-{
-	int		start;
-	int		end;
-	char	*var_name;
-	char	*value;
-	char	*new_arg;
-
-	while (1)
-	{
-		get_bounds(arg, &start, &end);
-		if (start == -1 || end == -1)
-			return (arg);
-		var_name = ft_substr(arg, start + 1, end - (start + 1));
-		value = get_env_value(var_name, env);
-		free(var_name);
-		new_arg = join_before_after(arg, value, start, end);
-		free(value);
-		free(arg);
-		arg = new_arg;
-		return (new_arg);
-	}
 }
 
 char	*expand_tilde(char *arg, t_env *env)

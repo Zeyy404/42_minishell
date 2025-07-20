@@ -1,11 +1,11 @@
 #include "../minishell.h"
 
-int	builtin_env(t_ast *ast, t_env **env)
+int	builtin_env(t_shell	*shell)
 {
 	t_env	*tmp;
 
-	(void)ast;
-	tmp = *env;
+	// (void)ast;
+	tmp = shell->env;
 	while (tmp)
 	{
 		if (tmp->value)

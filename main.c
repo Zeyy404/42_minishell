@@ -3,19 +3,54 @@
 
 int g_exit_status = 0;
 
+void	print_env(t_env *env)
+{
+	while(env)
+	{
+		ft_putstr_fd(env->key, 1);
+		ft_putchar_fd('=', 1);
+		ft_putendl_fd(env->value, 1);
+		env = env->next;
+	}
+}
+
+void	free_ast(t_ast *ast)
+{
+	if (!ast)
+		return ;
+	free_ast(ast->left);
+	free_ast(ast->right);
+	if (ast->cmd.argv)
+		split_free(ast->cmd.argv);
+	if (ast->cmd.delimiter)
+		free(ast->cmd.delimiter);
+	if (ast->cmd.infile)
+		free(ast->cmd.infile);
+	if (ast->cmd.outfile)
+		free(ast->cmd.outfile);
+	free(ast);
+}
+
+void	free_shell(t_shell	*shell)
+{
+	if (shell->env)
+		free_env(shell->env);
+	if (shell->tokens)
+		free_tokens(shell->tokens);
+	if (shell->ast)
+		free(shell->ast);
+}
 int	main(int ac, char **av, char **envp)
 {
 	(void)ac;
 	(void)av;
-	(void)envp;
+	int i = 0;
 	char	*line;
-	t_env	*env;
 	t_token *tokens;
-	t_ast *ast;
-	// int i = 0;
+	t_shell	shell;
 
-	env = get_env(envp);
-	while (1)
+	shell.env = get_env(envp);
+	while (i < 1)
 	{
 		line = readline("minishell$ ");
 		if (!line)
@@ -28,23 +63,24 @@ int	main(int ac, char **av, char **envp)
 			free(line);
 			continue;
 		}
-		t_token *head = tokens;
 		if (!check_syntax(tokens))
 		{
-			free_tokens(head);
+			free_tokens(tokens);
 			free(line);
 			continue;
 		}
-		ast = parse(&tokens);
-		if (!ast)
+		shell.tokens = tokens;
+		shell.ast = parse(&tokens);
+		if (!shell.ast)
 			printf("AST is Null\n");
 		else
-			expand_word(ast, env);
-		execution(ast, env);
-		free_tokens(head);
+			expand_word(shell.ast, shell.env);
+		execution(shell.ast, &shell);
 		free(line);
+		free_tokens(shell.tokens);
+		free_ast(shell.ast);
+		i++;
 	}
-	free_env(env);
+	free_env(shell.env);
 	return (0);
 }
-

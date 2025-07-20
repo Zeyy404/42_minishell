@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/07/18 18:15:44 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/07/20 11:36:54 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,13 @@ typedef struct s_env
 	struct s_env	*next;
 }					t_env;
 
-void				print_env(t_env *env);
+typedef	struct s_shell
+{
+	t_env	*env;
+	t_token	*tokens;
+	t_ast	*ast;
+}	t_shell;
+
 t_env				*get_env(char **envp);
 char				*get_key_value(char *envp, const char *code);
 t_env				*new_var(char *key, char *value);
@@ -134,36 +140,38 @@ int					expand_word(t_ast *ast, t_env *env);
 void				split_free(char **split);
 char				*concat(char *path, char slash, char *cmd);
 char				**env_to_char_array(t_env *env);
-bool				is_builtin(char *cmd);
 char				*find_cmd_path(char *cmd, t_env *env);
-void				execution(t_ast *ast, t_env *env);
-void				execute_one_cmd(t_ast *ast, t_env *env);
-void				execute_pipe(t_ast *ast, t_env *env);
+void				execution(t_ast *ast, t_shell *shell);
+void				execute_one_cmd(t_ast *ast, t_shell *shell);
+void				execute_pipe(t_ast *ast, t_shell *shell);
 void				execute_redirect_in(t_cmd *cmd);
 void				execute_redirect_out(t_cmd *cmd);
 void				execute_herdoc(t_cmd *cmd);
-bool				is_builtin(char *cmd);
-void				execute_builtins(t_ast *ast, t_env *env, char *cmd);
-void				execute_and_or(t_ast *ast, t_env *env);
-void				execute_group(t_ast *ast, t_env *env);
+bool	is_builtin(char *cmd, t_shell *shell);
+void	execute_builtins(char *cmd, t_shell *shell);
+void				execute_and_or(t_ast *ast, t_shell *shell);
+void				execute_group(t_ast *ast, t_shell *shell);
 
 // builtins
 typedef struct s_builtin
 {
 	char			*name;
-	int				(*f)(t_ast *, t_env **);
+	int				(*f)(t_shell *);
+	t_shell			*shell;
 }					t_builtin;
 
-int					builtin_cd(t_ast *ast, t_env **env);
-int					builtin_pwd(t_ast *ast, t_env **env);
-int					builtin_echo(t_ast *ast, t_env **env);
-int					builtin_export(t_ast *ast, t_env **env);
-int					builtin_unset(t_ast *ast, t_env **env);
-int					builtin_exit(t_ast *ast, t_env **env);
-void				assign_builtin(t_builtin *builtins);
+int					builtin_cd(t_shell *shell);
+int					builtin_pwd(t_shell *shell);
+int					builtin_echo(t_shell *shell);
+int					builtin_export(t_shell *shell);
+int					builtin_unset(t_shell *shell);
+int					builtin_exit(t_shell *shell);
+void				assign_builtin(t_builtin *builtins, t_shell *shell);
 void				env_set(t_env **env, char *key, char *value);
 char				*env_get(t_env *env, const char *key);
 int					is_valid_key(const char *str);
-int					builtin_env(t_ast *ast, t_env **env);
+int					builtin_env(t_shell *shell);
 
+void	free_shell(t_shell	*shell);
+void	free_ast(t_ast *ast);
 #endif
