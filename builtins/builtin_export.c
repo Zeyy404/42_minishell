@@ -3,14 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 22:25:33 by zsalih            #+#    #+#             */
-/*   Updated: 2025/07/20 11:15:22 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/07/22 10:14:45 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+static t_env	*copy_list(t_env *env)
+{
+	t_env	*copy;
+	t_env	*tail;
+	t_env	*new_node;
+
+	copy = NULL;
+	tail = NULL;
+	while (env)
+	{
+		new_node = malloc(sizeof(t_env));
+		if (!new_node)
+			return (NULL);
+		new_node->key = ft_strdup(env->key);
+		if (env->value)
+			new_node->value = ft_strdup(env->value);
+		else
+			new_node->value = NULL;
+		new_node->next = NULL;
+		if (!copy)
+		{
+			copy = new_node;
+			tail = new_node;
+		}
+		else
+		{
+			tail->next = new_node;
+			tail = new_node;
+		}
+		env = env->next;
+	}
+	return (copy);
+}
 
 static t_env	*sort_list(t_env *head)
 {
@@ -46,19 +80,18 @@ static t_env	*sort_list(t_env *head)
 
 static void	print_export(t_env *env)
 {
-	t_env	*export;
-	// int		i;
+	t_env	*copy;
+	t_env	*sorted;
 
-	
-	export = sort_list(env);
-	// i = 0;
-	while (export)
+	copy = copy_list(env);
+	sorted = sort_list(copy);
+	while (sorted)
 	{
-		if (export->value)
-			printf("declare -x %s=\"%s\"\n", export->key, export->value);
+		if (sorted->value)
+			printf("declare -x %s=\"%s\"\n", sorted->key, sorted->value);
 		else
-			printf("declare -x %s\n", export->key);
-		export = export->next;
+			printf("declare -x %s\n", sorted->key);
+		sorted = sorted->next;
 	}
 }
 

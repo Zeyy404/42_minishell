@@ -44,13 +44,13 @@ int	main(int ac, char **av, char **envp)
 {
 	(void)ac;
 	(void)av;
-	int i = 0;
+	// int i = 0;
 	char	*line;
 	t_token *tokens;
 	t_shell	shell;
 
 	shell.env = get_env(envp);
-	while (i < 1)
+	while (1)
 	{
 		line = readline("minishell$ ");
 		if (!line)
@@ -79,7 +79,7 @@ int	main(int ac, char **av, char **envp)
 		free(line);
 		free_tokens(shell.tokens);
 		free_ast(shell.ast);
-		i++;
+		// i++;
 	}
 	free_env(shell.env);
 	return (0);
