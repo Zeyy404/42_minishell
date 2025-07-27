@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:43:42 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/07/20 07:44:04 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/07/27 11:52:57 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,49 +16,47 @@ void	execute_redirect_out(t_cmd *cmd)
 {
 	int	fd;
 
-	if (cmd->outfile)
+	if (!cmd->outfile || *cmd->outfile == '\0')
+		return ;
+	if (cmd->append == 1)
+		fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	else
+		fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
 	{
-		if (cmd->append == 1)
-			fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		else
-			fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd == -1)
-		{
-			printf("error\n");
-			exit(1);
-		}
-		if (dup2(fd, STDOUT_FILENO) == -1)
-		{
-			printf("error\n");
-			close(fd);
-			exit(1);
-		}
-		close(fd);
+		perror("outfile error\n");
+		exit(1);
 	}
+	if (dup2(fd, STDOUT_FILENO) == -1)
+	{
+		perror("dup2 error\n");
+		close(fd);
+		exit(1);
+	}
+	close(fd);
 }
 
 void	execute_redirect_in(t_cmd *cmd)
 {
 	int	fd;
 
-	if (cmd->infile && cmd->here_doc == 0)
-	{
-		fd = open(cmd->infile, O_RDONLY);
-		if (fd == -1)
-		{
-			printf("error infile\n");
-			exit(1);
-		}
-		if (dup2(fd, STDIN_FILENO) == -1)
-		{
-			close(fd);
-			printf("error\n");
-			exit(1);
-		}
-		close(fd);
-	}
-	else if (cmd->here_doc == 1)
+	if (cmd->here_doc == 1)
 		execute_herdoc(cmd);
+	if (!cmd->infile || *cmd->infile == '\0')
+		return ;
+	fd = open(cmd->infile, O_RDONLY);
+	if (fd == -1)
+	{
+		perror("error infile\n");
+		exit(1);
+	}
+	if (dup2(fd, STDIN_FILENO) == -1)
+	{
+		perror("dup2 error\n");
+		close(fd);
+		exit(1);
+	}
+	close(fd);
 }
 
 void	execute_herdoc(t_cmd *cmd)
@@ -68,7 +66,7 @@ void	execute_herdoc(t_cmd *cmd)
 
 	if (pipe(fd) == -1)
 	{
-		printf("error\n");
+		perror("pipe error\n");
 		exit(1);
 	}
 	while (1)
@@ -86,7 +84,7 @@ void	execute_herdoc(t_cmd *cmd)
 	close(fd[1]);
 	if (dup2(fd[0], STDIN_FILENO) == -1)
 	{
-		printf("error\n");
+		perror("dup2 error\n");
 		close(fd[0]);
 		exit(1);
 	}

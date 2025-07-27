@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:11:16 by zsalih            #+#    #+#             */
-/*   Updated: 2025/07/20 14:55:51 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/07/27 16:48:49 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_ast	*parse_cmd(t_token **tokens)
 	argc = 0;
 	if (!node)
 		return (NULL);
-	while (*tokens && !is_logic_op((*tokens)->type))
+	while (*tokens && !is_logic_op((*tokens)->type) && (*tokens)->type != RPAREN)
 	{
 		if ((*tokens)->type == REDIR_IN)
 		{
@@ -96,40 +96,58 @@ t_ast	*parse_and_or(t_token **tokens)
 	}
 	return (left);
 }
-
 t_ast	*parse_group(t_token **tokens)
 {
 	t_ast	*node;
+	t_ast	*group_node;
 
 	*tokens = (*tokens)->next;
 	node = parse_and_or(tokens);
-	*tokens = (*tokens)->next; // Skip RPAREN
+	if (!node || !*tokens || (*tokens)->type != RPAREN)
+	{
+		free_ast(node);
+		return (NULL);
+	}
+	*tokens = (*tokens)->next;
+	group_node = ast_new_node(NODE_GROUP, node, NULL);
+	if (!group_node)
+	{
+		free_ast(node);
+		return (NULL);
+	}
 	while (*tokens && is_redir((*tokens)->type))
 	{
 		if ((*tokens)->type == REDIR_IN)
 		{
-			node->cmd.infile = ft_strdup((*tokens)->value);
+			*tokens = (*tokens)->next;
+			group_node->cmd.infile = ft_strdup((*tokens)->value);
 		}
 		else if ((*tokens)->type == REDIR_OUT || (*tokens)->type == APPEND)
 		{
-			node->cmd.append = 1;
-			node->cmd.outfile = ft_strdup((*tokens)->value);
+			group_node->cmd.append = ((*tokens)->type == APPEND);
+			*tokens = (*tokens)->next;
+			group_node->cmd.outfile = ft_strdup((*tokens)->value);
 		}
 		else if ((*tokens)->type == HEREDOC)
 		{
-			node->cmd.delimiter = ft_strdup((*tokens)->value);
+			*tokens = (*tokens)->next;
+			group_node->cmd.delimiter = ft_strdup((*tokens)->value);
 		}
 		*tokens = (*tokens)->next;
 	}
-	node->type = NODE_GROUP;
-	return (node);
+	return (group_node);
 }
 
-t_ast	*parse(t_token **tokens)
+// t_ast	*parse(t_token **tokens)
+// {
+// 	if (!*tokens)
+// 		return (NULL);
+// 	if ((*tokens)->type == LPAREN)
+// 		return (parse_group(tokens));
+// 	return (parse_and_or(tokens));
+// }
+
+t_ast *parse(t_token **tokens)
 {
-	if (!*tokens)
-		return (NULL);
-	if ((*tokens)->type == LPAREN)
-		return (parse_group(tokens));
-	return (parse_and_or(tokens));
+	return parse_and_or(tokens);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_word.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 16:26:33 by zsalih            #+#    #+#             */
-/*   Updated: 2025/06/27 16:26:34 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/07/27 16:10:13 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	token_word(const char *input, size_t *i, t_token **tokens)
 	char	*value;
 
 	start = *i;
-	while (input[*i] && !ft_isops(input[*i]) && !ft_isspace(input[*i]))
+	while (input[*i] && !ft_isops(input[*i]) && !ft_isspace(input[*i]) && input[*i] != '(' && input[*i] != ')')
 		(*i)++;
 	if (*i == start)
 		return (0);
