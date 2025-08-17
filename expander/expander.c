@@ -49,13 +49,30 @@ void	expand_argv(char **argv, t_env *env)
 	}
 }
 
+void	expand_files(t_ast *ast, t_env *env)
+{
+	if (ast->cmd.infile)
+	{
+		ast->cmd.infile= expand_tilde(ast->cmd.infile, env);
+		ast->cmd.infile = process_arg(ast->cmd.infile, env);
+	}
+	if (ast->cmd.outfile)
+	{
+		ast->cmd.outfile= expand_tilde(ast->cmd.outfile, env);
+		ast->cmd.outfile = process_arg(ast->cmd.outfile, env);
+	}
+	printf("infile: %s\n", ast->cmd.infile);
+	printf("outfile: %s\n", ast->cmd.outfile);
+}
+
 int	expand_word(t_ast *ast, t_env *env)
 {
 	if (!ast)
 		return (0);
-	if (ast->type == NODE_CMD && ast->cmd.argv)
+	if (ast->type == NODE_CMD && (ast->cmd.argv || ast->cmd.infile || ast->cmd.outfile))
 	{
 		expand_argv(ast->cmd.argv, env);
+		expand_files(ast, env);
 	}
 	if (ast->left)
 		expand_word(ast->left, env);

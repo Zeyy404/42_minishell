@@ -16,6 +16,7 @@ void	execute_redirect_out(t_cmd *cmd)
 {
 	int	fd;
 
+	printf("ececution:::: outfile: %s\n", cmd->outfile);
 	if (!cmd->outfile || *cmd->outfile == '\0')
 		return ;
 	if (cmd->append == 1)
@@ -39,6 +40,7 @@ void	execute_redirect_out(t_cmd *cmd)
 void	execute_redirect_in(t_cmd *cmd)
 {
 	int	fd;
+
 
 	if (cmd->here_doc == 1)
 		execute_herdoc(cmd);
