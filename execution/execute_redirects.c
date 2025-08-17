@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:43:42 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/07/27 11:52:57 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/08/17 16:26:56 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	execute_redirect_out(t_cmd *cmd)
 {
 	int	fd;
 
-	printf("ececution:::: outfile: %s\n", cmd->outfile);
+	// printf("ececution:::: outfile: %s\n", cmd->outfile);
 	if (!cmd->outfile || *cmd->outfile == '\0')
 		return ;
 	if (cmd->append == 1)

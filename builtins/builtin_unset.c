@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 17:48:38 by zsalih            #+#    #+#             */
-/*   Updated: 2025/07/20 11:15:41 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/08/17 17:40:42 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,9 @@ int	builtin_unset(t_shell *shell)
 	while (shell->ast->cmd.argv[i])
 	{
 		if (is_valid_key(shell->ast->cmd.argv[i]))
+		{
 			unset_env(&shell->env, shell->ast->cmd.argv[i]);
+		}
 		i++;
 	}
 	return (0);

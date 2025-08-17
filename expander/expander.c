@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 12:04:50 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/07/20 15:00:54 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/08/17 16:27:11 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ void	expand_files(t_ast *ast, t_env *env)
 		ast->cmd.outfile= expand_tilde(ast->cmd.outfile, env);
 		ast->cmd.outfile = process_arg(ast->cmd.outfile, env);
 	}
-	printf("infile: %s\n", ast->cmd.infile);
-	printf("outfile: %s\n", ast->cmd.outfile);
+	// printf("infile: %s\n", ast->cmd.infile);
+	// printf("outfile: %s\n", ast->cmd.outfile);
 }
 
 int	expand_word(t_ast *ast, t_env *env)

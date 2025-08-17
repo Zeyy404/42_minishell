@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:49:18 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/07/27 12:25:54 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/08/17 17:35:35 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,10 @@ char	*find_cmd_path(char *cmd, t_env *env)
 
 	tmp = env;
 	path = NULL;
+	if (!access(cmd, X_OK))
+	{
+		return (cmd);
+	}
 	while (tmp)
 	{
 		if (!ft_strcmp(tmp->key, "PATH"))
@@ -49,10 +53,26 @@ char	*find_cmd_path(char *cmd, t_env *env)
 
 void	execution(t_ast *ast, t_shell *shell)
 {
+	int in, out;
 	if (!ast)
 		return ;
 	if (ast->type == NODE_CMD)
-		execute_one_cmd(ast, shell);
+	{
+		if (ast->cmd.argv && is_builtin(ast->cmd.argv[0], shell))
+		{
+			in = dup(STDIN_FILENO);
+			out = dup(STDOUT_FILENO);
+			execute_redirect_in(&ast->cmd);
+			execute_redirect_out(&ast->cmd);
+			execute_builtins(ast->cmd.argv[0], shell);
+			dup2(in, STDIN_FILENO);
+			dup2(out, STDOUT_FILENO);
+			close(in);
+			close(out);
+		}
+		else
+			execute_one_cmd(ast, shell);
+	}
 	else if (ast->type == NODE_PIPE)
 		execute_pipe(ast, shell);
 	else if (ast->type == NODE_AND || ast->type == NODE_OR)
