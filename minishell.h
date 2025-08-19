@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/07/20 11:36:54 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/08/19 19:12:35 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,10 @@ typedef struct s_cmd
 {
 	char			**argv;
 	char			*infile;
-	char			*outfile;
+	char			**outfile;
 	int				append;
 	int				here_doc;
-	char			*delimiter;
+	char			**delimiter;
 }					t_cmd;
 
 typedef enum e_node_type
@@ -96,7 +96,7 @@ typedef struct s_ast
 t_ast				*ast_new_node(t_node_type nt, t_ast *l, t_ast *r);
 int					add_argv(char ***argv, int *argc, char *value);
 t_ast				*ast_new_node(t_node_type nt, t_ast *l, t_ast *r);
-int					add_argv(char ***argv, int *argc, char *value);
+int					add_str(char ***arr, int *count, char *value);
 t_ast				*parse_cmd(t_token **tokens);
 t_ast				*parse_pipeline(t_token **tokens);
 t_ast				*parse_and_or(t_token **tokens);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 12:26:34 by zsalih            #+#    #+#             */
-/*   Updated: 2025/07/20 14:35:48 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/08/19 15:21:17 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,26 +26,26 @@ t_ast *ast_new_node(t_node_type nt, t_ast *l, t_ast *r)
 	return (node);
 }
 
-int	add_argv(char ***argv, int *argc, char *value)
+int	add_str(char ***arr, int *count, char *value)
 {
-	char **new_argv;
+	char **new_arr;
 	int	i;
 	
-	new_argv = malloc(sizeof(char *) * ((*argc) + 2));
-	if (!new_argv)
+	new_arr = malloc(sizeof(char *) * ((*count) + 2));
+	if (!new_arr)
 		return (0);
 	i = 0;
-	while (i < (*argc))
+	while (i < (*count))
 	{
-		new_argv[i] = (*argv)[i]; // copying the array of pointers!
+		new_arr[i] = (*arr)[i]; // copying the array of pointers!
 		i++;
 	}
-	new_argv[i] = ft_strdup(value);
-	if (!new_argv[i])
-		return (free(new_argv), 0);
-	new_argv[i + 1] = NULL;
-	free(*argv); // free the previously allocated array of pointers!
-	*argv = new_argv;
-	(*argc)++;
+	new_arr[i] = ft_strdup(value);
+	if (!new_arr[i])
+		return (free(new_arr), 0);
+	new_arr[i + 1] = NULL;
+	free(*arr); // free the previously allocated array of pointers!
+	*arr = new_arr;
+	(*count)++;
 	return (1);
 }

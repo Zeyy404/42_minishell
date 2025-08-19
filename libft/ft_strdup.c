@@ -6,7 +6,7 @@
 /*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 09:08:57 by zsalih            #+#    #+#             */
-/*   Updated: 2024/12/24 14:39:02 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/08/19 14:50:06 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,3 @@ char	*ft_strdup(const char *src)
 	src_copy[i] = '\0';
 	return (src_copy);
 }
-
-/*
-#include <stdio.h>
-#include <string.h>
-
-int main()
-{
-	char *src;
-	char *src_copy;
-
-	src = "Hello";
-	src_copy = ft_strdup(src);
-	printf("%s\n", src_copy);
-	if (src_copy[strlen(src_copy) == '\0'])
-		printf("Null-terminated\n");
-	return (0);
-}
-*/

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 12:04:50 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/08/17 16:27:11 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/08/19 18:23:56 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,24 @@ void	expand_argv(char **argv, t_env *env)
 
 void	expand_files(t_ast *ast, t_env *env)
 {
+	int i;
+	int j;
+
+	i = 0;
+	j = 0;
 	if (ast->cmd.infile)
 	{
-		ast->cmd.infile= expand_tilde(ast->cmd.infile, env);
+		ast->cmd.infile = expand_tilde(ast->cmd.infile, env);
 		ast->cmd.infile = process_arg(ast->cmd.infile, env);
 	}
 	if (ast->cmd.outfile)
 	{
-		ast->cmd.outfile= expand_tilde(ast->cmd.outfile, env);
-		ast->cmd.outfile = process_arg(ast->cmd.outfile, env);
+		while (ast->cmd.outfile[i])
+		{
+			ast->cmd.outfile[i] = expand_tilde(ast->cmd.outfile[i], env);
+			ast->cmd.outfile[i] = process_arg(ast->cmd.outfile[i], env);
+			i++;
+		}
 	}
 	// printf("infile: %s\n", ast->cmd.infile);
 	// printf("outfile: %s\n", ast->cmd.outfile);

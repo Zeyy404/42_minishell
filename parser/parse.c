@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:11:16 by zsalih            #+#    #+#             */
-/*   Updated: 2025/07/27 16:48:49 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/08/19 19:13:23 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,18 @@ t_ast	*parse_cmd(t_token **tokens)
 	t_ast	*node;
 	char	**argv;
 	int		argc;
+	int		i;
+	int		j;
 
 	if ((*tokens)->type == LPAREN)
     	return parse_group(tokens);
 	node = ast_new_node(NODE_CMD, NULL, NULL);
-	ft_memset(&node->cmd, 0, sizeof(t_cmd));
 	argv = NULL;
 	argc = 0;
 	if (!node)
 		return (NULL);
+	i = 0;
+	j = 0;
 	while (*tokens && !is_logic_op((*tokens)->type) && (*tokens)->type != RPAREN)
 	{
 		if ((*tokens)->type == REDIR_IN)
@@ -41,17 +44,17 @@ t_ast	*parse_cmd(t_token **tokens)
 			else
 				node->cmd.append = 1;	
 			*tokens = (*tokens)->next;
-			node->cmd.outfile = ft_strdup((*tokens)->value);
+			add_str(&node->cmd.outfile, &i, (*tokens)->value);
 		}
 		else if ((*tokens)->type == HEREDOC)
 		{
 			*tokens = (*tokens)->next;
 			node->cmd.here_doc = 1;
-			node->cmd.delimiter = ft_strdup((*tokens)->value);
+			add_str(&node->cmd.delimiter, &j, (*tokens)->value);
 		}
 		else if ((*tokens)->type == WORD)
 		{
-			if (!add_argv(&argv, &argc, (*tokens)->value))
+			if (!add_str(&argv, &argc, (*tokens)->value))
 				return 	(NULL);
 		}
 		*tokens = (*tokens)->next;
@@ -100,6 +103,8 @@ t_ast	*parse_group(t_token **tokens)
 {
 	t_ast	*node;
 	t_ast	*group_node;
+	int		i;
+	int		j;
 
 	*tokens = (*tokens)->next;
 	node = parse_and_or(tokens);
@@ -115,6 +120,8 @@ t_ast	*parse_group(t_token **tokens)
 		free_ast(node);
 		return (NULL);
 	}
+	i = 0;
+	j = 0;
 	while (*tokens && is_redir((*tokens)->type))
 	{
 		if ((*tokens)->type == REDIR_IN)
@@ -126,28 +133,28 @@ t_ast	*parse_group(t_token **tokens)
 		{
 			group_node->cmd.append = ((*tokens)->type == APPEND);
 			*tokens = (*tokens)->next;
-			group_node->cmd.outfile = ft_strdup((*tokens)->value);
+			add_str(&node->cmd.outfile, &i, (*tokens)->value);
 		}
 		else if ((*tokens)->type == HEREDOC)
 		{
 			*tokens = (*tokens)->next;
-			group_node->cmd.delimiter = ft_strdup((*tokens)->value);
+			add_str(&node->cmd.delimiter, &j, (*tokens)->value);
 		}
 		*tokens = (*tokens)->next;
 	}
 	return (group_node);
 }
 
-// t_ast	*parse(t_token **tokens)
-// {
-// 	if (!*tokens)
-// 		return (NULL);
-// 	if ((*tokens)->type == LPAREN)
-// 		return (parse_group(tokens));
-// 	return (parse_and_or(tokens));
-// }
-
-t_ast *parse(t_token **tokens)
+t_ast	*parse(t_token **tokens)
 {
-	return parse_and_or(tokens);
+	if (!*tokens)
+		return (NULL);
+	if ((*tokens)->type == LPAREN)
+		return (parse_group(tokens));
+	return (parse_and_or(tokens));
 }
+
+// t_ast *parse(t_token **tokens)
+// {
+// 	return parse_and_or(tokens);
+// }
