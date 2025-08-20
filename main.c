@@ -110,7 +110,7 @@ int	main(int ac, char **av, char **envp)
 			printf("AST is Null\n");
 		else
 			expand_word(shell.ast, shell.env);
-		execution(shell.ast, &shell);
+		execution(shell.ast, &shell, 0);
 		free(line);
 		free_tokens(shell.tokens);
 		free_ast(shell.ast);

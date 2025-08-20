@@ -52,10 +52,8 @@ void	expand_argv(char **argv, t_env *env)
 void	expand_files(t_ast *ast, t_env *env)
 {
 	int i;
-	int j;
 
 	i = 0;
-	j = 0;
 	if (ast->cmd.infile)
 	{
 		ast->cmd.infile = expand_tilde(ast->cmd.infile, env);

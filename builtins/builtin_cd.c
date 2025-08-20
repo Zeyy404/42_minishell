@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih < zsalih@student.42abudhabi.ae>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 15:50:23 by zsalih            #+#    #+#             */
-/*   Updated: 2025/07/20 11:14:25 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/08/21 00:47:00 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,14 @@ static int	get_target(char **target, t_ast *ast, t_env **env)
 	return (0);
 }
 
-int	builtin_cd(t_shell *shell)
+int	builtin_cd(t_ast *ast, t_shell *shell)
 {
 	char	*buf;
 	char	*target;
 
 	buf = getcwd(NULL, 0);
 	target = NULL;
-	if (get_target(&target, shell->ast, &shell->env) != 0)
+	if (get_target(&target, ast, &shell->env) != 0)
 		return (free(buf), 1);
 	if (chdir(target) != 0)
 	{

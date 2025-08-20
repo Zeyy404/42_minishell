@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: zsalih < zsalih@student.42abudhabi.ae>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 22:25:33 by zsalih            #+#    #+#             */
-/*   Updated: 2025/07/22 10:14:45 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/08/21 00:50:05 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ static void	print_export(t_env *env)
 	}
 }
 
-int	builtin_export(t_shell *shell)
+int	builtin_export(t_ast *ast, t_shell *shell)
 {
 	int		i;
 	char	*equal_sign;
@@ -103,18 +103,17 @@ int	builtin_export(t_shell *shell)
 	char	*var_value;
 
 	i = 1;
-	if (shell->ast->cmd.argv[1] == NULL)
+	if (ast->cmd.argv[1] == NULL)
 	{
 		print_export(shell->env);
 		return (0);
 	}
-	while (shell->ast->cmd.argv[i])
+	while (ast->cmd.argv[i])
 	{
-		equal_sign = ft_strchr(shell->ast->cmd.argv[i], '=');
+		equal_sign = ft_strchr(ast->cmd.argv[i], '=');
 		if (equal_sign)
 		{
-			var_name = ft_substr(shell->ast->cmd.argv[i], 0, equal_sign
-					- shell->ast->cmd.argv[i]);
+			var_name = ft_substr(ast->cmd.argv[i], 0, equal_sign - ast->cmd.argv[i]);
 			var_value = ft_strdup(equal_sign + 1);
 			if (!is_valid_key(var_name))
 			{
@@ -132,14 +131,14 @@ int	builtin_export(t_shell *shell)
 		}
 		else
 		{
-			if (!is_valid_key(shell->ast->cmd.argv[i]))
+			if (!is_valid_key(ast->cmd.argv[i]))
 			{
 				ft_putstr_fd("export: `", 2);
-				ft_putstr_fd(shell->ast->cmd.argv[i], 2);
+				ft_putstr_fd(ast->cmd.argv[i], 2);
 				ft_putendl_fd("': not a valid identifier", 2);
 			}
-			else if (!env_get(shell->env, shell->ast->cmd.argv[i]))
-				env_set(&shell->env, ft_strdup(shell->ast->cmd.argv[i]), NULL);
+			else if (!env_get(shell->env, ast->cmd.argv[i]))
+				env_set(&shell->env, ft_strdup(ast->cmd.argv[i]), NULL);
 		}
 		i++;
 	}

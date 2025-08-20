@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtins.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih < zsalih@student.42abudhabi.ae>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:43:07 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/08/17 16:39:12 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/08/21 00:42:54 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ bool	is_builtin(char *cmd, t_shell *shell)
 	return (false);
 }
 
-void	execute_builtins(char *cmd, t_shell *shell)
+void	execute_builtins(char *cmd, t_ast *ast, t_shell *shell)
 {
 	t_builtin	builtins[8];
 	int			i;
@@ -41,7 +41,7 @@ void	execute_builtins(char *cmd, t_shell *shell)
 	{
 		if (!ft_strcmp(cmd, builtins[i].name))
 		{
-			builtins[i].f(shell);
+			builtins[i].f(ast, shell);
 			break ;
 		}
 		i++;

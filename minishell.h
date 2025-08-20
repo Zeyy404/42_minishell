@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: zsalih < zsalih@student.42abudhabi.ae>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/08/19 19:12:35 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/08/21 00:52:37 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,14 +141,14 @@ void				split_free(char **split);
 char				*concat(char *path, char slash, char *cmd);
 char				**env_to_char_array(t_env *env);
 char				*find_cmd_path(char *cmd, t_env *env);
-void				execution(t_ast *ast, t_shell *shell);
+void				execution(t_ast *ast, t_shell *shell, int in_child);
 void				execute_one_cmd(t_ast *ast, t_shell *shell);
 void				execute_pipe(t_ast *ast, t_shell *shell);
 void				execute_redirect_in(t_cmd *cmd);
 void				execute_redirect_out(t_cmd *cmd);
 void				execute_herdoc(t_cmd *cmd);
 bool	is_builtin(char *cmd, t_shell *shell);
-void	execute_builtins(char *cmd, t_shell *shell);
+void	execute_builtins(char *cmd, t_ast *ast, t_shell *shell);
 void				execute_and_or(t_ast *ast, t_shell *shell);
 void				execute_group(t_ast *ast, t_shell *shell);
 
@@ -156,21 +156,21 @@ void				execute_group(t_ast *ast, t_shell *shell);
 typedef struct s_builtin
 {
 	char			*name;
-	int				(*f)(t_shell *);
+	int				(*f)(t_ast *, t_shell *);
 	t_shell			*shell;
 }					t_builtin;
 
-int					builtin_cd(t_shell *shell);
-int					builtin_pwd(t_shell *shell);
-int					builtin_echo(t_shell *shell);
-int					builtin_export(t_shell *shell);
-int					builtin_unset(t_shell *shell);
-int					builtin_exit(t_shell *shell);
+int					builtin_cd(t_ast *ast, t_shell *shell);
+int					builtin_pwd(t_ast *ast, t_shell *shell);
+int					builtin_echo(t_ast *ast, t_shell *shell);
+int					builtin_export(t_ast *ast, t_shell *shell);
+int					builtin_unset(t_ast *ast, t_shell *shell);
+int					builtin_env(t_ast *ast, t_shell *shell);
+int					builtin_exit(t_ast *ast, t_shell *shell);
 void				assign_builtin(t_builtin *builtins, t_shell *shell);
 void				env_set(t_env **env, char *key, char *value);
 char				*env_get(t_env *env, const char *key);
 int					is_valid_key(const char *str);
-int					builtin_env(t_shell *shell);
 
 void	free_shell(t_shell	*shell);
 void	free_ast(t_ast *ast);
