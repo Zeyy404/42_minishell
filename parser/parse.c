@@ -3,14 +3,52 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:11:16 by zsalih            #+#    #+#             */
-/*   Updated: 2025/08/19 19:13:23 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/08/24 12:58:49 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int add_argv_with_flags(char ***argv, int **flags, int *argc, char *value, int quote_type)
+{
+    char **new_argv;
+    int  *new_flags;
+    int   i;
+
+    new_argv = malloc(sizeof(char *) * ((*argc) + 2));
+    if (!new_argv)
+        return (0);
+
+    new_flags = malloc(sizeof(int) * ((*argc) + 1));
+    if (!new_flags)
+        return (free(new_argv), 0);
+
+    i = 0;
+    while (i < *argc)
+    {
+        new_argv[i] = (*argv)[i];
+        new_flags[i] = (*flags)[i];
+        i++;
+    }
+
+    new_argv[i] = ft_strdup(value);
+    if (!new_argv[i])
+        return (free(new_flags), free(new_argv), 0);
+
+    new_flags[i] = quote_type;
+    new_argv[i + 1] = NULL;
+
+    free(*argv);
+    free(*flags);
+
+    *argv = new_argv;
+    *flags = new_flags;
+    (*argc)++;
+    return (1);
+}
 
 t_ast	*parse_cmd(t_token **tokens)
 {
@@ -19,7 +57,7 @@ t_ast	*parse_cmd(t_token **tokens)
 	int		argc;
 	int		i;
 	int		j;
-
+	int *flags = NULL;
 	if ((*tokens)->type == LPAREN)
     	return parse_group(tokens);
 	node = ast_new_node(NODE_CMD, NULL, NULL);
@@ -54,12 +92,21 @@ t_ast	*parse_cmd(t_token **tokens)
 		}
 		else if ((*tokens)->type == WORD)
 		{
-			if (!add_str(&argv, &argc, (*tokens)->value))
-				return 	(NULL);
+
+			int quote_type = 0;
+			if ((*tokens)->quotes)
+				quote_type = 1;
+			else if ((*tokens)->dquotes)
+				quote_type = 2;
+			// if (!add_str(&argv, &argc, (*tokens)->value))
+			// 	return 	(NULL);
+			if (!add_argv_with_flags(&argv, &flags, &argc, (*tokens)->value, quote_type))
+				return (NULL);
 		}
 		*tokens = (*tokens)->next;
 	}
 	node->cmd.argv = argv;
+	node->cmd.quotes = flags;
 	return (node);
 }
 

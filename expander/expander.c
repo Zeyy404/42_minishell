@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 12:04:50 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/08/19 18:23:56 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/08/24 12:57:15 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,20 @@ char	*process_arg(char *arg, t_env *env)
 	}
 }
 
-void	expand_argv(char **argv, t_env *env)
+void	expand_argv(char **argv, t_env *env, int *flag)
 {
 	int	i;
 
 	i = 0;
 	while (argv[i])
 	{
-		argv[i] = expand_tilde(argv[i], env);
-		argv[i] = process_arg(argv[i], env);
+		// printf("arg %s\n", argv[i]);
+		printf("flag[%d]: %d\n", i, flag[i]);
+		if (flag[i] != 1)
+		{
+			argv[i] = expand_tilde(argv[i], env);
+			argv[i] = process_arg(argv[i], env);
+		}
 		i++;
 	}
 }
@@ -78,7 +83,7 @@ int	expand_word(t_ast *ast, t_env *env)
 		return (0);
 	if (ast->type == NODE_CMD && (ast->cmd.argv || ast->cmd.infile || ast->cmd.outfile))
 	{
-		expand_argv(ast->cmd.argv, env);
+		expand_argv(ast->cmd.argv, env, ast->cmd.quotes);
 		expand_files(ast, env);
 	}
 	if (ast->left)

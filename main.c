@@ -41,10 +41,9 @@ void	free_shell(t_shell	*shell)
 		free(shell->ast);
 }
 
-void    sigint(int sig)
+void sigint(int sig)
 {
     (void)sig;
-
     ft_putstr_fd("\n", 1);
     rl_on_new_line();
     // rl_replace_line("", 0);
@@ -53,11 +52,9 @@ void    sigint(int sig)
 
 void    set_signals(void)
 {
-    signal(SIGINT, SIG_IGN);
+    signal(SIGINT, sigint);
     signal(SIGQUIT, SIG_IGN);
 }
-
-
 
 int	main(int ac, char **av, char **envp)
 {
@@ -83,17 +80,20 @@ int	main(int ac, char **av, char **envp)
 		if (*line)
 			add_history(line);
 		tokens = tokenize(line);
+		// print_tokens(tokens);
 		if (!tokens)
 		{
 			free(line);
 			continue;
 		}
+		
 		if (!check_syntax(tokens))
 		{
 			free_tokens(tokens);
 			free(line);
 			continue;
 		}
+		
 		shell.tokens = tokens;
 		// if (!shell.tokens)
 		// 	printf("tokens is not working\n");

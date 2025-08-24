@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih < zsalih@student.42abudhabi.ae>     +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/08/21 00:52:37 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/08/24 11:51:05 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ typedef struct s_cmd
 	int				append;
 	int				here_doc;
 	char			**delimiter;
+	int				*quotes;
 }					t_cmd;
 
 typedef enum e_node_type
@@ -133,7 +134,7 @@ char				*join_before_after(char *arg, char *value, int start,
 						int end);
 char				*process_arg(char *arg, t_env *env);
 char				*expand_tilde(char *arg, t_env *env);
-void				expand_argv(char **argv, t_env *env);
+void				expand_argv(char **argv, t_env *env, int *flag);
 int					expand_word(t_ast *ast, t_env *env);
 
 // execution
