@@ -21,6 +21,8 @@ t_token	*new_token(t_token_type type, char *value)
 		return (NULL);
 	token->type = type;
 	token->value = ft_strdup(value);
+	token->quotes = 0;
+	token->dquotes = 0;
 	token->next = NULL;
 	return (token);
 }

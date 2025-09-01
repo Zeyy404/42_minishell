@@ -51,7 +51,7 @@ char	*find_cmd_path(char *cmd, t_env *env)
 	return (NULL);
 }
 
-void	execution(t_ast *ast, t_shell *shell, int in_child)
+void	execution(t_ast *ast, t_shell *shell, int in_child, int *exit_status)
 {
 	int in, out;
 	if (!ast)
@@ -80,33 +80,33 @@ void	execution(t_ast *ast, t_shell *shell, int in_child)
 			}
 		}
 		else
-			execute_one_cmd(ast, shell);
+			execute_one_cmd(ast, shell, exit_status);
 	}
 	else if (ast->type == NODE_PIPE)
-		execute_pipe(ast, shell);
+		execute_pipe(ast, shell, exit_status);
 	else if (ast->type == NODE_AND || ast->type == NODE_OR)
-		execute_and_or(ast, shell);
+		execute_and_or(ast, shell, exit_status);
 	else if (ast->type == NODE_GROUP)
-		execute_group(ast, shell);
+		execute_group(ast, shell, exit_status);
 }
 
-void	wait_update_status(pid_t pid, int *g_exit_status)
+void	wait_update_status(pid_t pid, int *exit_status)
 {
 	int	status;
 
 	if (waitpid(pid, &status, 0) == -1)
 	{
 		perror("waitpid");
-		*g_exit_status = 1;
+		*exit_status = 1;
 		return ;
 	}
 	if (WIFEXITED(status))
-		*g_exit_status = WEXITSTATUS(status);
+		*exit_status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
-		*g_exit_status = 128 + WTERMSIG(status);
+		*exit_status = 128 + WTERMSIG(status);
 }
 
-void	execute_one_cmd(t_ast *ast, t_shell *shell)
+void	execute_one_cmd(t_ast *ast, t_shell *shell, int *exit_status)
 {
 	pid_t	pid;
 	char	*cmd_path;
@@ -137,10 +137,10 @@ void	execute_one_cmd(t_ast *ast, t_shell *shell)
 		exit(1);
 	}
 	else
-		wait_update_status(pid, &g_exit_status);
+		wait_update_status(pid, exit_status);
 }
 
-void	execute_pipe(t_ast *ast, t_shell *shell)
+void	execute_pipe(t_ast *ast, t_shell *shell, int *exit_status)
 {
 	int fd[2];
 	pid_t left_pid, right_pid;
@@ -155,8 +155,8 @@ void	execute_pipe(t_ast *ast, t_shell *shell)
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
 		close(fd[1]);
-		execution(ast->left, shell, 1);
-		exit(g_exit_status);
+		execution(ast->left, shell, 1, exit_status);
+		exit(*exit_status);
 	}
 	right_pid = fork();
 	if (right_pid == 0)
@@ -166,46 +166,49 @@ void	execute_pipe(t_ast *ast, t_shell *shell)
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
 		close(fd[0]);
-		execution(ast->right, shell, 1);
-		exit(g_exit_status);
+		execution(ast->right, shell, 1, exit_status);
+		exit(*exit_status);
 	}
 	close(fd[0]);
 	close(fd[1]);
-	wait_update_status(left_pid, &g_exit_status);
-	wait_update_status(right_pid, &g_exit_status);
+	wait_update_status(left_pid, exit_status);
+	wait_update_status(right_pid, exit_status);
 }
 
-void	execute_and_or(t_ast *ast, t_shell *shell)
+void	execute_and_or(t_ast *ast, t_shell *shell, int *exit_status)
 {
-	execution(ast->left, shell, 0);
-	if (ast->type == NODE_AND && g_exit_status == 0)
-		execution(ast->right, shell, 0);
-	else if (ast->type == NODE_OR && g_exit_status != 0)
-		execution(ast->right, shell, 0);
+	execution(ast->left, shell, 0, exit_status);
+	if (ast->type == NODE_AND && *exit_status == 0)
+    	execution(ast->right, shell, 0, exit_status);
+	else if (ast->type == NODE_OR && *exit_status != 0)
+    	execution(ast->right, shell, 0, exit_status);
+
 }
 
-void	execute_group(t_ast *ast, t_shell *shell)
+void	execute_group(t_ast *ast, t_shell *shell, int *exit_status)
 {
 	pid_t pid = fork();
 
 	if (!ast || !ast->left)
 	{
-		g_exit_status = 1;
+		*exit_status = 1;
 		return ;
 	}
 	if (pid == -1)
 	{
 		perror("fork");
-		g_exit_status = 1;
+		*exit_status = 1;
 		return ;
 	}
 	else if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		execution(ast->left, shell, 1);
-		exit(g_exit_status);
+		execution(ast->left, shell, 1, exit_status);
+		exit(*exit_status);
 	}
 	else
-		wait_update_status(pid, &g_exit_status);
+	{
+		wait_update_status(pid, exit_status);
+	}
 }

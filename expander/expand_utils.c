@@ -26,10 +26,10 @@ int	ft_strcmp(char *s1, char *s2)
 	return (s1[i] - s2[i]);
 }
 
-char	*get_env_value(const char *name, t_env *env)
+char	*get_env_value(const char *name, t_env *env, int exit_status)
 {
 	if (!ft_strcmp((char *)name, "?"))
-		return (ft_itoa(g_exit_status));
+		return (ft_itoa(exit_status));
 	while (env)
 	{
 		if (!ft_strcmp((char *)name, env->key))
@@ -85,7 +85,7 @@ char	*join_before_after(char *arg, char *value, int start, int end)
 	return (new);
 }
 
-char	*expand_tilde(char *arg, t_env *env)
+char	*expand_tilde(char *arg, t_env *env, int exit_status)
 {
 	char	*home;
 	char	*new_arg;
@@ -94,7 +94,7 @@ char	*expand_tilde(char *arg, t_env *env)
 		return (arg);
 	if (arg[1] == '\0' || arg[1] == '/' || arg[1] == ' ' || arg[1] == '$')
 	{
-		home = get_env_value("HOME", env);
+		home = get_env_value("HOME", env, exit_status);
 		if (arg[1] == '\0')
 			new_arg = ft_strdup(home);
 		else

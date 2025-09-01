@@ -1,8 +1,6 @@
 #include "minishell.h"
 #include "string.h"
 
-int g_exit_status = 0;
-
 void	print_env(t_env *env)
 {
 	while(env)
@@ -56,6 +54,40 @@ void    set_signals(void)
     signal(SIGQUIT, SIG_IGN);
 }
 
+#include <stdio.h>
+
+static const char *token_type_str(t_token_type type)
+{
+    if (type == WORD)       return "WORD";
+    if (type == PIPE)       return "PIPE";
+    if (type == REDIR_OUT)  return "REDIR_OUT";
+    if (type == REDIR_IN)   return "REDIR_IN";
+    if (type == APPEND)     return "APPEND";
+    if (type == HEREDOC)    return "HEREDOC";
+    if (type == AND_AND)    return "AND_AND";
+    if (type == OR_OR)      return "OR_OR";
+    if (type == AMPERSAND)  return "AMPERSAND";
+    if (type == LPAREN)     return "LPAREN";
+    if (type == RPAREN)     return "RPAREN";
+    return "UNKNOWN";
+}
+
+void    print_tokens(t_token *head)
+{
+    int i = 0;
+    while (head)
+    {
+        printf("token[%d]: type=%s, value=\"%s\", quotes=%d, dquotes=%d\n",
+               i,
+               token_type_str(head->type),
+               head->value ? head->value : "(null)",
+               head->quotes,
+               head->dquotes);
+        head = head->next;
+        i++;
+    }
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	(void)ac;
@@ -63,6 +95,7 @@ int	main(int ac, char **av, char **envp)
 	char	*line;
 	t_token *tokens;
 	t_shell	shell;
+	int exit_status = 0;
 
 	shell.tokens = NULL;
 	shell.ast = NULL;
@@ -75,7 +108,7 @@ int	main(int ac, char **av, char **envp)
 		{
 			ft_putendl_fd("exit", 1);
 			free_shell(&shell);
-			exit(g_exit_status);
+			exit(exit_status);
 		}
 		if (*line)
 			add_history(line);
@@ -93,7 +126,7 @@ int	main(int ac, char **av, char **envp)
 			free(line);
 			continue;
 		}
-		
+		// print_tokens(shell.tokens);
 		shell.tokens = tokens;
 		// if (!shell.tokens)
 		// 	printf("tokens is not working\n");
@@ -101,20 +134,20 @@ int	main(int ac, char **av, char **envp)
 		// 	printf("tokens is working\n");
 		// print_tokens(shell.tokens);
 		shell.ast = parse(&tokens);
-		// if (!shell.ast)
-		// 	printf("ast is not working\n");
-		// else
-		// 	printf("ast is working\n");
-		// print_ast(shell.ast, 0, "ROOT");
+	// 	// if (!shell.ast)
+	// 	// 	printf("ast is not working\n");
+	// 	// else
+	// 	// 	printf("ast is working\n");
+	// 	// print_ast(shell.ast, 0, "ROOT");
 		if (!shell.ast)
 			printf("AST is Null\n");
 		else
-			expand_word(shell.ast, shell.env);
-		execution(shell.ast, &shell, 0);
-		free(line);
-		free_tokens(shell.tokens);
-		free_ast(shell.ast);
+			expand_word(shell.ast, shell.env, exit_status);
+		execution(shell.ast, &shell, 0, &exit_status);
+	// // 	free(line);
+	// 	free_tokens(shell.tokens);
+	// 	free_ast(shell.ast);
 	}
-	free_env(shell.env);
+	// free_env(shell.env);
 	return (0);
 }

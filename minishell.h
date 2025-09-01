@@ -23,7 +23,6 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-extern int			g_exit_status;
 // tokenizer
 typedef enum e_token_type
 {
@@ -75,6 +74,8 @@ typedef struct s_cmd
 	int				here_doc;
 	char			**delimiter;
 	int				*quotes;
+	int				*out_quotes;
+	int				argc;
 }					t_cmd;
 
 typedef enum e_node_type
@@ -128,30 +129,31 @@ void				free_env(t_env *env);
 
 // expander
 int					ft_strcmp(char *s1, char *s2);
-char				*get_env_value(const char *name, t_env *env);
+char				*get_env_value(const char *name, t_env *env, int exit_status);
 void				get_bounds(char *arg, int *start, int *end);
 char				*join_before_after(char *arg, char *value, int start,
 						int end);
-char				*process_arg(char *arg, t_env *env);
-char				*expand_tilde(char *arg, t_env *env);
-void				expand_argv(char **argv, t_env *env, int *flag);
-int					expand_word(t_ast *ast, t_env *env);
+char				*process_arg(char *arg, t_env *env, int exit_status);
+char				*expand_tilde(char *arg, t_env *env, int exit_status);
+void				expand_argv(char **argv, t_env *env, int *flag, int exit_status);
+void	expand_files(t_ast *ast, t_env *env, int *flag, int exit_status);
+int					expand_word(t_ast *ast, t_env *env, int exit_status);
 
 // execution
 void				split_free(char **split);
 char				*concat(char *path, char slash, char *cmd);
 char				**env_to_char_array(t_env *env);
 char				*find_cmd_path(char *cmd, t_env *env);
-void				execution(t_ast *ast, t_shell *shell, int in_child);
-void				execute_one_cmd(t_ast *ast, t_shell *shell);
-void				execute_pipe(t_ast *ast, t_shell *shell);
+void				execution(t_ast *ast, t_shell *shell, int in_child, int *exit_status);
+void				execute_one_cmd(t_ast *ast, t_shell *shell, int *exit_status);
+void				execute_pipe(t_ast *ast, t_shell *shell, int *exit_status);
 void				execute_redirect_in(t_cmd *cmd);
 void				execute_redirect_out(t_cmd *cmd);
 void				execute_herdoc(t_cmd *cmd);
 bool	is_builtin(char *cmd, t_shell *shell);
 void	execute_builtins(char *cmd, t_ast *ast, t_shell *shell);
-void				execute_and_or(t_ast *ast, t_shell *shell);
-void				execute_group(t_ast *ast, t_shell *shell);
+void				execute_and_or(t_ast *ast, t_shell *shell, int *exit_status);
+void				execute_group(t_ast *ast, t_shell *shell, int *exit_status);
 
 // builtins
 typedef struct s_builtin

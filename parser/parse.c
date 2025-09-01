@@ -12,56 +12,86 @@
 
 #include "../minishell.h"
 
-int add_argv_with_flags(char ***argv, int **flags, int *argc, char *value, int quote_type)
+int	add_out(t_cmd *cmd, char *value, int *argc, int quotes, int dquotes)
 {
-    char **new_argv;
-    int  *new_flags;
-    int   i;
+	char **new_out;
+	int	*new_out_quotes;
+	int i;
 
-    new_argv = malloc(sizeof(char *) * ((*argc) + 2));
-    if (!new_argv)
-        return (0);
+	new_out = malloc(sizeof(char *) * ((*argc) + 2));
+	new_out_quotes = malloc(sizeof(int) * ((*argc) + 2));
+	if (!new_out || !new_out_quotes)
+		return 0;
+	i = 0;
+	while(i < *argc)
+	{
+		new_out[i] = cmd->outfile[i];
+		new_out_quotes[i] = cmd->out_quotes[i];
+		i++;
+	}
+	new_out[i] = ft_strdup(value);
+	if (!new_out[i])
+		return (0);
+	if (quotes)
+		new_out_quotes[i] = 1;
+	else if (dquotes)
+		new_out_quotes[i] = 2;
+	else if (!quotes || !dquotes)
+		new_out_quotes[i] = 0;
+	new_out[i + 1] = NULL;
+    new_out_quotes[i + 1] = 0;
+	cmd->outfile = new_out;
+	cmd->out_quotes = new_out_quotes;
+	(*argc)++;
+	return (1);
+}
 
-    new_flags = malloc(sizeof(int) * ((*argc) + 1));
-    if (!new_flags)
-        return (free(new_argv), 0);
 
-    i = 0;
-    while (i < *argc)
-    {
-        new_argv[i] = (*argv)[i];
-        new_flags[i] = (*flags)[i];
-        i++;
-    }
+int add_a(t_cmd *cmd, char *value, int *argc, int quotes, int dquotes)
+{
+	char **new_argv;
+	int	*neww_quotes;
+	int i;
 
-    new_argv[i] = ft_strdup(value);
-    if (!new_argv[i])
-        return (free(new_flags), free(new_argv), 0);
-
-    new_flags[i] = quote_type;
-    new_argv[i + 1] = NULL;
-
-    free(*argv);
-    free(*flags);
-
-    *argv = new_argv;
-    *flags = new_flags;
-    (*argc)++;
-    return (1);
+	new_argv = malloc(sizeof(char *) * ((*argc) + 2));
+	neww_quotes = malloc(sizeof(int) * ((*argc) + 2));
+	if (!new_argv || !neww_quotes)
+		return 0;
+	i = 0;
+	while(i < *argc)
+	{
+		new_argv[i] = cmd->argv[i];
+		neww_quotes[i] = cmd->quotes[i];
+		i++;
+	}
+	new_argv[i] = ft_strdup(value);
+	if (!new_argv[i])
+		return (0);
+	if (quotes)
+		neww_quotes[i] = 1;
+	else if (dquotes)
+		neww_quotes[i] = 2;
+	else if (!quotes || !dquotes)
+		neww_quotes[i] = 0;
+	new_argv[i + 1] = NULL;
+    neww_quotes[i + 1] = 0;
+	cmd->argv = new_argv;
+	cmd->quotes = neww_quotes;
+	(*argc)++;
+	return (1);
 }
 
 t_ast	*parse_cmd(t_token **tokens)
 {
 	t_ast	*node;
-	char	**argv;
+	// char	**argv;
 	int		argc;
 	int		i;
 	int		j;
-	int *flags = NULL;
 	if ((*tokens)->type == LPAREN)
     	return parse_group(tokens);
 	node = ast_new_node(NODE_CMD, NULL, NULL);
-	argv = NULL;
+	// argv = NULL;
 	argc = 0;
 	if (!node)
 		return (NULL);
@@ -82,7 +112,9 @@ t_ast	*parse_cmd(t_token **tokens)
 			else
 				node->cmd.append = 1;	
 			*tokens = (*tokens)->next;
-			add_str(&node->cmd.outfile, &i, (*tokens)->value);
+			// add_str(&node->cmd.outfile, &i, (*tokens)->value);
+			printf("there is an outfile\n");
+			add_out(&node->cmd, (*tokens)->value, &i, (*tokens)->quotes, (*tokens)->dquotes);
 		}
 		else if ((*tokens)->type == HEREDOC)
 		{
@@ -92,21 +124,29 @@ t_ast	*parse_cmd(t_token **tokens)
 		}
 		else if ((*tokens)->type == WORD)
 		{
+			if (!add_a(&node->cmd, (*tokens)->value, &argc, (*tokens)->quotes, (*tokens)->dquotes))
+				return (NULL);
 
-			int quote_type = 0;
-			if ((*tokens)->quotes)
-				quote_type = 1;
-			else if ((*tokens)->dquotes)
-				quote_type = 2;
 			// if (!add_str(&argv, &argc, (*tokens)->value))
 			// 	return 	(NULL);
-			if (!add_argv_with_flags(&argv, &flags, &argc, (*tokens)->value, quote_type))
-				return (NULL);
 		}
 		*tokens = (*tokens)->next;
 	}
-	node->cmd.argv = argv;
-	node->cmd.quotes = flags;
+	// node->cmd.argv = argv;
+	// int n = 0;
+	// while(n < (argc))
+	// {
+	// 	printf("argv[i]: %s\n", node->cmd.argv[n]);
+	// 	printf("quotes[i]: %d\n", node->cmd.quotes[n]);
+	// 	n++;
+	// }
+	// n = 0;
+	// while(n < (i))
+	// {
+	// 	printf("out[i]: %s\n", node->cmd.outfile[n]);
+	// 	printf("outquotes[i]: %d\n", node->cmd.out_quotes[n]);
+	// 	n++;
+	// }
 	return (node);
 }
 
