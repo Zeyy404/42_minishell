@@ -1,6 +1,7 @@
 #include "minishell.h"
 #include "string.h"
 
+int g_child_running = 0;
 void	print_env(t_env *env)
 {
 	while(env)
@@ -42,10 +43,13 @@ void	free_shell(t_shell	*shell)
 void sigint(int sig)
 {
     (void)sig;
-    ft_putstr_fd("\n", 1);
-    rl_on_new_line();
-    // rl_replace_line("", 0);
-    rl_redisplay();
+	if (!g_child_running)
+	{
+		ft_putstr_fd("\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
 }
 
 void    set_signals(void)
@@ -85,6 +89,97 @@ void    print_tokens(t_token *head)
                head->dquotes);
         head = head->next;
         i++;
+    }
+}
+
+
+#include <stdio.h>
+
+// Helper to print node type as string
+static const char *node_type_str(t_node_type type)
+{
+    if (type == NODE_CMD) return "CMD";
+    if (type == NODE_AND) return "AND";
+    if (type == NODE_OR) return "OR";
+    if (type == NODE_PIPE) return "PIPE";
+    if (type == NODE_GROUP) return "GROUP";
+    return "UNKNOWN";
+}
+
+// Helper to print indentation
+static void print_indent(int depth)
+{
+    for (int i = 0; i < depth; i++)
+        printf("    "); // 4 spaces
+}
+
+// Recursive AST printer
+void print_ast(t_ast *node, int depth)
+{
+    if (!node)
+        return;
+
+    print_indent(depth);
+    printf("Node: %s\n", node_type_str(node->type));
+
+    // If it's a command, print its details
+    if (node->type == NODE_CMD)
+    {
+        if (node->cmd.argv)
+        {
+            print_indent(depth);
+            printf("  argv: ");
+            for (int i = 0; node->cmd.argv[i]; i++)
+                printf("\"%s\" ", node->cmd.argv[i]);
+            printf("\n");
+        }
+
+        if (node->cmd.infile)
+        {
+            print_indent(depth);
+            printf("  infile: \"%s\"\n", node->cmd.infile);
+        }
+
+        if (node->cmd.outfile)
+        {
+            print_indent(depth);
+            printf("  outfile(s): ");
+            for (int i = 0; node->cmd.outfile[i]; i++)
+                printf("\"%s\" ", node->cmd.outfile[i]);
+            printf("\n");
+        }
+
+        if (node->cmd.here_doc)
+        {
+            print_indent(depth);
+            printf("  here_doc: yes\n");
+            if (node->cmd.delimiter)
+            {
+                print_indent(depth);
+                printf("  delimiters: ");
+                for (int i = 0; node->cmd.delimiter[i]; i++)
+                    printf("\"%s\" ", node->cmd.delimiter[i]);
+                printf("\n");
+            }
+        }
+
+        print_indent(depth);
+        printf("  append: %d\n", node->cmd.append);
+    }
+
+    // Recurse into children
+    if (node->left)
+    {
+        print_indent(depth);
+        printf("  left:\n");
+        print_ast(node->left, depth + 1);
+    }
+
+    if (node->right)
+    {
+        print_indent(depth);
+        printf("  right:\n");
+        print_ast(node->right, depth + 1);
     }
 }
 
@@ -143,6 +238,7 @@ int	main(int ac, char **av, char **envp)
 			printf("AST is Null\n");
 		else
 			expand_word(shell.ast, shell.env, exit_status);
+		// print_ast(shell.ast, 0);
 		execution(shell.ast, &shell, 0, &exit_status);
 	// // 	free(line);
 	// 	free_tokens(shell.tokens);

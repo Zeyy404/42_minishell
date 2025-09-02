@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih < zsalih@student.42abudhabi.ae>     +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:49:18 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/08/21 00:44:19 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/02 16:19:51 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,11 +88,13 @@ void	execution(t_ast *ast, t_shell *shell, int in_child, int *exit_status)
 		execute_and_or(ast, shell, exit_status);
 	else if (ast->type == NODE_GROUP)
 		execute_group(ast, shell, exit_status);
+
 }
 
 void	wait_update_status(pid_t pid, int *exit_status)
 {
 	int	status;
+	int sig;
 
 	if (waitpid(pid, &status, 0) == -1)
 	{
@@ -103,7 +105,14 @@ void	wait_update_status(pid_t pid, int *exit_status)
 	if (WIFEXITED(status))
 		*exit_status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
-		*exit_status = 128 + WTERMSIG(status);
+	{
+		sig = WTERMSIG(status);
+		if (sig == SIGQUIT)
+			printf("Quit: %d\n", sig);
+		else if (sig == SIGINT)
+			printf("\n");	
+		*exit_status = 128 + sig;
+	}
 }
 
 void	execute_one_cmd(t_ast *ast, t_shell *shell, int *exit_status)
@@ -113,9 +122,11 @@ void	execute_one_cmd(t_ast *ast, t_shell *shell, int *exit_status)
 	char	**env_arr;
 
 	pid = fork();
+	g_child_running = 1;
 	if (pid == 0)
 	{
-		signal(SIGINT, SIG_DFL);
+		
+		signal(SIGINT, sigint);
 		signal(SIGQUIT, SIG_DFL);
 		execute_redirect_in(&ast->cmd);
 		execute_redirect_out(&ast->cmd);
@@ -148,9 +159,11 @@ void	execute_pipe(t_ast *ast, t_shell *shell, int *exit_status)
 	if (pipe(fd) == -1)
 		return (perror("pipe"));
 	left_pid = fork();
+	g_child_running = 1;
 	if (left_pid == 0)
 	{
-		signal(SIGINT, SIG_DFL);
+		
+		signal(SIGINT, sigint);
 		signal(SIGQUIT, SIG_DFL);
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
@@ -159,9 +172,11 @@ void	execute_pipe(t_ast *ast, t_shell *shell, int *exit_status)
 		exit(*exit_status);
 	}
 	right_pid = fork();
+	g_child_running = 1;
 	if (right_pid == 0)
 	{
-		signal(SIGINT, SIG_DFL);
+		
+		signal(SIGINT, sigint);
 		signal(SIGQUIT, SIG_DFL);
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
@@ -182,13 +197,12 @@ void	execute_and_or(t_ast *ast, t_shell *shell, int *exit_status)
     	execution(ast->right, shell, 0, exit_status);
 	else if (ast->type == NODE_OR && *exit_status != 0)
     	execution(ast->right, shell, 0, exit_status);
-
 }
 
 void	execute_group(t_ast *ast, t_shell *shell, int *exit_status)
 {
 	pid_t pid = fork();
-
+	g_child_running = 1;
 	if (!ast || !ast->left)
 	{
 		*exit_status = 1;
@@ -200,10 +214,13 @@ void	execute_group(t_ast *ast, t_shell *shell, int *exit_status)
 		*exit_status = 1;
 		return ;
 	}
+	
 	else if (pid == 0)
 	{
-		signal(SIGINT, SIG_DFL);
+		
+		signal(SIGINT, sigint);
 		signal(SIGQUIT, SIG_DFL);
+		
 		execution(ast->left, shell, 1, exit_status);
 		exit(*exit_status);
 	}

@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/08/24 11:51:05 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/02 16:16:40 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
+extern int g_child_running; 
 // tokenizer
 typedef enum e_token_type
 {
@@ -177,4 +178,6 @@ int					is_valid_key(const char *str);
 
 void	free_shell(t_shell	*shell);
 void	free_ast(t_ast *ast);
+
+void sigint(int sig);
 #endif

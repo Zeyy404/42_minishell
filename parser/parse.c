@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:11:16 by zsalih            #+#    #+#             */
-/*   Updated: 2025/08/24 12:58:49 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/02 13:37:18 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,6 +231,62 @@ t_ast	*parse_group(t_token **tokens)
 	}
 	return (group_node);
 }
+
+// t_ast *parse_group(t_token **tokens)
+// {
+//     t_ast *inner;
+//     t_ast *group_node;
+//     int out_count = 0;
+//     int heredoc_count = 0;
+
+//     // Skip '('
+//     *tokens = (*tokens)->next;
+
+//     // Parse the inside as full AND/OR pipeline
+//     inner = parse_and_or(tokens);
+//     if (!inner || !*tokens || (*tokens)->type != RPAREN)
+//     {
+//         free_ast(inner);
+//         return NULL;
+//     }
+
+//     // Skip ')'
+//     *tokens = (*tokens)->next;
+
+//     // Wrap in a NODE_GROUP
+//     group_node = ast_new_node(NODE_GROUP, inner, NULL);
+//     if (!group_node)
+//     {
+//         free_ast(inner);
+//         return NULL;
+//     }
+
+//     // Handle redirections applied to the group as a whole:  (cmd) > file
+//     while (*tokens && is_redir((*tokens)->type))
+//     {
+//         if ((*tokens)->type == REDIR_IN)
+//         {
+//             *tokens = (*tokens)->next;
+//             group_node->cmd.infile = ft_strdup((*tokens)->value);
+//         }
+//         else if ((*tokens)->type == REDIR_OUT || (*tokens)->type == APPEND)
+//         {
+//             group_node->cmd.append = ((*tokens)->type == APPEND);
+//             *tokens = (*tokens)->next;
+//             add_out(&group_node->cmd, (*tokens)->value, &out_count, (*tokens)->quotes, (*tokens)->dquotes);
+//         }
+//         else if ((*tokens)->type == HEREDOC)
+//         {
+//             *tokens = (*tokens)->next;
+//             add_str(&group_node->cmd.delimiter, &heredoc_count, (*tokens)->value);
+//         }
+//         *tokens = (*tokens)->next;
+//     }
+
+//     return group_node;
+// }
+
+
 
 t_ast	*parse(t_token **tokens)
 {
