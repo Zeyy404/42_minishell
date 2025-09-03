@@ -15,6 +15,7 @@ FILES:= tokenizer/token_list.c \
 		env/env.c \
 		expander/expand_utils.c \
 		expander/expander.c \
+		execution/find_path.c \
 		execution/execute_utils.c \
 		execution/execute_builtins.c \
 		execution/execute_redirects.c \
@@ -27,6 +28,7 @@ FILES:= tokenizer/token_list.c \
 		builtins/builtin_unset.c \
 		builtins/builtin_env.c \
 		builtins/builtin_utils.c \
+		signals/signals.c \
 		main.c
 
 HEADER:= minishell.h

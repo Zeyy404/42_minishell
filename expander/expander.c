@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 12:04:50 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/08/24 12:57:15 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/03 12:20:41 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ char	*process_arg(char *arg, t_env *env, int exit_status)
 	char	*var_name;
 	char	*value;
 	char	*new_arg;
+
 	while (1)
 	{
 		get_bounds(arg, &start, &end);
@@ -38,10 +39,10 @@ char	*process_arg(char *arg, t_env *env, int exit_status)
 void	expand_argv(char **argv, t_env *env, int *flag, int exit_status)
 {
 	int	i;
+
 	i = 0;
 	while (argv[i])
 	{
-
 		if (flag[i] != 1)
 		{
 			argv[i] = expand_tilde(argv[i], env, exit_status);
@@ -53,7 +54,8 @@ void	expand_argv(char **argv, t_env *env, int *flag, int exit_status)
 
 void	expand_files(t_ast *ast, t_env *env, int *flag, int exit_status)
 {
-	int i;
+	int	i;
+
 	i = 0;
 	if (ast->cmd.infile)
 	{
@@ -66,21 +68,22 @@ void	expand_files(t_ast *ast, t_env *env, int *flag, int exit_status)
 		{
 			if (flag[i] != 1)
 			{
-				ast->cmd.outfile[i] = expand_tilde(ast->cmd.outfile[i], env, exit_status);
-				ast->cmd.outfile[i] = process_arg(ast->cmd.outfile[i], env, exit_status);
+				ast->cmd.outfile[i] = expand_tilde(ast->cmd.outfile[i], env,
+						exit_status);
+				ast->cmd.outfile[i] = process_arg(ast->cmd.outfile[i], env,
+						exit_status);
 			}
 			i++;
 		}
 	}
-	// printf("infile: %s\n", ast->cmd.infile);
-	// printf("outfile: %s\n", ast->cmd.outfile);
 }
 
 int	expand_word(t_ast *ast, t_env *env, int exit_status)
 {
 	if (!ast)
 		return (0);
-	if (ast->type == NODE_CMD && (ast->cmd.argv || ast->cmd.infile || ast->cmd.outfile))
+	if (ast->type == NODE_CMD && (ast->cmd.argv || ast->cmd.infile
+			|| ast->cmd.outfile))
 	{
 		expand_argv(ast->cmd.argv, env, ast->cmd.quotes, exit_status);
 		expand_files(ast, env, ast->cmd.out_quotes, exit_status);

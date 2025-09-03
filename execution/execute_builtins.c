@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtins.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih < zsalih@student.42abudhabi.ae>     +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:43:07 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/08/21 00:42:54 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/03 15:55:14 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,36 @@ void	execute_builtins(char *cmd, t_ast *ast, t_shell *shell)
 		}
 		i++;
 	}
+}
+
+int	builtin_child(t_ast *ast, t_shell *shell, int *exit_status)
+{
+	if (execute_redirect_in(&ast->cmd, exit_status))
+	{
+		*exit_status = 1;
+		return (1);
+	}
+	if (execute_redirect_out(&ast->cmd))
+	{
+		*exit_status = 1;
+		return (1);
+	}
+	execute_builtins(ast->cmd.argv[0], ast, shell);
+	return (0);
+}
+
+int	builtin_parent(t_ast *ast, t_shell *shell, int *exit_status)
+{
+	int	in;
+	int	out;
+
+	in = dup(STDIN_FILENO);
+	out = dup(STDOUT_FILENO);
+	if (builtin_child(ast, shell, exit_status))
+		return (1);
+	dup2(in, STDIN_FILENO);
+	dup2(out, STDOUT_FILENO);
+	close(in);
+	close(out);
+	return (0);
 }

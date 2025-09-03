@@ -40,24 +40,6 @@ void	free_shell(t_shell	*shell)
 		free(shell->ast);
 }
 
-void sigint(int sig)
-{
-    (void)sig;
-	if (!g_child_running)
-	{
-		ft_putstr_fd("\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-}
-
-void    set_signals(void)
-{
-    signal(SIGINT, sigint);
-    signal(SIGQUIT, SIG_IGN);
-}
-
 #include <stdio.h>
 
 static const char *token_type_str(t_token_type type)

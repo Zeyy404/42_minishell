@@ -1,1 +1,0 @@
-echio hello || (cd expander && ls)

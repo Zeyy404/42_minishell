@@ -6,54 +6,14 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:49:18 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/02 16:19:51 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/03 16:06:00 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*find_cmd_path(char *cmd, t_env *env)
-{
-	char	*path;
-	t_env	*tmp;
-	char	**split_path;
-	int		i;
-	char	*joined_path;
-
-	tmp = env;
-	path = NULL;
-	if (!access(cmd, X_OK))
-	{
-		return (cmd);
-	}
-	while (tmp)
-	{
-		if (!ft_strcmp(tmp->key, "PATH"))
-		{
-			path = tmp->value;
-			break ;
-		}
-		tmp = tmp->next;
-	}
-	if (!path)
-		return (NULL);
-	split_path = ft_split(path, ':');
-	i = 0;
-	while (split_path[i])
-	{
-		joined_path = concat(split_path[i], '/', cmd);
-		if (!access(joined_path, X_OK))
-			return (split_free(split_path), joined_path);
-		free(joined_path);
-		i++;
-	}
-	split_free(split_path);
-	return (NULL);
-}
-
 void	execution(t_ast *ast, t_shell *shell, int in_child, int *exit_status)
 {
-	int in, out;
 	if (!ast)
 		return ;
 	if (ast->type == NODE_CMD)
@@ -61,23 +21,9 @@ void	execution(t_ast *ast, t_shell *shell, int in_child, int *exit_status)
 		if (ast->cmd.argv && is_builtin(ast->cmd.argv[0], shell))
 		{
 			if (in_child)
-			{
-				execute_redirect_in(&ast->cmd);
-				execute_redirect_out(&ast->cmd);
-				execute_builtins(ast->cmd.argv[0], ast, shell);
-			}
+				builtin_child(ast, shell, exit_status);
 			else
-			{
-				in = dup(STDIN_FILENO);
-				out = dup(STDOUT_FILENO);
-				execute_redirect_in(&ast->cmd);
-				execute_redirect_out(&ast->cmd);
-				execute_builtins(ast->cmd.argv[0], ast, shell);
-				dup2(in, STDIN_FILENO);
-				dup2(out, STDOUT_FILENO);
-				close(in);
-				close(out);
-			}
+				builtin_parent(ast, shell, exit_status);
 		}
 		else
 			execute_one_cmd(ast, shell, exit_status);
@@ -85,147 +31,79 @@ void	execution(t_ast *ast, t_shell *shell, int in_child, int *exit_status)
 	else if (ast->type == NODE_PIPE)
 		execute_pipe(ast, shell, exit_status);
 	else if (ast->type == NODE_AND || ast->type == NODE_OR)
-		execute_and_or(ast, shell, exit_status);
+		execute_and_or(ast, shell, exit_status, in_child);
 	else if (ast->type == NODE_GROUP)
 		execute_group(ast, shell, exit_status);
-
-}
-
-void	wait_update_status(pid_t pid, int *exit_status)
-{
-	int	status;
-	int sig;
-
-	if (waitpid(pid, &status, 0) == -1)
-	{
-		perror("waitpid");
-		*exit_status = 1;
-		return ;
-	}
-	if (WIFEXITED(status))
-		*exit_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-	{
-		sig = WTERMSIG(status);
-		if (sig == SIGQUIT)
-			printf("Quit: %d\n", sig);
-		else if (sig == SIGINT)
-			printf("\n");	
-		*exit_status = 128 + sig;
-	}
 }
 
 void	execute_one_cmd(t_ast *ast, t_shell *shell, int *exit_status)
 {
 	pid_t	pid;
-	char	*cmd_path;
-	char	**env_arr;
 
 	pid = fork();
 	g_child_running = 1;
 	if (pid == 0)
-	{
-		
-		signal(SIGINT, sigint);
-		signal(SIGQUIT, SIG_DFL);
-		execute_redirect_in(&ast->cmd);
-		execute_redirect_out(&ast->cmd);
-		if (!ast->cmd.argv || !ast->cmd.argv[0])
-			exit(0);
-		cmd_path = find_cmd_path(ast->cmd.argv[0], shell->env);
-		env_arr = env_to_char_array(shell->env);
-		if (!cmd_path)
-		{
-			ft_putstr_fd(ast->cmd.argv[0], 2);
-			ft_putendl_fd(": command not found", 2);
-			split_free(env_arr);
-			exit(127);
-		}
-		execve(cmd_path, ast->cmd.argv, env_arr);
-		perror("execve");
-		split_free(env_arr);
-		free(cmd_path);
-		exit(1);
-	}
+		exec_child_one(ast, shell, exit_status);
 	else
 		wait_update_status(pid, exit_status);
 }
 
 void	execute_pipe(t_ast *ast, t_shell *shell, int *exit_status)
 {
-	int fd[2];
-	pid_t left_pid, right_pid;
+	int		fd[2];
+	pid_t	left_pid;
+	pid_t	right_pid;
 
 	if (pipe(fd) == -1)
 		return (perror("pipe"));
 	left_pid = fork();
 	g_child_running = 1;
 	if (left_pid == 0)
-	{
-		
-		signal(SIGINT, sigint);
-		signal(SIGQUIT, SIG_DFL);
-		close(fd[0]);
-		dup2(fd[1], STDOUT_FILENO);
-		close(fd[1]);
-		execution(ast->left, shell, 1, exit_status);
-		exit(*exit_status);
-	}
+		exec_child_pipe_left(ast, shell, exit_status, fd);
 	right_pid = fork();
 	g_child_running = 1;
 	if (right_pid == 0)
-	{
-		
-		signal(SIGINT, sigint);
-		signal(SIGQUIT, SIG_DFL);
-		close(fd[1]);
-		dup2(fd[0], STDIN_FILENO);
-		close(fd[0]);
-		execution(ast->right, shell, 1, exit_status);
-		exit(*exit_status);
-	}
+		exec_child_pipe_right(ast, shell, exit_status, fd);
 	close(fd[0]);
 	close(fd[1]);
 	wait_update_status(left_pid, exit_status);
 	wait_update_status(right_pid, exit_status);
 }
 
-void	execute_and_or(t_ast *ast, t_shell *shell, int *exit_status)
+void	execute_and_or(t_ast *ast, t_shell *shell, int *exit_status,
+	int in_child)
 {
-	execution(ast->left, shell, 0, exit_status);
+	execution(ast->left, shell, in_child, exit_status);
 	if (ast->type == NODE_AND && *exit_status == 0)
-    	execution(ast->right, shell, 0, exit_status);
+		execution(ast->right, shell, in_child, exit_status);
 	else if (ast->type == NODE_OR && *exit_status != 0)
-    	execution(ast->right, shell, 0, exit_status);
+		execution(ast->right, shell, in_child, exit_status);
 }
 
 void	execute_group(t_ast *ast, t_shell *shell, int *exit_status)
 {
-	pid_t pid = fork();
-	g_child_running = 1;
+	pid_t	pid;
+
 	if (!ast || !ast->left)
 	{
 		*exit_status = 1;
 		return ;
 	}
+	pid = fork();
+	g_child_running = 1;
 	if (pid == -1)
 	{
 		perror("fork");
 		*exit_status = 1;
 		return ;
 	}
-	
 	else if (pid == 0)
 	{
-		
 		signal(SIGINT, sigint);
 		signal(SIGQUIT, SIG_DFL);
-		
 		execution(ast->left, shell, 1, exit_status);
 		exit(*exit_status);
 	}
 	else
-	{
 		wait_update_status(pid, exit_status);
-	}
 }
