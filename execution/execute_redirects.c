@@ -41,6 +41,8 @@ int	execute_redirect_out(t_cmd *cmd)
 		err = open_outfile(cmd->outfile[i], cmd->append, &fd);
 		if (err)
 			return (1);
+		if (cmd->outfile[i + 1])
+			close(fd);
 		i++;
 	}
 	if (dup2(fd, STDOUT_FILENO) == -1)

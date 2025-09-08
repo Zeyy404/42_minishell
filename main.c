@@ -95,16 +95,20 @@ static void print_indent(int depth)
         printf("    "); // 4 spaces
 }
 
-// Recursive AST printer
 void print_ast(t_ast *node, int depth)
 {
     if (!node)
         return;
 
     print_indent(depth);
-    printf("Node: %s\n", node_type_str(node->type));
 
-    // If it's a command, print its details
+    // Add marker if root
+    if (depth == 0)
+        printf("Root Node: %s\n", node_type_str(node->type));
+    else
+        printf("Node: %s\n", node_type_str(node->type));
+
+    // Print CMD details if needed (your existing code)
     if (node->type == NODE_CMD)
     {
         if (node->cmd.argv)
@@ -165,6 +169,7 @@ void print_ast(t_ast *node, int depth)
     }
 }
 
+
 int	main(int ac, char **av, char **envp)
 {
 	(void)ac;
@@ -190,7 +195,7 @@ int	main(int ac, char **av, char **envp)
 		if (*line)
 			add_history(line);
 		tokens = tokenize(line);
-		// print_tokens(tokens);
+		print_tokens(tokens);
 		if (!tokens)
 		{
 			free(line);
@@ -215,7 +220,7 @@ int	main(int ac, char **av, char **envp)
 	// 	// 	printf("ast is not working\n");
 	// 	// else
 	// 	// 	printf("ast is working\n");
-	// 	// print_ast(shell.ast, 0, "ROOT");
+		// print_ast(shell.ast, 0, "ROOT");
 		if (!shell.ast)
 			printf("AST is Null\n");
 		else

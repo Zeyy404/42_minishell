@@ -33,7 +33,7 @@ void	execution(t_ast *ast, t_shell *shell, int in_child, int *exit_status)
 	else if (ast->type == NODE_AND || ast->type == NODE_OR)
 		execute_and_or(ast, shell, exit_status, in_child);
 	else if (ast->type == NODE_GROUP)
-		execute_group(ast, shell, exit_status);
+		execute_group(ast, shell, exit_status, in_child);
 }
 
 void	execute_one_cmd(t_ast *ast, t_shell *shell, int *exit_status)
@@ -80,8 +80,9 @@ void	execute_and_or(t_ast *ast, t_shell *shell, int *exit_status,
 		execution(ast->right, shell, in_child, exit_status);
 }
 
-void	execute_group(t_ast *ast, t_shell *shell, int *exit_status)
+void	execute_group(t_ast *ast, t_shell *shell, int *exit_status, int in_child)
 {
+	printf("in execute group\n");
 	pid_t	pid;
 
 	if (!ast || !ast->left)
@@ -101,6 +102,27 @@ void	execute_group(t_ast *ast, t_shell *shell, int *exit_status)
 	{
 		signal(SIGINT, sigint);
 		signal(SIGQUIT, SIG_DFL);
+		if (!in_child && ast->cmd.outfile)
+		{
+			if (execute_redirect_out(&ast->cmd))
+			{
+				*exit_status = 1;
+				exit(1);
+			}
+		}
+		if (ast->cmd.infile)
+		{
+			if (execute_redirect_in(&ast->cmd, exit_status))
+			{
+				*exit_status = 1;
+				exit(1);
+			}
+		}
+		if (ast->cmd.here_doc)
+		{
+			if (execute_herdoc(& ast->cmd))
+				exit(1);
+		}
 		execution(ast->left, shell, 1, exit_status);
 		exit(*exit_status);
 	}

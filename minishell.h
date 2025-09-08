@@ -166,7 +166,7 @@ void	execute_one_cmd(t_ast *ast, t_shell *shell, int *exit_status);
 void	execute_pipe(t_ast *ast, t_shell *shell, int *exit_status);
 void	execute_and_or(t_ast *ast, t_shell *shell, int *exit_status,
 	int in_child);
-void	execute_group(t_ast *ast, t_shell *shell, int *exit_status);
+void	execute_group(t_ast *ast, t_shell *shell, int *exit_status, int in_child);
 
 // builtins
 typedef struct s_builtin

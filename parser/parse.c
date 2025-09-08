@@ -113,7 +113,7 @@ t_ast	*parse_cmd(t_token **tokens)
 				node->cmd.append = 1;	
 			*tokens = (*tokens)->next;
 			// add_str(&node->cmd.outfile, &i, (*tokens)->value);
-			printf("there is an outfile\n");
+			// printf("there is an outfile\n");
 			add_out(&node->cmd, (*tokens)->value, &i, (*tokens)->quotes, (*tokens)->dquotes);
 		}
 		else if ((*tokens)->type == HEREDOC)
@@ -188,23 +188,23 @@ t_ast	*parse_and_or(t_token **tokens)
 }
 t_ast	*parse_group(t_token **tokens)
 {
-	t_ast	*node;
+	t_ast	*inner;
 	t_ast	*group_node;
 	int		i;
 	int		j;
 
 	*tokens = (*tokens)->next;
-	node = parse_and_or(tokens);
-	if (!node || !*tokens || (*tokens)->type != RPAREN)
+	inner = parse_and_or(tokens);
+	if (!inner || !*tokens || (*tokens)->type != RPAREN)
 	{
-		free_ast(node);
+		free_ast(inner);
 		return (NULL);
 	}
 	*tokens = (*tokens)->next;
-	group_node = ast_new_node(NODE_GROUP, node, NULL);
+	group_node = ast_new_node(NODE_GROUP, inner, NULL);
 	if (!group_node)
 	{
-		free_ast(node);
+		free_ast(inner);
 		return (NULL);
 	}
 	i = 0;
@@ -220,82 +220,35 @@ t_ast	*parse_group(t_token **tokens)
 		{
 			group_node->cmd.append = ((*tokens)->type == APPEND);
 			*tokens = (*tokens)->next;
-			add_str(&node->cmd.outfile, &i, (*tokens)->value);
+			add_str(&group_node->cmd.outfile, &i, (*tokens)->value);
 		}
 		else if ((*tokens)->type == HEREDOC)
 		{
 			*tokens = (*tokens)->next;
-			add_str(&node->cmd.delimiter, &j, (*tokens)->value);
+			add_str(&group_node->cmd.delimiter, &j, (*tokens)->value);
+			group_node->cmd.here_doc = 1;
 		}
 		*tokens = (*tokens)->next;
 	}
 	return (group_node);
 }
 
-// t_ast *parse_group(t_token **tokens)
+// t_ast	*parse(t_token **tokens)
 // {
-//     t_ast *inner;
-//     t_ast *group_node;
-//     int out_count = 0;
-//     int heredoc_count = 0;
-
-//     // Skip '('
-//     *tokens = (*tokens)->next;
-
-//     // Parse the inside as full AND/OR pipeline
-//     inner = parse_and_or(tokens);
-//     if (!inner || !*tokens || (*tokens)->type != RPAREN)
-//     {
-//         free_ast(inner);
-//         return NULL;
-//     }
-
-//     // Skip ')'
-//     *tokens = (*tokens)->next;
-
-//     // Wrap in a NODE_GROUP
-//     group_node = ast_new_node(NODE_GROUP, inner, NULL);
-//     if (!group_node)
-//     {
-//         free_ast(inner);
-//         return NULL;
-//     }
-
-//     // Handle redirections applied to the group as a whole:  (cmd) > file
-//     while (*tokens && is_redir((*tokens)->type))
-//     {
-//         if ((*tokens)->type == REDIR_IN)
-//         {
-//             *tokens = (*tokens)->next;
-//             group_node->cmd.infile = ft_strdup((*tokens)->value);
-//         }
-//         else if ((*tokens)->type == REDIR_OUT || (*tokens)->type == APPEND)
-//         {
-//             group_node->cmd.append = ((*tokens)->type == APPEND);
-//             *tokens = (*tokens)->next;
-//             add_out(&group_node->cmd, (*tokens)->value, &out_count, (*tokens)->quotes, (*tokens)->dquotes);
-//         }
-//         else if ((*tokens)->type == HEREDOC)
-//         {
-//             *tokens = (*tokens)->next;
-//             add_str(&group_node->cmd.delimiter, &heredoc_count, (*tokens)->value);
-//         }
-//         *tokens = (*tokens)->next;
-//     }
-
-//     return group_node;
+// 	if (!*tokens)
+// 		return (NULL);
+// 	if ((*tokens)->type == LPAREN)
+// 		return (parse_group(tokens));
+// 	return (parse_and_or(tokens));
 // }
 
-
-
-t_ast	*parse(t_token **tokens)
+t_ast *parse(t_token **tokens)
 {
-	if (!*tokens)
-		return (NULL);
-	if ((*tokens)->type == LPAREN)
-		return (parse_group(tokens));
-	return (parse_and_or(tokens));
+    if (!*tokens)
+        return (NULL);
+    return parse_and_or(tokens);
 }
+
 
 // t_ast *parse(t_token **tokens)
 // {
