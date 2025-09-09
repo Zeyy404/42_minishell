@@ -1,0 +1,7 @@
+{
+   readline
+   Memcheck:Leak
+   fun:malloc
+   fun:__libc_malloc
+   obj:/usr/lib/libreadline*
+}

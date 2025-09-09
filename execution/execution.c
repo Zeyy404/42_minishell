@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:49:18 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/09 14:33:57 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/09 18:31:27 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,9 @@ void	execute_pipe(t_ast *ast, t_shell *shell)
 void	execute_and_or(t_ast *ast, t_shell *shell, int in_child)
 {
 	execution(ast->left, shell, in_child);
-	if (ast->type == NODE_AND && &shell->exit_status == 0)
+	if (ast->type == NODE_AND && shell->exit_status == 0)
 		execution(ast->right, shell, in_child);
-	else if (ast->type == NODE_OR && &shell->exit_status != 0)
+	else if (ast->type == NODE_OR && shell->exit_status != 0)
 		execution(ast->right, shell, in_child);
 }
 

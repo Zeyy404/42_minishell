@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 22:25:33 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/09 14:46:09 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/09 21:39:41 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,12 +120,11 @@ int	builtin_export(t_ast *ast, t_shell *shell)
 				ft_putstr_fd("export: `", 2);
 				ft_putstr_fd(ast->cmd.argv[i], 2);
 				ft_putendl_fd("': not a valid identifier", 2);
-				
 				free(var_name);
 				free(var_value);
 				shell->exit_status = 1;
 				i++;
-				continue ;
+				break ; 
 			}
 			env_set(&shell->env, var_name, var_value);
 			free(var_name);

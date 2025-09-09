@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 15:50:45 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/09 12:03:31 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/09 21:09:06 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char	*env_get(t_env *env, const char *key)
 		return (NULL);
 	while (env)
 	{
-		if (ft_strcmp(env->key, (char *)key) == 0)
+		if (ft_strcmp(env->key, key) == 0)
 			return (env->value);
 		env = env->next;
 	}
