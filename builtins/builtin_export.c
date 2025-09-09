@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih < zsalih@student.42abudhabi.ae>     +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 22:25:33 by zsalih            #+#    #+#             */
-/*   Updated: 2025/08/21 00:50:05 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/09 14:46:09 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,10 +118,12 @@ int	builtin_export(t_ast *ast, t_shell *shell)
 			if (!is_valid_key(var_name))
 			{
 				ft_putstr_fd("export: `", 2);
-				ft_putstr_fd(var_name, 2);
+				ft_putstr_fd(ast->cmd.argv[i], 2);
 				ft_putendl_fd("': not a valid identifier", 2);
+				
 				free(var_name);
 				free(var_value);
+				shell->exit_status = 1;
 				i++;
 				continue ;
 			}
@@ -136,11 +138,12 @@ int	builtin_export(t_ast *ast, t_shell *shell)
 				ft_putstr_fd("export: `", 2);
 				ft_putstr_fd(ast->cmd.argv[i], 2);
 				ft_putendl_fd("': not a valid identifier", 2);
+				shell->exit_status = 1;
 			}
 			else if (!env_get(shell->env, ast->cmd.argv[i]))
 				env_set(&shell->env, ft_strdup(ast->cmd.argv[i]), NULL);
 		}
 		i++;
 	}
-	return (0);
+	return (shell->exit_status);
 }

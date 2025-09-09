@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_utils2.c                                   :+:      :+:    :+:   */
+/*   execute_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 15:51:57 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/03 15:55:05 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/09 14:29:14 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ void	wait_update_status(pid_t pid, int *exit_status)
 	}
 }
 
-void	exec_child_one(t_ast *ast, t_shell *shell, int *exit_status)
+void	exec_child_one(t_ast *ast, t_shell *shell)
 {
 	char	*cmd_path;
 	char	**env_arr;
 
 	signal(SIGINT, sigint);
 	signal(SIGQUIT, SIG_DFL);
-	if (execute_redirect_in(&ast->cmd, exit_status))
+	if (execute_redirect_in(&ast->cmd, &shell->exit_status))
 		exit(1);
 	if (execute_redirect_out(&ast->cmd))
 		exit(1);
@@ -59,32 +59,30 @@ void	exec_child_one(t_ast *ast, t_shell *shell, int *exit_status)
 		exit(127);
 	}
 	execve(cmd_path, ast->cmd.argv, env_arr);
-	perror("execve");
+	perror(ast->cmd.argv[0]);
 	split_free(env_arr);
 	free(cmd_path);
 	exit(1);
 }
 
-void	exec_child_pipe_left(t_ast *ast, t_shell *shell, int *exit_status,
-	int fd[2])
+void	exec_child_pipe_left(t_ast *ast, t_shell *shell, int fd[2])
 {
 	signal(SIGINT, sigint);
 	signal(SIGQUIT, SIG_DFL);
 	close(fd[0]);
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[1]);
-	execution(ast->left, shell, 1, exit_status);
-	exit(*exit_status);
+	execution(ast->left, shell, 1);
+	exit(shell->exit_status);
 }
 
-void	exec_child_pipe_right(t_ast *ast, t_shell *shell, int *exit_status,
-	int fd[2])
+void	exec_child_pipe_right(t_ast *ast, t_shell *shell, int fd[2])
 {
 	signal(SIGINT, sigint);
 	signal(SIGQUIT, SIG_DFL);
 	close(fd[1]);
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
-	execution(ast->right, shell, 1, exit_status);
-	exit(*exit_status);
+	execution(ast->right, shell, 1);
+	exit(shell->exit_status);
 }

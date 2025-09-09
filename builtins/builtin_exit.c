@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih < zsalih@student.42abudhabi.ae>     +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 18:23:35 by zsalih            #+#    #+#             */
-/*   Updated: 2025/08/21 00:48:48 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/09 16:43:00 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	builtin_exit(t_ast *ast, t_shell *shell)
 		ft_putstr_fd("exit: ", 2);
 		ft_putstr_fd(ast->cmd.argv[1], 2);
 		ft_putendl_fd(": numeric argument required", 2);
-		exit(2);
+		exit(255);
 	}
 	else if (ast->cmd.argv[1] && ast->cmd.argv[2])
 	{

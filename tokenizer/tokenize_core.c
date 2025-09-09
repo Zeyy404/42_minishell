@@ -6,11 +6,58 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 16:26:49 by zsalih            #+#    #+#             */
-/*   Updated: 2025/07/27 15:36:47 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/09 17:47:59 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+int	token_consume_word_or_quote( const char *input, size_t *i, t_token **tokens)
+{
+	size_t start;
+	char *value;
+	char *part;
+	char quote;
+	char *tmp;
+
+	value = ft_strdup("");
+	if (!value)
+		return (0);
+	while(input[*i] && !ft_isspace(input[*i]) && !ft_isops(input[*i]) && input[*i] != '(' && input[*i] != ')')
+	{
+		if (input[*i] == '"' || input[*i] == '\'')
+		{
+			quote = input[(*i)++];
+			printf("quote: %c\n", quote);
+			printf("input[%ld]: %c\n",*i, input[*i]);
+			start = *i;
+			while(input[*i] && input[*i] != quote)
+				(*i)++;
+			part = ft_substr(input, start, *i - start);
+			if (!part)
+				return (0);
+			tmp = value;
+			value = ft_strjoin(value, part);
+			free(part);
+			free(tmp);
+			if (input[*i] == quote)
+				(*i)++;
+		}
+		else
+		{
+			start = *i;
+			while (input[*i] && !ft_isspace(input[*i]) && !ft_isops(input[*i]) && input[*i] != '(' && input[*i] != ')' && input[*i] != '"' && input[*i] != '\'')
+				(*i)++;
+			part = ft_substr(input, start, *i - start);
+			tmp = value;
+			value = ft_strjoin(value, part);
+			free(tmp);
+			free(part);
+		}
+	}
+	add_token(tokens, new_token(WORD, value));
+	free(value);
+	return (1);
+}
 
 static int	skip_whitespace(const char *input, size_t *i)
 {
@@ -37,7 +84,8 @@ static int	dispatch_token(const char *input, size_t *i, t_token **tokens)
 	else if (ft_isops(input[*i]))
 		return (token_operators(input, i, tokens));
 	else
-		return (token_word(input, i, tokens));
+   		return (token_consume_word_or_quote(input, i, tokens));
+
 }
 
 

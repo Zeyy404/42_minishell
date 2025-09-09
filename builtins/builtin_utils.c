@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih < zsalih@student.42abudhabi.ae>     +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 15:50:45 by zsalih            #+#    #+#             */
-/*   Updated: 2025/08/21 00:46:38 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/09 12:03:31 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void	env_set(t_env **env, char *key, char *value)
 {
 	t_env	*tmp;
 	t_env	*new;
+	char	*dup_key;
+	char	*dup_value;
 
 	tmp = *env;
 	while (tmp)
@@ -44,12 +46,20 @@ void	env_set(t_env **env, char *key, char *value)
 		if (ft_strcmp(tmp->key, key) == 0)
 		{
 			free(tmp->value);
-			tmp->value = ft_strdup(value);
+			if (value)
+				tmp->value = ft_strdup(value);
+			else
+				tmp->value = NULL;
 			return ;
 		}
 		tmp = tmp->next;
 	}
-	new = new_var(key, value);
+	dup_key = ft_strdup(key);
+	if (value)
+		dup_value = ft_strdup(value);
+	else
+		dup_value = NULL;
+	new = new_var(dup_key, dup_value);
 	add_to_env(env, new);
 }
 
@@ -59,7 +69,7 @@ char	*env_get(t_env *env, const char *key)
 		return (NULL);
 	while (env)
 	{
-		if (ft_strncmp(env->key, key, ft_strlen(key)) == 0)
+		if (ft_strcmp(env->key, (char *)key) == 0)
 			return (env->value);
 		env = env->next;
 	}

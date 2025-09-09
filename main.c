@@ -177,12 +177,13 @@ int	main(int ac, char **av, char **envp)
 	char	*line;
 	t_token *tokens;
 	t_shell	shell;
-	int exit_status = 0;
+	shell.exit_status = 0;
 
 	shell.tokens = NULL;
 	shell.ast = NULL;
 	shell.env = get_env(envp);
 	set_signals();
+    // print_env(shell.env);
 	while (1)
 	{
 		line = readline("minishell$ ");
@@ -190,12 +191,12 @@ int	main(int ac, char **av, char **envp)
 		{
 			ft_putendl_fd("exit", 1);
 			free_shell(&shell);
-			exit(exit_status);
+			exit(shell.exit_status);
 		}
 		if (*line)
 			add_history(line);
 		tokens = tokenize(line);
-		print_tokens(tokens);
+		// print_tokens(tokens);
 		if (!tokens)
 		{
 			free(line);
@@ -220,13 +221,13 @@ int	main(int ac, char **av, char **envp)
 	// 	// 	printf("ast is not working\n");
 	// 	// else
 	// 	// 	printf("ast is working\n");
-		// print_ast(shell.ast, 0, "ROOT");
+		// print_ast(shell.ast, 0);
 		if (!shell.ast)
 			printf("AST is Null\n");
 		else
-			expand_word(shell.ast, shell.env, exit_status);
+			expand_word(shell.ast, shell.env, shell.exit_status);
 		// print_ast(shell.ast, 0);
-		execution(shell.ast, &shell, 0, &exit_status);
+		execution(shell.ast, &shell, 0);
 	// // 	free(line);
 	// 	free_tokens(shell.tokens);
 	// 	free_ast(shell.ast);

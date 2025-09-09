@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/03 16:03:20 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/09 14:17:17 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ typedef	struct s_shell
 	t_env	*env;
 	t_token	*tokens;
 	t_ast	*ast;
+	int		exit_status;
 }	t_shell;
 
 t_env				*get_env(char **envp);
@@ -147,26 +148,26 @@ char	**env_to_char_array(t_env *env);
 char	*get_path(t_env *env);
 char	*find_cmd_path(char *cmd, t_env *env);
 bool	is_builtin(char *cmd, t_shell *shell);
-void	execute_builtins(char *cmd, t_ast *ast, t_shell *shell);
+int	execute_builtins(char *cmd, t_ast *ast, t_shell *shell);
 void	wait_update_status(pid_t pid, int *exit_status);
-int		builtin_child(t_ast *ast, t_shell *shell, int *exit_status);
-int		builtin_parent(t_ast *ast, t_shell *shell, int *exit_status);
-void	exec_child_one(t_ast *ast, t_shell *shell, int *exit_status);
-void	exec_child_pipe_left(t_ast *ast, t_shell *shell, int *exit_status,
+int		builtin_child(t_ast *ast, t_shell *shell);
+int		builtin_parent(t_ast *ast, t_shell *shell);
+void	exec_child_one(t_ast *ast, t_shell *shell);
+void	exec_child_pipe_left(t_ast *ast, t_shell *shell,
 	int fd[2]);
-void	exec_child_pipe_right(t_ast *ast, t_shell *shell, int *exit_status,
+void	exec_child_pipe_right(t_ast *ast, t_shell *shell,
 	int fd[2]);
 int		open_outfile(char *file, int append, int *fd);
 int		execute_redirect_out(t_cmd *cmd);
 int		execute_redirect_in(t_cmd *cmd, int *exit_status);
 int		heredoc_loop(int *fd, char *delimiter);
 int		execute_herdoc(t_cmd *cmd);
-void	execution(t_ast *ast, t_shell *shell, int in_child, int *exit_status);
-void	execute_one_cmd(t_ast *ast, t_shell *shell, int *exit_status);
-void	execute_pipe(t_ast *ast, t_shell *shell, int *exit_status);
-void	execute_and_or(t_ast *ast, t_shell *shell, int *exit_status,
+void	execution(t_ast *ast, t_shell *shell, int in_child);
+void	execute_one_cmd(t_ast *ast, t_shell *shell);
+void	execute_pipe(t_ast *ast, t_shell *shell);
+void	execute_and_or(t_ast *ast, t_shell *shell,
 	int in_child);
-void	execute_group(t_ast *ast, t_shell *shell, int *exit_status, int in_child);
+void	execute_group(t_ast *ast, t_shell *shell, int in_child);
 
 // builtins
 typedef struct s_builtin
