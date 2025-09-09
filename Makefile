@@ -52,7 +52,7 @@ $(LIBFT):
 	make -C libft
 
 $(NAME): $(OFILES)
-	$(CC) $(CCFLAGS) $(OFILES) $(LIBFT) -o $(NAME) -lreadline
+	$(CC) $(CCFLAGS) $(OFILES) $(LIBFT) -o $(NAME) -lreadline -L/opt/vagrant/embedded/lib
 
 bonus: $(OBONUS)
 	$(CC) $(CCFLAGS) $(OBONUS)  -o $(BNAME)
