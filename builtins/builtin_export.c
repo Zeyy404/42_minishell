@@ -6,7 +6,7 @@
 /*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 22:25:33 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/09 21:39:41 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/14 00:07:10 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ static void	print_export(t_env *env)
 	}
 }
 
-int	builtin_export(t_ast *ast, t_shell *shell)
+int	builtin_export(char **argv, t_shell *shell)
 {
 	int		i;
 	char	*equal_sign;
@@ -103,22 +103,22 @@ int	builtin_export(t_ast *ast, t_shell *shell)
 	char	*var_value;
 
 	i = 1;
-	if (ast->cmd.argv[1] == NULL)
+	if (argv[1] == NULL)
 	{
 		print_export(shell->env);
 		return (0);
 	}
-	while (ast->cmd.argv[i])
+	while (argv[i])
 	{
-		equal_sign = ft_strchr(ast->cmd.argv[i], '=');
+		equal_sign = ft_strchr(argv[i], '=');
 		if (equal_sign)
 		{
-			var_name = ft_substr(ast->cmd.argv[i], 0, equal_sign - ast->cmd.argv[i]);
+			var_name = ft_substr(argv[i], 0, equal_sign - argv[i]);
 			var_value = ft_strdup(equal_sign + 1);
 			if (!is_valid_key(var_name))
 			{
 				ft_putstr_fd("export: `", 2);
-				ft_putstr_fd(ast->cmd.argv[i], 2);
+				ft_putstr_fd(argv[i], 2);
 				ft_putendl_fd("': not a valid identifier", 2);
 				free(var_name);
 				free(var_value);
@@ -132,15 +132,15 @@ int	builtin_export(t_ast *ast, t_shell *shell)
 		}
 		else
 		{
-			if (!is_valid_key(ast->cmd.argv[i]))
+			if (!is_valid_key(argv[i]))
 			{
 				ft_putstr_fd("export: `", 2);
-				ft_putstr_fd(ast->cmd.argv[i], 2);
+				ft_putstr_fd(argv[i], 2);
 				ft_putendl_fd("': not a valid identifier", 2);
 				shell->exit_status = 1;
 			}
-			else if (!env_get(shell->env, ast->cmd.argv[i]))
-				env_set(&shell->env, ft_strdup(ast->cmd.argv[i]), NULL);
+			else if (!env_get(shell->env, argv[i]))
+				env_set(&shell->env, ft_strdup(argv[i]), NULL);
 		}
 		i++;
 	}

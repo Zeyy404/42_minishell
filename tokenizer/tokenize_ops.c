@@ -6,7 +6,7 @@
 /*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 16:26:44 by zsalih            #+#    #+#             */
-/*   Updated: 2025/06/27 16:26:44 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/11 21:36:25 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,22 @@ static int	handle_double_operators(const char *input, size_t *i,
 {
 	if (input[*i] == '>' && input[*i + 1] == '>')
 	{
-		add_token(tokens, new_token(APPEND, ">>"));
+		add_token(tokens, new_token(APPEND, ft_strdup(">>"), NULL));
 		*i += 2;
 	}
 	else if (input[*i] == '<' && input[*i + 1] == '<')
 	{
-		add_token(tokens, new_token(HEREDOC, "<<"));
+		add_token(tokens, new_token(HEREDOC, ft_strdup("<<"), NULL));
 		*i += 2;
 	}
 	else if (input[*i] == '&' && input[*i + 1] == '&')
 	{
-		add_token(tokens, new_token(AND_AND, "&&"));
+		add_token(tokens, new_token(AND_AND, ft_strdup("&&"), NULL));
 		*i += 2;
 	}
 	else if (input[*i] == '|' && input[*i + 1] == '|')
 	{
-		add_token(tokens, new_token(OR_OR, "||"));
+		add_token(tokens, new_token(OR_OR, ft_strdup("||"), NULL));
 		*i += 2;
 	}
 	else
@@ -45,22 +45,22 @@ static int	handle_single_operators(const char *input, size_t *i,
 {
 	if (input[*i] == '|')
 	{
-		add_token(tokens, new_token(PIPE, "|"));
+		add_token(tokens, new_token(PIPE, ft_strdup("|"), NULL));
 		(*i)++;
 	}
 	else if (input[*i] == '>')
 	{
-		add_token(tokens, new_token(REDIR_OUT, ">"));
+		add_token(tokens, new_token(REDIR_OUT, ft_strdup(">"), NULL));
 		(*i)++;
 	}
 	else if (input[*i] == '<')
 	{
-		add_token(tokens, new_token(REDIR_IN, "<"));
+		add_token(tokens, new_token(REDIR_IN, ft_strdup("<"), NULL));
 		(*i)++;
 	}
 	else if (input[*i] == '&')
 	{
-		add_token(tokens, new_token(AMPERSAND, "&"));
+		add_token(tokens, new_token(AMPERSAND, ft_strdup("&"), NULL));
 		(*i)++;
 	}
 	else

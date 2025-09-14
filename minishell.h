@@ -6,7 +6,7 @@
 /*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/09 19:17:00 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/14 13:33:02 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <stdio.h>
 
 extern int			g_child_running;
 // tokenizer
@@ -40,22 +41,40 @@ typedef enum e_token_type
 	RPAREN,
 }					t_token_type;
 
+typedef enum e_quote
+{
+	Q_NONE,
+	Q_SINGLE,
+	Q_DOUBLE,
+}					t_quote;
+
+typedef struct s_word
+{
+	char			*value;
+	t_quote			quote_type;
+	struct s_word	*next;
+}					t_word;
+
 typedef struct s_token
 {
+	t_word			*words;
 	t_token_type	type;
 	char			*value;
-	int				quotes;
-	int				dquotes;
+	// int				quotes;
+	// int				dquotes;
 	struct s_token	*next;
 }					t_token;
 
-t_token				*new_token(t_token_type type, char *value);
+t_token				*new_token(t_token_type type, char *value, t_word *words);
 void				add_token(t_token **tokens, t_token *new_token);
 void				free_tokens(t_token *tokens);
+t_word				*new_word(char *value, t_quote quote_type);
+void				add_word(t_word **words, t_word *new_word);
+void 				free_word_list(t_word *words);
 t_token				*tokenize(const char *input);
 int					token_word(const char *input, size_t *i, t_token **tokens);
 int					token_quotes(const char *input, size_t *i,
-						t_token **tokens);
+						t_word **words);
 int					token_operators(const char *input, size_t *i,
 						t_token **tokens);
 int					check_syntax(t_token *tokens);
@@ -63,20 +82,28 @@ bool				ft_isops(char c);
 bool				ft_isspace(char c);
 int					is_redir(t_token_type t);
 int					is_logic_op(t_token_type t);
+int					is_quote(char c);
 // tokenizer
 
 // parser
+
+typedef struct s_argv
+{
+	t_word			*words;
+	struct s_argv	*next;
+}					t_argv;
+
 typedef struct s_cmd
 {
-	char			**argv;
-	char			*infile;
-	char			**outfile;
+	t_argv			*argv;
+	t_word			*infile;
+	t_word			*outfile;
 	int				append;
 	int				here_doc;
-	char			**delimiter;
-	int				*quotes;
-	int				*out_quotes;
-	int				argc;
+	t_word			*delimiter;
+	// int				*quotes;
+	// int				*out_quotes;
+	// int				argc;
 }					t_cmd;
 
 typedef enum e_node_type
@@ -97,9 +124,7 @@ typedef struct s_ast
 }					t_ast;
 
 t_ast				*ast_new_node(t_node_type nt, t_ast *l, t_ast *r);
-int					add_argv(char ***argv, int *argc, char *value);
-t_ast				*ast_new_node(t_node_type nt, t_ast *l, t_ast *r);
-int					add_str(char ***arr, int *count, char *value);
+// int					add_str(char ***arr, int *count, t_word *words);
 t_ast				*parse_cmd(t_token **tokens);
 t_ast				*parse_pipeline(t_token **tokens);
 t_ast				*parse_and_or(t_token **tokens);
@@ -138,10 +163,8 @@ char				*join_before_after(char *arg, char *value, int start,
 						int end);
 char				*process_arg(char *arg, t_env *env, int exit_status);
 char				*expand_tilde(char *arg, t_env *env, int exit_status);
-void				expand_argv(char **argv, t_env *env, int *flag,
-						int exit_status);
-void				expand_files(t_ast *ast, t_env *env, int *flag,
-						int exit_status);
+void				expand_argv(t_argv *argv, t_env *env, int exit_status);
+void				expand_files(t_ast *ast, t_env *env, int exit_status);
 int					expand_word(t_ast *ast, t_env *env, int exit_status);
 
 // execution
@@ -169,22 +192,24 @@ void				execute_one_cmd(t_ast *ast, t_shell *shell);
 void				execute_pipe(t_ast *ast, t_shell *shell);
 void				execute_and_or(t_ast *ast, t_shell *shell, int in_child);
 void				execute_group(t_ast *ast, t_shell *shell, int in_child);
+char				**flatten_argv(t_argv *argv_list);
+void				free_argv(char **argv);
 
 // builtins
 typedef struct s_builtin
 {
 	char			*name;
-	int				(*f)(t_ast *, t_shell *);
+	int				(*f)(char **, t_shell *);
 	t_shell			*shell;
 }					t_builtin;
 
-int					builtin_cd(t_ast *ast, t_shell *shell);
-int					builtin_pwd(t_ast *ast, t_shell *shell);
-int					builtin_echo(t_ast *ast, t_shell *shell);
-int					builtin_export(t_ast *ast, t_shell *shell);
-int					builtin_unset(t_ast *ast, t_shell *shell);
-int					builtin_env(t_ast *ast, t_shell *shell);
-int					builtin_exit(t_ast *ast, t_shell *shell);
+int					builtin_cd(char **argv, t_shell *shell);
+int					builtin_pwd(char **argv, t_shell *shell);
+int					builtin_echo(char **argv, t_shell *shell);
+int					builtin_export(char **argv, t_shell *shell);
+int					builtin_unset(char **argv, t_shell *shell);
+int					builtin_env(char **argv, t_shell *shell);
+int					builtin_exit(char **argv, t_shell *shell);
 void				assign_builtin(t_builtin *builtins, t_shell *shell);
 void				env_set(t_env **env, char *key, char *value);
 char				*env_get(t_env *env, const char *key);
@@ -197,5 +222,5 @@ void				sigint(int sig);
 void				set_signals(void);
 void				sigint_heredoc(int sig);
 
-void rl_replace_line(const char *text, int clear_undo);
+void				rl_replace_line(const char *text, int clear_undo);
 #endif

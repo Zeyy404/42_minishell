@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_redirects.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:43:42 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/09 14:26:18 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/13 23:44:15 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,21 +29,21 @@ int	open_outfile(char *file, int append, int *fd)
 int	execute_redirect_out(t_cmd *cmd)
 {
 	int	fd;
-	int	i;
 	int	err;
+	t_word *curr;
 
 	err = 0;
-	if (!cmd->outfile || **cmd->outfile == '\0')
+	if (!cmd->outfile)
 		return (0);
-	i = 0;
-	while (cmd->outfile[i])
+	curr = cmd->outfile;
+	while (curr)
 	{
-		err = open_outfile(cmd->outfile[i], cmd->append, &fd);
+		err = open_outfile(curr->value, cmd->append, &fd);
 		if (err)
 			return (1);
-		if (cmd->outfile[i + 1])
+		if (curr->next)
 			close(fd);
-		i++;
+		curr = curr->next;
 	}
 	if (dup2(fd, STDOUT_FILENO) == -1)
 	{
@@ -58,6 +58,7 @@ int	execute_redirect_out(t_cmd *cmd)
 int	execute_redirect_in(t_cmd *cmd, int *exit_status)
 {
 	int	fd;
+	t_word *curr;
 
 	if (cmd->here_doc == 1)
 	{
@@ -67,13 +68,20 @@ int	execute_redirect_in(t_cmd *cmd, int *exit_status)
 			return (1);
 		}
 	}
-	if (!cmd->infile || *cmd->infile == '\0')
+	if (!cmd->infile)
 		return (0);
-	fd = open(cmd->infile, O_RDONLY);
-	if (fd == -1)
+	curr = cmd->infile;
+	while (curr)
 	{
-		perror(cmd->infile);
-		return (1);
+		fd = open(curr->value, O_RDONLY);
+		if (fd == -1)
+		{
+			perror(curr->value);
+			return (1);
+		}
+		if (curr->next)
+			close(fd);
+		curr = curr->next;
 	}
 	if (dup2(fd, STDIN_FILENO) == -1)
 	{
@@ -112,28 +120,28 @@ int	heredoc_loop(int *fd, char *delimiter)
 int	execute_herdoc(t_cmd *cmd)
 {
 	int		fd[2];
-	int		i;
+	t_word *curr;
 
-	i = 0;
-	while (cmd->delimiter[i])
+	curr = cmd->delimiter;
+	while (curr)
 	{
 		if (pipe(fd) == -1)
 		{
 			perror("pipe error\n");
-			exit(1);
+			return (1);
 		}
 		signal(SIGINT, sigint_heredoc);
 		signal(SIGQUIT, SIG_IGN);
-		if (heredoc_loop(fd, cmd->delimiter[i]))
+		if (heredoc_loop(fd, curr->value))
 			return (close(fd[0]), close(fd[1]), 1);
 		close(fd[1]);
-		if (cmd->delimiter[i + 1] == NULL)
+		if (curr->next == NULL)
 		{
 			if (dup2(fd[0], STDIN_FILENO) == -1)
 				return (perror("dup2 error\n"), close(fd[0]), 1);
 		}
 		close(fd[0]);
-		i++;
+		curr = curr->next;
 	}
 	return (0);
 }

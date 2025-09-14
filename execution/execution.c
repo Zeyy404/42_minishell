@@ -6,19 +6,122 @@
 /*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:49:18 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/09 18:31:27 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/14 12:39:21 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+static void	free_partial_argv(char **argv, int count)
+{
+	int	i;
+
+	i = 0;
+	while (i < count)
+	{
+		free(argv[i]);
+		i++;
+	}
+	free(argv);
+}
+
+static int	argv_list_size(t_argv *list)
+{
+	int	count;
+
+	count = 0;
+	while (list)
+	{
+		count++;
+		list = list->next;
+	}
+	return (count);
+}
+
+static char	*flatten_word_list(t_word *words)
+{
+	size_t	total_len;
+	t_word	*curr;
+	char	*result;
+	char	*ptr;
+	size_t	len;
+
+	total_len = 0;
+	curr = words;
+	while (curr)
+	{
+		total_len += strlen(curr->value);
+		curr = curr->next;
+	}
+	result = malloc(total_len + 1);
+	if (!result)
+		return (NULL);
+	ptr = result;
+	curr = words;
+	while (curr)
+	{
+		len = strlen(curr->value);
+		memcpy(ptr, curr->value, len);
+		ptr += len;
+		curr = curr->next;
+	}
+	*ptr = '\0';
+	return (result);
+}
+
+char	**flatten_argv(t_argv *argv_list)
+{
+	int		size;
+	char	**argv;
+	t_argv	*curr;
+	int		i;
+
+	size = argv_list_size(argv_list);
+	argv = malloc(sizeof(char *) * (size + 1));
+	if (!argv)
+		return (NULL);
+	curr = argv_list;
+	i = 0;
+	while (curr)
+	{
+		argv[i] = flatten_word_list(curr->words);
+		if (!argv[i])
+		{
+			free_partial_argv(argv, i);
+			return (NULL);
+		}
+		i++;
+		curr = curr->next;
+	}
+	argv[i] = NULL;
+	return (argv);
+}
+
+void	free_argv(char **argv)
+{
+	int	i;
+
+	if (!argv)
+		return ;
+	i = 0;
+	while (argv[i])
+	{
+		free(argv[i]);
+		i++;
+	}
+	free(argv);
+}
+
 void	execution(t_ast *ast, t_shell *shell, int in_child)
 {
+	char	**argv;
+
 	if (!ast)
 		return ;
 	if (ast->type == NODE_CMD)
 	{
-		if (ast->cmd.argv && is_builtin(ast->cmd.argv[0], shell))
+		argv = flatten_argv(ast->cmd.argv);
+		if (argv && is_builtin(argv[0], shell))
 		{
 			if (in_child)
 				builtin_child(ast, shell);
@@ -118,7 +221,7 @@ void	execute_group(t_ast *ast, t_shell *shell, int in_child)
 		}
 		if (ast->cmd.here_doc)
 		{
-			if (execute_herdoc(& ast->cmd))
+			if (execute_herdoc(&ast->cmd))
 				exit(1);
 		}
 		execution(ast->left, shell, 1);

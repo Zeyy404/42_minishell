@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 18:23:35 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/09 16:43:00 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/14 00:05:47 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,26 +30,26 @@ static int	is_numeric(const char *str)
 	return (1);
 }
 
-int	builtin_exit(t_ast *ast, t_shell *shell)
+int	builtin_exit(char **argv, t_shell *shell)
 {
 	int	exit_code;
 
 	if (isatty(STDIN_FILENO))
 		ft_putendl_fd("exit", 2);
-	if (ast->cmd.argv[1] && !is_numeric(ast->cmd.argv[1]))
+	if (argv[1] && !is_numeric(argv[1]))
 	{
 		ft_putstr_fd("exit: ", 2);
-		ft_putstr_fd(ast->cmd.argv[1], 2);
+		ft_putstr_fd(argv[1], 2);
 		ft_putendl_fd(": numeric argument required", 2);
 		exit(255);
 	}
-	else if (ast->cmd.argv[1] && ast->cmd.argv[2])
+	else if (argv[1] && argv[2])
 	{
 		ft_putendl_fd("exit: too many arguments", 2);
 		return (1);
 	}
-	if (ast->cmd.argv[1])
-		exit_code = ft_atoi(shell->ast->cmd.argv[1]) % 256;
+	if (argv[1])
+		exit_code = ft_atoi(argv[1]) % 256;
 	else
 		exit_code = 0;
 	free_shell(shell);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 15:51:57 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/09 14:29:14 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/13 23:39:33 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	exec_child_one(t_ast *ast, t_shell *shell)
 {
 	char	*cmd_path;
 	char	**env_arr;
+	char	**argv;
 
 	signal(SIGINT, sigint);
 	signal(SIGQUIT, SIG_DFL);
@@ -47,19 +48,20 @@ void	exec_child_one(t_ast *ast, t_shell *shell)
 		exit(1);
 	if (execute_redirect_out(&ast->cmd))
 		exit(1);
-	if (!ast->cmd.argv || !ast->cmd.argv[0])
+	argv = flatten_argv(ast->cmd.argv);
+	if (!argv || !argv[0])
 		exit(0);
-	cmd_path = find_cmd_path(ast->cmd.argv[0], shell->env);
+	cmd_path = find_cmd_path(argv[0], shell->env);
 	env_arr = env_to_char_array(shell->env);
 	if (!cmd_path)
 	{
-		ft_putstr_fd(ast->cmd.argv[0], 2);
+		ft_putstr_fd(argv[0], 2);
 		ft_putendl_fd(": command not found", 2);
 		split_free(env_arr);
 		exit(127);
 	}
-	execve(cmd_path, ast->cmd.argv, env_arr);
-	perror(ast->cmd.argv[0]);
+	execve(cmd_path, argv, env_arr);
+	perror(argv[0]);
 	split_free(env_arr);
 	free(cmd_path);
 	exit(1);

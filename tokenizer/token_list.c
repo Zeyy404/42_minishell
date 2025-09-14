@@ -6,13 +6,13 @@
 /*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 16:26:26 by zsalih            #+#    #+#             */
-/*   Updated: 2025/06/27 16:26:28 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/14 00:19:06 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_token	*new_token(t_token_type type, char *value)
+t_token	*new_token(t_token_type type, char *value, t_word *words)
 {
 	t_token	*token;
 
@@ -20,9 +20,10 @@ t_token	*new_token(t_token_type type, char *value)
 	if (!token)
 		return (NULL);
 	token->type = type;
+	token->words = words;
 	token->value = ft_strdup(value);
-	token->quotes = 0;
-	token->dquotes = 0;
+	// token->quotes = 0;
+	// token->dquotes = 0;
 	token->next = NULL;
 	return (token);
 }
@@ -53,6 +54,7 @@ void	free_tokens(t_token *tokens)
 		tmp = tokens;
 		tokens = tokens->next;
 		free(tmp->value);
+		free_word_list(tmp->words);
 		free(tmp);
 	}
 }

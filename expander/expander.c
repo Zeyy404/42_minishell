@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 12:04:50 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/03 12:20:41 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/14 13:02:24 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,45 +36,61 @@ char	*process_arg(char *arg, t_env *env, int exit_status)
 	return (arg);
 }
 
-void	expand_argv(char **argv, t_env *env, int *flag, int exit_status)
+void	expand_argv(t_argv *argv, t_env *env, int exit_status)
 {
-	int	i;
+	t_argv *curr;
+	t_word *w;
 
-	i = 0;
-	while (argv[i])
+	curr = argv;
+	while (curr)
 	{
-		if (flag[i] != 1)
+		w = curr->words;
+		while (w)
 		{
-			argv[i] = expand_tilde(argv[i], env, exit_status);
-			argv[i] = process_arg(argv[i], env, exit_status);
+			if (w->quote_type != Q_SINGLE)
+			{
+				w->value = expand_tilde(w->value, env, exit_status);
+				w->value = process_arg(w->value, env, exit_status);
+			}
+			w = w->next;
 		}
-		i++;
+		curr = curr->next;
 	}
 }
 
-void	expand_files(t_ast *ast, t_env *env, int *flag, int exit_status)
+void	expand_files(t_ast *ast, t_env *env, int exit_status)
 {
-	int	i;
+	t_word *curr;
 
-	i = 0;
-	if (ast->cmd.infile)
+	curr = ast->cmd.infile;
+	while (curr)
 	{
-		ast->cmd.infile = expand_tilde(ast->cmd.infile, env, exit_status);
-		ast->cmd.infile = process_arg(ast->cmd.infile, env, exit_status);
-	}
-	if (ast->cmd.outfile)
-	{
-		while (ast->cmd.outfile[i])
+		if (curr->quote_type != Q_SINGLE)
 		{
-			if (flag[i] != 1)
-			{
-				ast->cmd.outfile[i] = expand_tilde(ast->cmd.outfile[i], env,
-						exit_status);
-				ast->cmd.outfile[i] = process_arg(ast->cmd.outfile[i], env,
-						exit_status);
-			}
-			i++;
+			curr->value = expand_tilde(curr->value, env, exit_status);
+			curr->value = process_arg(curr->value, env, exit_status);
 		}
+		curr = curr->next;
+	}
+	curr = ast->cmd.outfile;
+	while (curr)
+	{
+		if (curr->quote_type != Q_SINGLE)
+		{
+			curr->value = expand_tilde(curr->value, env, exit_status);
+			curr->value = process_arg(curr->value, env, exit_status);	
+		}
+		curr = curr->next;
+	}
+	curr = ast->cmd.delimiter;
+	while (curr)
+	{
+		if (curr->quote_type != Q_SINGLE)
+		{
+			curr->value = expand_tilde(curr->value, env, exit_status);
+			curr->value = process_arg(curr->value, env, exit_status);
+		}
+		curr = curr->next;
 	}
 }
 
@@ -85,8 +101,8 @@ int	expand_word(t_ast *ast, t_env *env, int exit_status)
 	if (ast->type == NODE_CMD && (ast->cmd.argv || ast->cmd.infile
 			|| ast->cmd.outfile))
 	{
-		expand_argv(ast->cmd.argv, env, ast->cmd.quotes, exit_status);
-		expand_files(ast, env, ast->cmd.out_quotes, exit_status);
+		expand_argv(ast->cmd.argv, env, exit_status);
+		expand_files(ast, env, exit_status);
 	}
 	if (ast->left)
 		expand_word(ast->left, env, exit_status);

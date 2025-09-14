@@ -6,7 +6,7 @@
 /*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 09:08:57 by zsalih            #+#    #+#             */
-/*   Updated: 2025/08/19 14:50:06 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/11 21:42:52 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*ft_strdup(const char *src)
 	int		i;
 	char	*src_copy;
 
+	if (!src)
+		return (NULL);
 	size = 0;
 	while (src[size])
 	{
