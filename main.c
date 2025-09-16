@@ -389,12 +389,13 @@ int	main(int ac, char **av, char **envp)
 		if (shell.ast)
 			expand_word(shell.ast, shell.env, shell.exit_status);
 		execution(shell.ast, &shell, 0);
+        // printf("execution ended\n");
         free_tokens(shell.tokens);
         free_ast(shell.ast);
         shell.tokens = NULL;
         shell.ast = NULL;
         free(line);
-        // i++;
+        // i++; 
 	}
 	free_env(shell.env);
 	return (0);

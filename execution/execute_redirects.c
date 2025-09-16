@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_redirects.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:43:42 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/13 23:44:15 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/16 16:42:29 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	open_outfile(char *file, int append, int *fd)
 		*fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (*fd == -1)
 	{
+		printf("%s\n", file);
 		perror(file);
 		return (1);
 	}
@@ -38,6 +39,7 @@ int	execute_redirect_out(t_cmd *cmd)
 	curr = cmd->outfile;
 	while (curr)
 	{
+		// printf("file: %s\n", curr->value);
 		err = open_outfile(curr->value, cmd->append, &fd);
 		if (err)
 			return (1);

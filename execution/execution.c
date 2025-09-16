@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:49:18 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/14 12:39:21 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/16 18:05:57 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static char	*flatten_word_list(t_word *words)
 	curr = words;
 	while (curr)
 	{
-		total_len += strlen(curr->value);
+		total_len += ft_strlen(curr->value);
 		curr = curr->next;
 	}
 	result = malloc(total_len + 1);
@@ -60,8 +60,8 @@ static char	*flatten_word_list(t_word *words)
 	curr = words;
 	while (curr)
 	{
-		len = strlen(curr->value);
-		memcpy(ptr, curr->value, len);
+		len = ft_strlen(curr->value);
+		ft_memcpy(ptr, curr->value, len);
 		ptr += len;
 		curr = curr->next;
 	}
@@ -151,26 +151,29 @@ void	execution(t_ast *ast, t_shell *shell, int in_child)
 		argv = flatten_argv(ast->cmd.argv);
 		if (argv && is_builtin(argv[0], shell))
 		{
+			free_argv(argv);
 			if (in_child)
 			{
-				if (strcmp(argv[0], "exit") == 0)
-				{
-					free_argv(argv);
-					builtin_child(ast, shell);
-				}
+				// if (ft_strcmp(argv[0], "exit") == 0)
+				builtin_child(ast, shell);
 			}
 			else
 			{
-				if (strcmp(argv[0], "exit") == 0)
-				{
-					free_argv(argv);
-					builtin_parent(ast, shell);
-				}
+				// if (ft_strcmp(argv[0], "exit") == 0)
+					// free_argv(argv);
+				builtin_parent(ast, shell);	
+				// argv = flatten_argv(ast->cmd.argv);
 			}
+			// argv = flatten_argv(ast->cmd.argv);
+			// if (ft_strcmp(argv[0], "exit") != 0)
+			// free_argv(argv);
+			// printf("done executing builtin\n");
 		}
 		else
+		{
+			free_argv(argv);
 			execute_one_cmd(ast, shell);
-		free_argv(argv);
+		}
 	}
 	else if (ast->type == NODE_PIPE)
 		execute_pipe(ast, shell);

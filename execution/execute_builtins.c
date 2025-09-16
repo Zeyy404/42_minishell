@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtins.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:43:07 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/14 00:09:51 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/16 20:27:12 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int	execute_builtins(char *cmd, t_ast *ast, t_shell *shell)
 int	builtin_child(t_ast *ast, t_shell *shell)
 {
 	char **argv;
+	// char *cmd;
 
 	if (execute_redirect_in(&ast->cmd, &shell->exit_status))
 	{
@@ -72,19 +73,25 @@ int	builtin_child(t_ast *ast, t_shell *shell)
 		return (1);
 	}
 	argv = flatten_argv(ast->cmd.argv);
-	if (strcmp(argv[0], "exit") == 0)
+	if (ft_strcmp(argv[0], "exit") == 0)
 	{
 		free_argv(argv);
 		shell->exit_status = execute_builtins("exit", ast, shell);
 	}
 	else
+	{
 		shell->exit_status = execute_builtins(argv[0], ast, shell);
-	free_argv(argv);
-	return (0);
+		free_argv(argv);
+		return (0);
+	}
+	// argv = flatten_argv(ast->cmd.argv);
+	// shell->exit_status = 1;
+	return (1);
 }
 
 int	builtin_parent(t_ast *ast, t_shell *shell)
 {
+	// printf("in parent\n");
 	int	in;
 	int	out;
 
@@ -92,6 +99,7 @@ int	builtin_parent(t_ast *ast, t_shell *shell)
 	out = dup(STDOUT_FILENO);
 	if (builtin_child(ast, shell))
 		return (1);
+	// printf("child executed \n");
 	dup2(in, STDIN_FILENO);
 	dup2(out, STDOUT_FILENO);
 	close(in);
