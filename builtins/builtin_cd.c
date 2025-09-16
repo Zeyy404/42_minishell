@@ -41,6 +41,7 @@ int	builtin_cd(char **argv, t_shell *shell)
 {
 	char	*buf;
 	char	*target;
+	char	*new_pwd;
 
 	if (!argv)
 		return (1);
@@ -60,6 +61,11 @@ int	builtin_cd(char **argv, t_shell *shell)
 		env_set(&shell->env, "OLDPWD", buf);
 		free(buf);
 	}
-	env_set(&shell->env, "PWD", getcwd(NULL, 0));
+	new_pwd = getcwd(NULL, 0);
+	if (new_pwd)
+	{
+		env_set(&shell->env, "PWD", new_pwd);
+		free(new_pwd);
+	}
 	return (0);
 }

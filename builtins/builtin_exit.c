@@ -41,6 +41,8 @@ int	builtin_exit(char **argv, t_shell *shell)
 		ft_putstr_fd("exit: ", 2);
 		ft_putstr_fd(argv[1], 2);
 		ft_putendl_fd(": numeric argument required", 2);
+		free_argv(argv);
+		free_shell(shell);
 		exit(255);
 	}
 	else if (argv[1] && argv[2])
@@ -52,6 +54,7 @@ int	builtin_exit(char **argv, t_shell *shell)
 		exit_code = ft_atoi(argv[1]) % 256;
 	else
 		exit_code = 0;
+	free_argv(argv);
 	free_shell(shell);
 	exit(exit_code);
 }

@@ -35,6 +35,7 @@ int	execute_builtins(char *cmd, t_ast *ast, t_shell *shell)
 	t_builtin	builtins[8];
 	int			i;
 	char **argv;
+	int return_val;
 
 	assign_builtin(builtins, shell);
 	i = 0;
@@ -45,11 +46,14 @@ int	execute_builtins(char *cmd, t_ast *ast, t_shell *shell)
 	{
 		if (!ft_strcmp(cmd, builtins[i].name))
 		{
-			return(builtins[i].f(argv, shell));
+			return_val = builtins[i].f(argv, shell);
+			free_argv(argv);
+			return(return_val);
 			// break ;
 		}
 		i++;
 	}
+	free_argv(argv);
 	return (1);
 }
 
@@ -68,7 +72,14 @@ int	builtin_child(t_ast *ast, t_shell *shell)
 		return (1);
 	}
 	argv = flatten_argv(ast->cmd.argv);
-	shell->exit_status = execute_builtins(argv[0], ast, shell);
+	if (strcmp(argv[0], "exit") == 0)
+	{
+		free_argv(argv);
+		shell->exit_status = execute_builtins("exit", ast, shell);
+	}
+	else
+		shell->exit_status = execute_builtins(argv[0], ast, shell);
+	free_argv(argv);
 	return (0);
 }
 

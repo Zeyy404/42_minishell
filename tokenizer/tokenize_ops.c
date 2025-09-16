@@ -17,22 +17,22 @@ static int	handle_double_operators(const char *input, size_t *i,
 {
 	if (input[*i] == '>' && input[*i + 1] == '>')
 	{
-		add_token(tokens, new_token(APPEND, ft_strdup(">>"), NULL));
+		add_token(tokens, new_token(APPEND, ">>", NULL));
 		*i += 2;
 	}
 	else if (input[*i] == '<' && input[*i + 1] == '<')
 	{
-		add_token(tokens, new_token(HEREDOC, ft_strdup("<<"), NULL));
+		add_token(tokens, new_token(HEREDOC, "<<", NULL));
 		*i += 2;
 	}
 	else if (input[*i] == '&' && input[*i + 1] == '&')
 	{
-		add_token(tokens, new_token(AND_AND, ft_strdup("&&"), NULL));
+		add_token(tokens, new_token(AND_AND, "&&", NULL));
 		*i += 2;
 	}
 	else if (input[*i] == '|' && input[*i + 1] == '|')
 	{
-		add_token(tokens, new_token(OR_OR, ft_strdup("||"), NULL));
+		add_token(tokens, new_token(OR_OR, "||", NULL));
 		*i += 2;
 	}
 	else
@@ -45,22 +45,22 @@ static int	handle_single_operators(const char *input, size_t *i,
 {
 	if (input[*i] == '|')
 	{
-		add_token(tokens, new_token(PIPE, ft_strdup("|"), NULL));
+		add_token(tokens, new_token(PIPE, "|", NULL));
 		(*i)++;
 	}
 	else if (input[*i] == '>')
 	{
-		add_token(tokens, new_token(REDIR_OUT, ft_strdup(">"), NULL));
+		add_token(tokens, new_token(REDIR_OUT, ">", NULL));
 		(*i)++;
 	}
 	else if (input[*i] == '<')
 	{
-		add_token(tokens, new_token(REDIR_IN, ft_strdup("<"), NULL));
+		add_token(tokens, new_token(REDIR_IN, "<", NULL));
 		(*i)++;
 	}
 	else if (input[*i] == '&')
 	{
-		add_token(tokens, new_token(AMPERSAND, ft_strdup("&"), NULL));
+		add_token(tokens, new_token(AMPERSAND, "&", NULL));
 		(*i)++;
 	}
 	else

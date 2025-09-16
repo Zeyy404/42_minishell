@@ -216,11 +216,18 @@ char				*env_get(t_env *env, const char *key);
 int					is_valid_key(const char *str);
 
 void				free_shell(t_shell *shell);
-void				free_ast(t_ast *ast);
+void free_ast(t_ast *node);
 
 void				sigint(int sig);
 void				set_signals(void);
 void				sigint_heredoc(int sig);
 
 void				rl_replace_line(const char *text, int clear_undo);
+
+
+//print functions (NOT IMPORTANT)
+const char *token_type_str(t_token_type type);
+const char *quote_type_str(t_quote q);
+void print_tokens(t_token *tokens);
+
 #endif

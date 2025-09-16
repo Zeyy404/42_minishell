@@ -50,13 +50,17 @@ void	exec_child_one(t_ast *ast, t_shell *shell)
 		exit(1);
 	argv = flatten_argv(ast->cmd.argv);
 	if (!argv || !argv[0])
+	{
+		free_argv(argv);
 		exit(0);
+	}
 	cmd_path = find_cmd_path(argv[0], shell->env);
 	env_arr = env_to_char_array(shell->env);
 	if (!cmd_path)
 	{
 		ft_putstr_fd(argv[0], 2);
 		ft_putendl_fd(": command not found", 2);
+		free_argv(argv);
 		split_free(env_arr);
 		exit(127);
 	}
@@ -64,6 +68,7 @@ void	exec_child_one(t_ast *ast, t_shell *shell)
 	perror(argv[0]);
 	split_free(env_arr);
 	free(cmd_path);
+	free_argv(argv);
 	exit(1);
 }
 

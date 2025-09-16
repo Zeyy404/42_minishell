@@ -76,9 +76,9 @@ static int	dispatch_token(const char *input, size_t *i, t_token **tokens)
 	if (input[*i] == '(' || input[*i] == ')')
 	{
 		if (input[*i] == '(')
-			add_token(tokens, new_token(LPAREN, ft_strdup("("), NULL));
+			add_token(tokens, new_token(LPAREN, "(", NULL));
 		else
-			add_token(tokens, new_token(RPAREN, ft_strdup(")"), NULL));
+			add_token(tokens, new_token(RPAREN, ")", NULL));
 		(*i)++;
 		return (1);
 	}
@@ -102,7 +102,10 @@ t_token	*tokenize(const char *input)
 		if (!skip_whitespace(input, &i))
 			break ;
 		if (!dispatch_token(input, &i, &tokens))
+		{
+			free_tokens(tokens);
 			return (NULL);
+		}
 	}
 	return (tokens);
 }

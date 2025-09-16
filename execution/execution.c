@@ -112,6 +112,34 @@ void	free_argv(char **argv)
 	free(argv);
 }
 
+// void	execution(t_ast *ast, t_shell *shell, int in_child)
+// {
+// 	char	**argv;
+
+// 	if (!ast)
+// 		return ;
+// 	if (ast->type == NODE_CMD)
+// 	{
+// 		argv = flatten_argv(ast->cmd.argv);
+// 		if (argv && is_builtin(argv[0], shell))
+// 		{
+// 			if (in_child)
+// 				builtin_child(ast, shell);
+// 			else
+// 				builtin_parent(ast, shell);
+// 		}
+// 		else
+// 			execute_one_cmd(ast, shell);
+// 		free_argv(argv);
+// 	}
+// 	else if (ast->type == NODE_PIPE)
+// 		execute_pipe(ast, shell);
+// 	else if (ast->type == NODE_AND || ast->type == NODE_OR)
+// 		execute_and_or(ast, shell, in_child);
+// 	else if (ast->type == NODE_GROUP)
+// 		execute_group(ast, shell, in_child);
+// }
+
 void	execution(t_ast *ast, t_shell *shell, int in_child)
 {
 	char	**argv;
@@ -124,12 +152,25 @@ void	execution(t_ast *ast, t_shell *shell, int in_child)
 		if (argv && is_builtin(argv[0], shell))
 		{
 			if (in_child)
-				builtin_child(ast, shell);
+			{
+				if (strcmp(argv[0], "exit") == 0)
+				{
+					free_argv(argv);
+					builtin_child(ast, shell);
+				}
+			}
 			else
-				builtin_parent(ast, shell);
+			{
+				if (strcmp(argv[0], "exit") == 0)
+				{
+					free_argv(argv);
+					builtin_parent(ast, shell);
+				}
+			}
 		}
 		else
 			execute_one_cmd(ast, shell);
+		free_argv(argv);
 	}
 	else if (ast->type == NODE_PIPE)
 		execute_pipe(ast, shell);

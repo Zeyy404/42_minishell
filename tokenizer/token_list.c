@@ -21,7 +21,10 @@ t_token	*new_token(t_token_type type, char *value, t_word *words)
 		return (NULL);
 	token->type = type;
 	token->words = words;
-	token->value = ft_strdup(value);
+	if (value)
+		token->value = ft_strdup(value);
+	else
+		token->value = NULL;
 	// token->quotes = 0;
 	// token->dquotes = 0;
 	token->next = NULL;
@@ -53,8 +56,10 @@ void	free_tokens(t_token *tokens)
 	{
 		tmp = tokens;
 		tokens = tokens->next;
-		free(tmp->value);
-		free_word_list(tmp->words);
+		if (tmp->value)
+			free(tmp->value);
+		if (tmp->words)
+			free_word_list(tmp->words);
 		free(tmp);
 	}
 }
