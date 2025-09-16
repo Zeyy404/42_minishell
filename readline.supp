@@ -1,7 +1,12 @@
 {
-   readline
-   Memcheck:Leak
-   fun:malloc
-   fun:__libc_malloc
-   obj:/usr/lib/libreadline*
+    leak readline
+    Memcheck:Leak 
+    ...
+    fun:readline
+}
+{
+    leak add_history
+    Memcheck:Leak
+    ...
+    fun:add_history
 }

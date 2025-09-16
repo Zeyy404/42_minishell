@@ -6,7 +6,7 @@
 /*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 22:25:33 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/14 00:07:10 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/16 21:48:18 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ static void	print_export(t_env *env)
 			printf("declare -x %s\n", sorted->key);
 		sorted = sorted->next;
 	}
+	free_env(copy);
 }
 
 int	builtin_export(char **argv, t_shell *shell)
@@ -140,7 +141,11 @@ int	builtin_export(char **argv, t_shell *shell)
 				shell->exit_status = 1;
 			}
 			else if (!env_get(shell->env, argv[i]))
-				env_set(&shell->env, ft_strdup(argv[i]), NULL);
+			{
+				var_name = ft_strdup(argv[i]);
+				env_set(&shell->env, var_name, NULL);
+				free(var_name);
+			}
 		}
 		i++;
 	}
