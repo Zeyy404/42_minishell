@@ -6,7 +6,7 @@
 /*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 16:26:26 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/14 00:19:06 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/17 20:49:54 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ t_token	*new_token(t_token_type type, char *value, t_word *words)
 		token->value = ft_strdup(value);
 	else
 		token->value = NULL;
-	// token->quotes = 0;
-	// token->dquotes = 0;
 	token->next = NULL;
 	return (token);
 }

@@ -6,7 +6,7 @@
 /*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 16:26:54 by zsalih            #+#    #+#             */
-/*   Updated: 2025/06/27 16:26:54 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/17 20:54:22 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,4 +20,9 @@ bool	ft_isops(char c)
 bool	ft_isspace(char c)
 {
 	return ((c >= 9 && c <= 13) || c == 32);
+}
+
+int	is_quote(char c)
+{
+	return (c == '\'' || c == '"');
 }
