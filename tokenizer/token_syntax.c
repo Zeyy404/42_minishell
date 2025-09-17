@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_syntax.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 16:27:00 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/11 21:29:28 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/17 16:09:08 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,12 @@ int	check_syntax(t_token *tokens)
 		if (!prev && is_logic_op(tokens->type))
 		{
 			printf("syntax error near unexpected token `%s'\n", tokens->value);
-			return (0);
+			return (258);
 		}
 		else if (prev && is_operator(prev->type) && is_operator(tokens->type))
 		{
 			printf("syntax error near unexpected token `%s'\n", tokens->value);
-			return (0);
+			return (258);
 		}
 		prev = tokens;
 		tokens = tokens->next;
@@ -50,7 +50,7 @@ int	check_syntax(t_token *tokens)
 	if (prev && (is_logic_op(prev->type) || is_redir(prev->type)))
 	{
 		printf("syntax error near unexpected token `newline'\n");
-		return (0);
+		return (258);
 	}
-	return (1);
+	return (0);
 }

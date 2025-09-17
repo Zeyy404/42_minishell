@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:43:42 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/16 16:42:29 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/17 19:34:27 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	execute_redirect_in(t_cmd *cmd, int *exit_status)
 	{
 		if (execute_herdoc(cmd) == 1)
 		{
-			*exit_status = 1;
+			*exit_status = 0;
 			return (1);
 		}
 	}

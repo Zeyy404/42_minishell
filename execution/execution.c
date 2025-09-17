@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:49:18 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/16 18:05:57 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/17 10:30:31 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,7 @@ void	execution(t_ast *ast, t_shell *shell, int in_child)
 void	execute_one_cmd(t_ast *ast, t_shell *shell)
 {
 	pid_t	pid;
-
+	printf("fork 1\n");
 	pid = fork();
 	g_child_running = 1;
 	if (pid == 0)
@@ -203,10 +203,12 @@ void	execute_pipe(t_ast *ast, t_shell *shell)
 
 	if (pipe(fd) == -1)
 		return (perror("pipe"));
+	printf("fork 2\n");
 	left_pid = fork();
 	g_child_running = 1;
 	if (left_pid == 0)
 		exec_child_pipe_left(ast, shell, fd);
+	printf("fork 3\n");
 	right_pid = fork();
 	g_child_running = 1;
 	if (right_pid == 0)
@@ -235,6 +237,7 @@ void	execute_group(t_ast *ast, t_shell *shell, int in_child)
 		shell->exit_status = 1;
 		return ;
 	}
+	printf("fork 4\n");
 	pid = fork();
 	g_child_running = 1;
 	if (pid == -1)

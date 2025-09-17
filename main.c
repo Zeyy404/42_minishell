@@ -361,7 +361,8 @@ int	main(int ac, char **av, char **envp)
 	set_signals();
     // int i = 0;
 	while (1)
-	{
+	{     
+        // printf("exit status = %d\n", shell.exit_status);
 		line = readline("minishell$ ");
 		if (!line)
 		{
@@ -377,8 +378,9 @@ int	main(int ac, char **av, char **envp)
 			free(line);
 			continue;
 		}
-		if (!check_syntax(shell.tokens))
+		if (check_syntax(shell.tokens) == 258)
 		{
+            shell.exit_status = 258;
 			free_tokens(shell.tokens);
             shell.tokens = NULL;
 			free(line);
@@ -389,7 +391,6 @@ int	main(int ac, char **av, char **envp)
 		if (shell.ast)
 			expand_word(shell.ast, shell.env, shell.exit_status);
 		execution(shell.ast, &shell, 0);
-        // printf("execution ended\n");
         free_tokens(shell.tokens);
         free_ast(shell.ast);
         shell.tokens = NULL;

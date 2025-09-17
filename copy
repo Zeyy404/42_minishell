@@ -1,0 +1,1078 @@
+==659== Memcheck, a memory error detector
+==659== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==659== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==659== Command: ./minishell
+==659== 
+==660== 
+==660== HEAP SUMMARY:
+==660==     in use at exit: 207,660 bytes in 300 blocks
+==660==   total heap usage: 500 allocs, 200 frees, 222,942 bytes allocated
+==660== 
+==660== 2 bytes in 1 blocks are still reachable in loss record 1 of 75
+==660==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==660==    by 0x10F0E6: ft_strdup (in /home/vscode/src/minishell)
+==660==    by 0x1094E3: new_token (in /home/vscode/src/minishell)
+==660==    by 0x109D92: handle_single_operators (in /home/vscode/src/minishell)
+==660==    by 0x109F10: token_operators (in /home/vscode/src/minishell)
+==660==    by 0x109ABB: dispatch_token (in /home/vscode/src/minishell)
+==660==    by 0x109B35: tokenize (in /home/vscode/src/minishell)
+==660==    by 0x10E7D3: main (in /home/vscode/src/minishell)
+==660== 
+==660== 
+==660== 15 bytes in 4 blocks are still reachable in loss record 11 of 75
+==660==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==660==    by 0x10F0E6: ft_strdup (in /home/vscode/src/minishell)
+==660==    by 0x109629: new_word (in /home/vscode/src/minishell)
+==660==    by 0x10A400: token_word (in /home/vscode/src/minishell)
+==660==    by 0x109AD4: dispatch_token (in /home/vscode/src/minishell)
+==660==    by 0x109B35: tokenize (in /home/vscode/src/minishell)
+==660==    by 0x10E7D3: main (in /home/vscode/src/minishell)
+==660== 
+==660== 
+==660== 32 bytes in 1 blocks are still reachable in loss record 18 of 75
+==660==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==660==    by 0x1094A9: new_token (in /home/vscode/src/minishell)
+==660==    by 0x109D92: handle_single_operators (in /home/vscode/src/minishell)
+==660==    by 0x109F10: token_operators (in /home/vscode/src/minishell)
+==660==    by 0x109ABB: dispatch_token (in /home/vscode/src/minishell)
+==660==    by 0x109B35: tokenize (in /home/vscode/src/minishell)
+==660==    by 0x10E7D3: main (in /home/vscode/src/minishell)
+==660== 
+==660== 32 bytes in 2 blocks are still reachable in loss record 19 of 75
+==660==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==660==    by 0x10A57F: new_argv (in /home/vscode/src/minishell)
+==660==    by 0x10A5DC: add_argv (in /home/vscode/src/minishell)
+==660==    by 0x10A85F: parse_cmd (in /home/vscode/src/minishell)
+==660==    by 0x10A8D5: parse_pipeline (in /home/vscode/src/minishell)
+==660==    by 0x10A95A: parse_and_or (in /home/vscode/src/minishell)
+==660==    by 0x10AC30: parse (in /home/vscode/src/minishell)
+==660==    by 0x10E83A: main (in /home/vscode/src/minishell)
+==660== 
+==660== 32 bytes in 2 blocks are still reachable in loss record 20 of 75
+==660==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==660==    by 0x10A57F: new_argv (in /home/vscode/src/minishell)
+==660==    by 0x10A5DC: add_argv (in /home/vscode/src/minishell)
+==660==    by 0x10A85F: parse_cmd (in /home/vscode/src/minishell)
+==660==    by 0x10A900: parse_pipeline (in /home/vscode/src/minishell)
+==660==    by 0x10A95A: parse_and_or (in /home/vscode/src/minishell)
+==660==    by 0x10AC30: parse (in /home/vscode/src/minishell)
+==660==    by 0x10E83A: main (in /home/vscode/src/minishell)
+==660== 
+==660== 64 bytes in 1 blocks are still reachable in loss record 24 of 75
+==660==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==660==    by 0x10A512: ast_new_node (in /home/vscode/src/minishell)
+==660==    by 0x10A6EC: parse_cmd (in /home/vscode/src/minishell)
+==660==    by 0x10A8D5: parse_pipeline (in /home/vscode/src/minishell)
+==660==    by 0x10A95A: parse_and_or (in /home/vscode/src/minishell)
+==660==    by 0x10AC30: parse (in /home/vscode/src/minishell)
+==660==    by 0x10E83A: main (in /home/vscode/src/minishell)
+==660== 
+==660== 64 bytes in 1 blocks are still reachable in loss record 25 of 75
+==660==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==660==    by 0x10A512: ast_new_node (in /home/vscode/src/minishell)
+==660==    by 0x10A6EC: parse_cmd (in /home/vscode/src/minishell)
+==660==    by 0x10A900: parse_pipeline (in /home/vscode/src/minishell)
+==660==    by 0x10A95A: parse_and_or (in /home/vscode/src/minishell)
+==660==    by 0x10AC30: parse (in /home/vscode/src/minishell)
+==660==    by 0x10E83A: main (in /home/vscode/src/minishell)
+==660== 
+==660== 64 bytes in 1 blocks are still reachable in loss record 26 of 75
+==660==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==660==    by 0x10A512: ast_new_node (in /home/vscode/src/minishell)
+==660==    by 0x10A919: parse_pipeline (in /home/vscode/src/minishell)
+==660==    by 0x10A95A: parse_and_or (in /home/vscode/src/minishell)
+==660==    by 0x10AC30: parse (in /home/vscode/src/minishell)
+==660==    by 0x10E83A: main (in /home/vscode/src/minishell)
+==660== 
+==660== 
+==660== 96 bytes in 4 blocks are still reachable in loss record 30 of 75
+==660==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==660==    by 0x10960B: new_word (in /home/vscode/src/minishell)
+==660==    by 0x10A400: token_word (in /home/vscode/src/minishell)
+==660==    by 0x109AD4: dispatch_token (in /home/vscode/src/minishell)
+==660==    by 0x109B35: tokenize (in /home/vscode/src/minishell)
+==660==    by 0x10E7D3: main (in /home/vscode/src/minishell)
+==660== 
+==660== 128 bytes in 4 blocks are still reachable in loss record 31 of 75
+==660==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==660==    by 0x1094A9: new_token (in /home/vscode/src/minishell)
+==660==    by 0x10A4C4: token_word (in /home/vscode/src/minishell)
+==660==    by 0x109AD4: dispatch_token (in /home/vscode/src/minishell)
+==660==    by 0x109B35: tokenize (in /home/vscode/src/minishell)
+==660==    by 0x10E7D3: main (in /home/vscode/src/minishell)
+==660== 
+==660== 
+==660== 211 bytes in 20 blocks are still reachable in loss record 33 of 75
+==660==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==660==    by 0x10F3FC: ft_substr (in /home/vscode/src/minishell)
+==660==    by 0x10ADA8: get_key_value (in /home/vscode/src/minishell)
+==660==    by 0x10AC88: get_env (in /home/vscode/src/minishell)
+==660==    by 0x10E75D: main (in /home/vscode/src/minishell)
+==660== 
+==660== 
+==660== 480 bytes in 20 blocks are still reachable in loss record 36 of 75
+==660==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==660==    by 0x10ADF5: new_var (in /home/vscode/src/minishell)
+==660==    by 0x10ACC8: get_env (in /home/vscode/src/minishell)
+==660==    by 0x10E75D: main (in /home/vscode/src/minishell)
+==660== 
+==660== 
+==660== 1,881 bytes in 20 blocks are still reachable in loss record 48 of 75
+==660==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==660==    by 0x10F3FC: ft_substr (in /home/vscode/src/minishell)
+==660==    by 0x10ADCE: get_key_value (in /home/vscode/src/minishell)
+==660==    by 0x10ACB1: get_env (in /home/vscode/src/minishell)
+==660==    by 0x10E75D: main (in /home/vscode/src/minishell)
+
+==660== 
+==660== LEAK SUMMARY:
+==660==    definitely lost: 0 bytes in 0 blocks
+==660==    indirectly lost: 0 bytes in 0 blocks
+==660==      possibly lost: 0 bytes in 0 blocks
+==660==    still reachable: 207,660 bytes in 300 blocks
+==660==         suppressed: 0 bytes in 0 blocks
+==660== 
+==660== For lists of detected and suppressed errors, rerun with: -s
+==660== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+==661== 
+==661== HEAP SUMMARY:
+==661==     in use at exit: 207,660 bytes in 300 blocks
+==661==   total heap usage: 494 allocs, 194 frees, 222,877 bytes allocated
+==661== 
+==661== 2 bytes in 1 blocks are still reachable in loss record 1 of 75
+==661==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==661==    by 0x10F0E6: ft_strdup (in /home/vscode/src/minishell)
+==661==    by 0x1094E3: new_token (in /home/vscode/src/minishell)
+==661==    by 0x109D92: handle_single_operators (in /home/vscode/src/minishell)
+==661==    by 0x109F10: token_operators (in /home/vscode/src/minishell)
+==661==    by 0x109ABB: dispatch_token (in /home/vscode/src/minishell)
+==661==    by 0x109B35: tokenize (in /home/vscode/src/minishell)
+==661==    by 0x10E7D3: main (in /home/vscode/src/minishell)
+==661== 
+
+
+==661== 15 bytes in 4 blocks are still reachable in loss record 11 of 75
+==661==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==661==    by 0x10F0E6: ft_strdup (in /home/vscode/src/minishell)
+==661==    by 0x109629: new_word (in /home/vscode/src/minishell)
+==661==    by 0x10A400: token_word (in /home/vscode/src/minishell)
+==661==    by 0x109AD4: dispatch_token (in /home/vscode/src/minishell)
+==661==    by 0x109B35: tokenize (in /home/vscode/src/minishell)
+==661==    by 0x10E7D3: main (in /home/vscode/src/minishell)
+==661== 
+
+==661== 
+==661== 32 bytes in 1 blocks are still reachable in loss record 18 of 75
+==661==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==661==    by 0x1094A9: new_token (in /home/vscode/src/minishell)
+==661==    by 0x109D92: handle_single_operators (in /home/vscode/src/minishell)
+==661==    by 0x109F10: token_operators (in /home/vscode/src/minishell)
+==661==    by 0x109ABB: dispatch_token (in /home/vscode/src/minishell)
+==661==    by 0x109B35: tokenize (in /home/vscode/src/minishell)
+==661==    by 0x10E7D3: main (in /home/vscode/src/minishell)
+==661== 
+==661== 32 bytes in 2 blocks are still reachable in loss record 19 of 75
+==661==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==661==    by 0x10A57F: new_argv (in /home/vscode/src/minishell)
+==661==    by 0x10A5DC: add_argv (in /home/vscode/src/minishell)
+==661==    by 0x10A85F: parse_cmd (in /home/vscode/src/minishell)
+==661==    by 0x10A8D5: parse_pipeline (in /home/vscode/src/minishell)
+==661==    by 0x10A95A: parse_and_or (in /home/vscode/src/minishell)
+==661==    by 0x10AC30: parse (in /home/vscode/src/minishell)
+==661==    by 0x10E83A: main (in /home/vscode/src/minishell)
+==661== 
+==661== 32 bytes in 2 blocks are still reachable in loss record 20 of 75
+==661==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==661==    by 0x10A57F: new_argv (in /home/vscode/src/minishell)
+==661==    by 0x10A5DC: add_argv (in /home/vscode/src/minishell)
+==661==    by 0x10A85F: parse_cmd (in /home/vscode/src/minishell)
+==661==    by 0x10A900: parse_pipeline (in /home/vscode/src/minishell)
+==661==    by 0x10A95A: parse_and_or (in /home/vscode/src/minishell)
+==661==    by 0x10AC30: parse (in /home/vscode/src/minishell)
+==661==    by 0x10E83A: main (in /home/vscode/src/minishell)
+==661== 
+==661== 
+==661== 64 bytes in 1 blocks are still reachable in loss record 24 of 75
+==661==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==661==    by 0x10A512: ast_new_node (in /home/vscode/src/minishell)
+==661==    by 0x10A6EC: parse_cmd (in /home/vscode/src/minishell)
+==661==    by 0x10A8D5: parse_pipeline (in /home/vscode/src/minishell)
+==661==    by 0x10A95A: parse_and_or (in /home/vscode/src/minishell)
+==661==    by 0x10AC30: parse (in /home/vscode/src/minishell)
+==661==    by 0x10E83A: main (in /home/vscode/src/minishell)
+==661== 
+==661== 64 bytes in 1 blocks are still reachable in loss record 25 of 75
+==661==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==661==    by 0x10A512: ast_new_node (in /home/vscode/src/minishell)
+==661==    by 0x10A6EC: parse_cmd (in /home/vscode/src/minishell)
+==661==    by 0x10A900: parse_pipeline (in /home/vscode/src/minishell)
+==661==    by 0x10A95A: parse_and_or (in /home/vscode/src/minishell)
+==661==    by 0x10AC30: parse (in /home/vscode/src/minishell)
+==661==    by 0x10E83A: main (in /home/vscode/src/minishell)
+==661== 
+==661== 64 bytes in 1 blocks are still reachable in loss record 26 of 75
+==661==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==661==    by 0x10A512: ast_new_node (in /home/vscode/src/minishell)
+==661==    by 0x10A919: parse_pipeline (in /home/vscode/src/minishell)
+==661==    by 0x10A95A: parse_and_or (in /home/vscode/src/minishell)
+==661==    by 0x10AC30: parse (in /home/vscode/src/minishell)
+==661==    by 0x10E83A: main (in /home/vscode/src/minishell)
+==661== 
+==661== 
+==661== 96 bytes in 4 blocks are still reachable in loss record 30 of 75
+==661==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==661==    by 0x10960B: new_word (in /home/vscode/src/minishell)
+==661==    by 0x10A400: token_word (in /home/vscode/src/minishell)
+==661==    by 0x109AD4: dispatch_token (in /home/vscode/src/minishell)
+==661==    by 0x109B35: tokenize (in /home/vscode/src/minishell)
+==661==    by 0x10E7D3: main (in /home/vscode/src/minishell)
+==661== 
+==661== 128 bytes in 4 blocks are still reachable in loss record 31 of 75
+==661==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==661==    by 0x1094A9: new_token (in /home/vscode/src/minishell)
+==661==    by 0x10A4C4: token_word (in /home/vscode/src/minishell)
+==661==    by 0x109AD4: dispatch_token (in /home/vscode/src/minishell)
+==661==    by 0x109B35: tokenize (in /home/vscode/src/minishell)
+==661==    by 0x10E7D3: main (in /home/vscode/src/minishell)
+==661== 
+==661== 
+==661== 211 bytes in 20 blocks are still reachable in loss record 33 of 75
+==661==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==661==    by 0x10F3FC: ft_substr (in /home/vscode/src/minishell)
+==661==    by 0x10ADA8: get_key_value (in /home/vscode/src/minishell)
+==661==    by 0x10AC88: get_env (in /home/vscode/src/minishell)
+==661==    by 0x10E75D: main (in /home/vscode/src/minishell)
+==661== 
+==661== 
+==661== 480 bytes in 20 blocks are still reachable in loss record 36 of 75
+==661==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==661==    by 0x10ADF5: new_var (in /home/vscode/src/minishell)
+==661==    by 0x10ACC8: get_env (in /home/vscode/src/minishell)
+==661==    by 0x10E75D: main (in /home/vscode/src/minishell)
+==661== 
+==661== 
+==661== 
+==661== 1,881 bytes in 20 blocks are still reachable in loss record 48 of 75
+==661==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==661==    by 0x10F3FC: ft_substr (in /home/vscode/src/minishell)
+==661==    by 0x10ADCE: get_key_value (in /home/vscode/src/minishell)
+==661==    by 0x10ACB1: get_env (in /home/vscode/src/minishell)
+==661==    by 0x10E75D: main (in /home/vscode/src/minishell)
+==661== 
+==661== 
+==661== LEAK SUMMARY:
+==661==    definitely lost: 0 bytes in 0 blocks
+==661==    indirectly lost: 0 bytes in 0 blocks
+==661==      possibly lost: 0 bytes in 0 blocks
+==661==    still reachable: 207,660 bytes in 300 blocks
+==661==         suppressed: 0 bytes in 0 blocks
+==661== 
+==661== For lists of detected and suppressed errors, rerun with: -s
+==661== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+==659== 
+==659== HEAP SUMMARY:
+==659==     in use at exit: 204,542 bytes in 218 blocks
+==659==   total heap usage: 491 allocs, 273 frees, 222,846 bytes allocated
+==659== 
+==659== LEAK SUMMARY:
+==659==    definitely lost: 0 bytes in 0 blocks
+==659==    indirectly lost: 0 bytes in 0 blocks
+==659==      possibly lost: 0 bytes in 0 blocks
+==659==    still reachable: 204,542 bytes in 218 blocks
+==659==         suppressed: 0 bytes in 0 blocks
+==659== 
+==659== For lists of detected and suppressed errors, rerun with: -s
+==659== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+
+
+
+COMAND NOT FOUND ==1079== For lists of detected and suppressed errors, rerun with: -s
+==1079== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+echoooo: command not found
+==1081== 
+==1081== HEAP SUMMARY:
+==1081==     in use at exit: 207,821 bytes in 318 blocks
+==1081==   total heap usage: 864 allocs, 546 frees, 232,232 bytes allocated
+==1081== 
+==1081== 1 bytes in 1 blocks are still reachable in loss record 1 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4884C17: replace_history_entry (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4864246: readline_internal_teardown (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4865504: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 2 bytes in 1 blocks are still reachable in loss record 2 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x10F181: ft_strjoin (in /home/vscode/src/minishell)
+==1081==    by 0x10B21B: join_before_after (in /home/vscode/src/minishell)
+==1081==    by 0x10B3FE: process_arg (in /home/vscode/src/minishell)
+==1081==    by 0x10B4A1: expand_argv (in /home/vscode/src/minishell)
+==1081==    by 0x10B6A7: expand_word (in /home/vscode/src/minishell)
+==1081==    by 0x10E869: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 3 bytes in 1 blocks are still reachable in loss record 3 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x10F0C2: ft_strdup (in /home/vscode/src/minishell)
+==1081==    by 0x10DE04: env_set (in /home/vscode/src/minishell)
+==1081==    by 0x10D883: builtin_export (in /home/vscode/src/minishell)
+==1081==    by 0x10C070: execute_builtins (in /home/vscode/src/minishell)
+==1081==    by 0x10C1D3: builtin_child (in /home/vscode/src/minishell)
+==1081==    by 0x10C22E: builtin_parent (in /home/vscode/src/minishell)
+==1081==    by 0x10CA6E: execution (in /home/vscode/src/minishell)
+==1081==    by 0x10E881: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 3 bytes in 1 blocks are still reachable in loss record 4 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x10F0C2: ft_strdup (in /home/vscode/src/minishell)
+==1081==    by 0x10DE1B: env_set (in /home/vscode/src/minishell)
+==1081==    by 0x10D883: builtin_export (in /home/vscode/src/minishell)
+==1081==    by 0x10C070: execute_builtins (in /home/vscode/src/minishell)
+==1081==    by 0x10C1D3: builtin_child (in /home/vscode/src/minishell)
+==1081==    by 0x10C22E: builtin_parent (in /home/vscode/src/minishell)
+==1081==    by 0x10CA6E: execution (in /home/vscode/src/minishell)
+==1081==    by 0x10E881: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 6 bytes in 1 blocks are still reachable in loss record 5 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x493E38E: strdup (strdup.c:42)
+==1081==    by 0x4AA1B67: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA231F: _nc_first_db (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AABF8E: _nc_read_entry2 (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA4AF5: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA4F04: _nc_setupterm (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA5459: tgetent_sp (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x488075B: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 6 bytes in 1 blocks are still reachable in loss record 6 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x493E38E: strdup (strdup.c:42)
+==1081==    by 0x4AA4F4F: _nc_setupterm (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA5459: tgetent_sp (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x488075B: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 8 bytes in 1 blocks are still reachable in loss record 7 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x493E38E: strdup (strdup.c:42)
+==1081==    by 0x4AAC667: _nc_trim_sgr0 (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA5638: tgetent_sp (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x488075B: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 8 bytes in 1 blocks are still reachable in loss record 8 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x10F0C2: ft_strdup (in /home/vscode/src/minishell)
+==1081==    by 0x109629: new_word (in /home/vscode/src/minishell)
+==1081==    by 0x10A400: token_word (in /home/vscode/src/minishell)
+==1081==    by 0x109AD4: dispatch_token (in /home/vscode/src/minishell)
+==1081==    by 0x109B35: tokenize (in /home/vscode/src/minishell)
+==1081==    by 0x10E7DF: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 8 bytes in 1 blocks are still reachable in loss record 9 of 77
+==1081==    at 0x483DFAF: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B041: xrealloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4876234: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48767D5: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4863FE5: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AA: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 11 bytes in 1 blocks are still reachable in loss record 10 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48642AB: readline_internal_teardown (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4865504: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 12 bytes in 1 blocks are still reachable in loss record 11 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4864010: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AA: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 12 bytes in 1 blocks are still reachable in loss record 12 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x487663E: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48767D5: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4863FE5: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AA: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 13 bytes in 1 blocks are still reachable in loss record 13 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4872CF2: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4865228: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 15 bytes in 1 blocks are still reachable in loss record 14 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4884BEF: replace_history_entry (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4864246: readline_internal_teardown (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4865504: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 16 bytes in 1 blocks are still reachable in loss record 15 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x4865317: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 18 bytes in 1 blocks are still reachable in loss record 16 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x4AA2794: _nc_home_terminfo (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA2309: _nc_first_db (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AABF8E: _nc_read_entry2 (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA4AF5: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA4F04: _nc_setupterm (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA5459: tgetent_sp (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x488075B: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 20 bytes in 1 blocks are still reachable in loss record 17 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48739D3: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4872818: rl_parse_and_bind (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4872C6C: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4865228: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 24 bytes in 1 blocks are still reachable in loss record 18 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4884BD0: replace_history_entry (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4864246: readline_internal_teardown (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4865504: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 24 bytes in 1 blocks are still reachable in loss record 19 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x10ADF5: new_var (in /home/vscode/src/minishell)
+==1081==    by 0x10DE3C: env_set (in /home/vscode/src/minishell)
+==1081==    by 0x10D883: builtin_export (in /home/vscode/src/minishell)
+==1081==    by 0x10C070: execute_builtins (in /home/vscode/src/minishell)
+==1081==    by 0x10C1D3: builtin_child (in /home/vscode/src/minishell)
+==1081==    by 0x10C22E: builtin_parent (in /home/vscode/src/minishell)
+==1081==    by 0x10CA6E: execution (in /home/vscode/src/minishell)
+==1081==    by 0x10E881: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 32 bytes in 2 blocks are still reachable in loss record 20 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x10A57F: new_argv (in /home/vscode/src/minishell)
+==1081==    by 0x10A5DC: add_argv (in /home/vscode/src/minishell)
+==1081==    by 0x10A85F: parse_cmd (in /home/vscode/src/minishell)
+==1081==    by 0x10A8D5: parse_pipeline (in /home/vscode/src/minishell)
+==1081==    by 0x10A95A: parse_and_or (in /home/vscode/src/minishell)
+==1081==    by 0x10AC30: parse (in /home/vscode/src/minishell)
+==1081==    by 0x10E846: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 46 bytes in 1 blocks are still reachable in loss record 21 of 77
+==1081==    at 0x483DFAF: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x4AA23B7: _nc_doalloc (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AAB674: _nc_read_termtype (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AABA8C: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AABE83: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AABFB4: _nc_read_entry2 (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA4AF5: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA4F04: _nc_setupterm (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA5459: tgetent_sp (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x488075B: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081== 
+==1081== 46 bytes in 1 blocks are still reachable in loss record 22 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x4AA024E: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA4F1B: _nc_setupterm (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA5459: tgetent_sp (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x488075B: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 48 bytes in 1 blocks are still reachable in loss record 23 of 77
+==1081==    at 0x483DD99: calloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x4AA1F2B: _nc_first_db (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AABF8E: _nc_read_entry2 (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA4AF5: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA4F04: _nc_setupterm (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA5459: tgetent_sp (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x488075B: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 48 bytes in 2 blocks are still reachable in loss record 24 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x10960B: new_word (in /home/vscode/src/minishell)
+==1081==    by 0x10A400: token_word (in /home/vscode/src/minishell)
+==1081==    by 0x109AD4: dispatch_token (in /home/vscode/src/minishell)
+==1081==    by 0x109B35: tokenize (in /home/vscode/src/minishell)
+==1081==    by 0x10E7DF: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 64 bytes in 1 blocks are still reachable in loss record 25 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x10A512: ast_new_node (in /home/vscode/src/minishell)
+==1081==    by 0x10A6EC: parse_cmd (in /home/vscode/src/minishell)
+==1081==    by 0x10A8D5: parse_pipeline (in /home/vscode/src/minishell)
+==1081==    by 0x10A95A: parse_and_or (in /home/vscode/src/minishell)
+==1081==    by 0x10AC30: parse (in /home/vscode/src/minishell)
+==1081==    by 0x10E846: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 64 bytes in 2 blocks are still reachable in loss record 26 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x1094A9: new_token (in /home/vscode/src/minishell)
+==1081==    by 0x10A4C4: token_word (in /home/vscode/src/minishell)
+==1081==    by 0x109AD4: dispatch_token (in /home/vscode/src/minishell)
+==1081==    by 0x109B35: tokenize (in /home/vscode/src/minishell)
+==1081==    by 0x10E7DF: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 66 bytes in 1 blocks are still reachable in loss record 27 of 77
+==1081==    at 0x483DFAF: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x4AA23B7: _nc_doalloc (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA7D83: tparm (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4878E13: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x487A13D: rl_redisplay (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4864356: _rl_internal_char_cleanup (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4864CFA: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654EC: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 78 bytes in 1 blocks are still reachable in loss record 28 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x4AA02BF: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA4F1B: _nc_setupterm (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA5459: tgetent_sp (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x488075B: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 85 bytes in 9 blocks are still reachable in loss record 29 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4884760: alloc_history_entry (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4884A04: add_history (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E7D3: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 87 bytes in 1 blocks are still reachable in loss record 30 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x4AA1E94: _nc_first_db (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AABF8E: _nc_read_entry2 (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA4AF5: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA4F04: _nc_setupterm (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA5459: tgetent_sp (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x488075B: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 94 bytes in 1 blocks are still reachable in loss record 31 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x4AA6642: _nc_tparm_analyze (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA68CB: tparm (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AAC3E4: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AAC659: _nc_trim_sgr0 (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA5638: tgetent_sp (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x488075B: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 108 bytes in 9 blocks are still reachable in loss record 32 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48849E2: add_history (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E7D3: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 156 bytes in 1 blocks are still reachable in loss record 33 of 77
+==1081==    at 0x483DFAF: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x4AA23B7: _nc_doalloc (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AAB692: _nc_read_termtype (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AABA8C: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AABE83: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AABFB4: _nc_read_entry2 (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA4AF5: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA4F04: _nc_setupterm (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA5459: tgetent_sp (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x488075B: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081== 
+==1081== 211 bytes in 20 blocks are still reachable in loss record 34 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x10F3D8: ft_substr (in /home/vscode/src/minishell)
+==1081==    by 0x10ADA8: get_key_value (in /home/vscode/src/minishell)
+==1081==    by 0x10AC88: get_env (in /home/vscode/src/minishell)
+==1081==    by 0x10E775: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 216 bytes in 9 blocks are still reachable in loss record 35 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4884747: alloc_history_entry (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4884A04: add_history (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E7D3: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 256 bytes in 1 blocks are still reachable in loss record 36 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4865466: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 280 bytes in 1 blocks are still reachable in loss record 37 of 77
+==1081==    at 0x483DD99: calloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x4AA4EB7: _nc_setupterm (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA5459: tgetent_sp (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x488075B: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 480 bytes in 20 blocks are still reachable in loss record 38 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x10ADF5: new_var (in /home/vscode/src/minishell)
+==1081==    by 0x10ACC8: get_env (in /home/vscode/src/minishell)
+==1081==    by 0x10E775: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 496 bytes in 1 blocks are still reachable in loss record 39 of 77
+==1081==    at 0x483DD99: calloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x4AAB8FB: _nc_read_termtype (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AABA8C: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AABE83: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AABFB4: _nc_read_entry2 (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA4AF5: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA4F04: _nc_setupterm (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA5459: tgetent_sp (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x488075B: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 496 bytes in 1 blocks are still reachable in loss record 40 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x4AA0399: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA4F1B: _nc_setupterm (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA5459: tgetent_sp (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x488075B: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 755 bytes in 1 blocks are still reachable in loss record 41 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x4AAB97B: _nc_read_termtype (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AABA8C: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AABE83: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AABFB4: _nc_read_entry2 (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA4AF5: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA4F04: _nc_setupterm (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA5459: tgetent_sp (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x488075B: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 1,024 bytes in 1 blocks are still reachable in loss record 42 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4875B8A: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x487B0E6: rl_redisplay (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48640F6: readline_internal_setup (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654D3: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 1,024 bytes in 1 blocks are still reachable in loss record 43 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4875BA0: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x487B0E6: rl_redisplay (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48640F6: readline_internal_setup (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654D3: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 1,024 bytes in 1 blocks are still reachable in loss record 44 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4875BE8: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x487B0E6: rl_redisplay (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48640F6: readline_internal_setup (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654D3: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 1,024 bytes in 1 blocks are still reachable in loss record 45 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4875C07: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x487B0E6: rl_redisplay (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48640F6: readline_internal_setup (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654D3: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 1,024 bytes in 1 blocks are still reachable in loss record 46 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4875C1F: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x487B0E6: rl_redisplay (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48640F6: readline_internal_setup (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654D3: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 1,024 bytes in 1 blocks are still reachable in loss record 47 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4875C37: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x487B0E6: rl_redisplay (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48640F6: readline_internal_setup (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654D3: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 1,486 bytes in 1 blocks are still reachable in loss record 48 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x4AAAFF2: _nc_read_termtype (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AABA8C: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AABE83: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AABFB4: _nc_read_entry2 (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA4AF5: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA4F04: _nc_setupterm (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA5459: tgetent_sp (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x488075B: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 1,536 bytes in 1 blocks are still reachable in loss record 49 of 77
+==1081==    at 0x483DFAF: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B041: xrealloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4869944: rl_add_funmap_entry (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4869998: rl_initialize_funmap (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x486521C: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 1,881 bytes in 20 blocks are still reachable in loss record 50 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x10F3D8: ft_substr (in /home/vscode/src/minishell)
+==1081==    by 0x10ADCE: get_key_value (in /home/vscode/src/minishell)
+==1081==    by 0x10ACB1: get_env (in /home/vscode/src/minishell)
+==1081==    by 0x10E775: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 2,032 bytes in 1 blocks are still reachable in loss record 51 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4880999: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 2,208 bytes in 138 blocks are still reachable in loss record 52 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48698F0: rl_add_funmap_entry (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4869998: rl_initialize_funmap (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x486521C: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 3,792 bytes in 1 blocks are still reachable in loss record 53 of 77
+==1081==    at 0x483DFAF: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x4AA23B7: _nc_doalloc (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AAB6B0: _nc_read_termtype (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AABA8C: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AABE83: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AABFB4: _nc_read_entry2 (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA4AF5: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA4F04: _nc_setupterm (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA5459: tgetent_sp (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x488075B: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081== 
+==1081== 3,792 bytes in 1 blocks are still reachable in loss record 54 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x4AA026F: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA4F1B: _nc_setupterm (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA5459: tgetent_sp (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x488075B: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 4,016 bytes in 1 blocks are still reachable in loss record 55 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4884A5B: add_history (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E7D3: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 4,080 bytes in 1 blocks are still reachable in loss record 56 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48809B9: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 4,112 bytes in 1 blocks are still reachable in loss record 57 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4869A91: rl_make_bare_keymap (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4870D79: rl_generic_bind (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4871F1D: rl_bind_keyseq_if_unbound_in_map (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x487FF45: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4880897: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 4,112 bytes in 1 blocks are still reachable in loss record 58 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4869A91: rl_make_bare_keymap (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4870D79: rl_generic_bind (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4871F1D: rl_bind_keyseq_if_unbound_in_map (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x487FFCA: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4880897: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 4,112 bytes in 1 blocks are still reachable in loss record 59 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4869A91: rl_make_bare_keymap (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4870D79: rl_generic_bind (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4871F1D: rl_bind_keyseq_if_unbound_in_map (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x487FFCA: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48808A3: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 4,112 bytes in 1 blocks are still reachable in loss record 60 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4869A91: rl_make_bare_keymap (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4870D79: rl_generic_bind (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4871F1D: rl_bind_keyseq_if_unbound_in_map (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x487FFCA: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48808AF: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 4,112 bytes in 1 blocks are still reachable in loss record 61 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4869A91: rl_make_bare_keymap (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4870D79: rl_generic_bind (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4871F1D: rl_bind_keyseq_if_unbound_in_map (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4863F72: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4865274: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 4,112 bytes in 1 blocks are still reachable in loss record 62 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4869A91: rl_make_bare_keymap (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4870D79: rl_generic_bind (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4871F1D: rl_bind_keyseq_if_unbound_in_map (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4863F72: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4865283: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 4,112 bytes in 1 blocks are still reachable in loss record 63 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4869A91: rl_make_bare_keymap (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4870D79: rl_generic_bind (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4871F1D: rl_bind_keyseq_if_unbound_in_map (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4863F72: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48652A1: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 7,952 bytes in 1 blocks are still reachable in loss record 64 of 77
+==1081==    at 0x483DD99: calloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x4AA1067: ??? (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA185F: _nc_find_type_entry (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x4AA5D9C: tgetstr_sp (in /usr/lib/x86_64-linux-gnu/libtinfo.so.6.2)
+==1081==    by 0x488079B: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 8,224 bytes in 2 blocks are still reachable in loss record 65 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4869A91: rl_make_bare_keymap (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4870D79: rl_generic_bind (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4871F1D: rl_bind_keyseq_if_unbound_in_map (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x487FFB7: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4880897: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 8,224 bytes in 2 blocks are still reachable in loss record 66 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4869A91: rl_make_bare_keymap (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4870D79: rl_generic_bind (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4871F1D: rl_bind_keyseq_if_unbound_in_map (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x487FF45: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48808A3: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 8,224 bytes in 2 blocks are still reachable in loss record 67 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4869A91: rl_make_bare_keymap (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4870D79: rl_generic_bind (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4871F1D: rl_bind_keyseq_if_unbound_in_map (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x487FFB7: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48808A3: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 8,224 bytes in 2 blocks are still reachable in loss record 68 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4869A91: rl_make_bare_keymap (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4870D79: rl_generic_bind (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4871F1D: rl_bind_keyseq_if_unbound_in_map (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x487FF45: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48808AF: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 8,224 bytes in 2 blocks are still reachable in loss record 69 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4869A91: rl_make_bare_keymap (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4870D79: rl_generic_bind (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4871F1D: rl_bind_keyseq_if_unbound_in_map (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x487FFB7: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48808AF: _rl_init_terminal_io (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48651FF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 8,224 bytes in 2 blocks are still reachable in loss record 70 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4869A91: rl_make_bare_keymap (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4870D79: rl_generic_bind (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4871F1D: rl_bind_keyseq_if_unbound_in_map (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4863F63: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4865274: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 8,224 bytes in 2 blocks are still reachable in loss record 71 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4869A91: rl_make_bare_keymap (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4870D79: rl_generic_bind (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4871F1D: rl_bind_keyseq_if_unbound_in_map (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4863F63: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4865283: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 8,224 bytes in 2 blocks are still reachable in loss record 72 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4869A91: rl_make_bare_keymap (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4870D79: rl_generic_bind (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4871F1D: rl_bind_keyseq_if_unbound_in_map (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4863F63: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48652A1: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 8,224 bytes in 2 blocks are still reachable in loss record 73 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4869A91: rl_make_bare_keymap (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4870D79: rl_generic_bind (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4871F1D: rl_bind_keyseq_if_unbound_in_map (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48652BF: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 8,224 bytes in 2 blocks are still reachable in loss record 74 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4869A91: rl_make_bare_keymap (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4870D79: rl_generic_bind (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4871F1D: rl_bind_keyseq_if_unbound_in_map (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48652D2: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 12,336 bytes in 3 blocks are still reachable in loss record 75 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4869A91: rl_make_bare_keymap (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4870D79: rl_generic_bind (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4871F1D: rl_bind_keyseq_if_unbound_in_map (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4863F3A: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4865283: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 12,336 bytes in 3 blocks are still reachable in loss record 76 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4869A91: rl_make_bare_keymap (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4870D79: rl_generic_bind (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4871F1D: rl_bind_keyseq_if_unbound_in_map (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4863F3A: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48652A1: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== 28,784 bytes in 7 blocks are still reachable in loss record 77 of 77
+==1081==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1081==    by 0x488B00C: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4869A91: rl_make_bare_keymap (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4870D79: rl_generic_bind (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4872A92: rl_parse_and_bind (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4872C6C: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x4865228: rl_initialize (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x48654AF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.0)
+==1081==    by 0x10E78A: main (in /home/vscode/src/minishell)
+==1081== 
+==1081== LEAK SUMMARY:
+==1081==    definitely lost: 0 bytes in 0 blocks
+==1081==    indirectly lost: 0 bytes in 0 blocks
+==1081==      possibly lost: 0 bytes in 0 blocks
+==1081==    still reachable: 207,821 bytes in 318 blocks
+==1081==         suppressed: 0 bytes in 0 blocks
+==1081== 
+

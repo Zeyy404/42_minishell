@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_quote.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 16:26:19 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/14 13:35:12 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/17 15:50:43 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,11 @@ int	token_quotes(const char *input, size_t *i, t_word **words)
 			start = *i;
 			while (input[*i] && input[*i] != quote)
 				(*i)++;
-			if (!input[*i])
+			if (!input[*i] || input[*i] != quote)
+			{
+				ft_putendl_fd("Error: Unclosed quotes" , 2);
 				return (0);
+			}
 			value = ft_substr(input, start, *i - start);
 			if (!value)
 				return (0);
