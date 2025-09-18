@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:49:18 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/17 10:30:31 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/18 18:01:32 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,13 +203,13 @@ void	execute_pipe(t_ast *ast, t_shell *shell)
 
 	if (pipe(fd) == -1)
 		return (perror("pipe"));
-	printf("fork 2\n");
 	left_pid = fork();
+	printf("fork 2\n");
 	g_child_running = 1;
 	if (left_pid == 0)
 		exec_child_pipe_left(ast, shell, fd);
-	printf("fork 3\n");
 	right_pid = fork();
+	printf("fork 3\n");
 	g_child_running = 1;
 	if (right_pid == 0)
 		exec_child_pipe_right(ast, shell, fd);
@@ -237,8 +237,8 @@ void	execute_group(t_ast *ast, t_shell *shell, int in_child)
 		shell->exit_status = 1;
 		return ;
 	}
-	printf("fork 4\n");
 	pid = fork();
+	printf("fork 4\n");
 	g_child_running = 1;
 	if (pid == -1)
 	{
@@ -248,7 +248,7 @@ void	execute_group(t_ast *ast, t_shell *shell, int in_child)
 	}
 	else if (pid == 0)
 	{
-		signal(SIGINT, sigint);
+		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 		if (!in_child && ast->cmd.outfile)
 		{
@@ -272,6 +272,7 @@ void	execute_group(t_ast *ast, t_shell *shell, int in_child)
 				exit(1);
 		}
 		execution(ast->left, shell, 1);
+		free_shell(shell);
 		exit(shell->exit_status);
 	}
 	else

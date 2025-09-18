@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 15:51:57 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/17 19:34:56 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/18 18:03:48 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,18 +42,19 @@ void	exec_child_one(t_ast *ast, t_shell *shell)
 	char	**env_arr;
 	char	**argv;
 
-	signal(SIGINT, sigint);
+	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	if (execute_redirect_in(&ast->cmd, &shell->exit_status))
+	int ret = execute_redirect_in(&ast->cmd, &shell->exit_status);
+	if (ret && g_child_running == 2)
+	{
+		free_shell(shell);
+		exit(1);
+	}
+	else if (ret)
 	{
 		free_shell(shell);
 		exit(0);
 	}
-	// else if (!execute_redirect_in(&ast->cmd, &shell->exit_status))
-	// {
-	// 	free_shell(shell);
-	// 	exit(1);
-	// }
 	if (execute_redirect_out(&ast->cmd))
 	{
 		free_shell(shell);
@@ -77,6 +78,7 @@ void	exec_child_one(t_ast *ast, t_shell *shell)
 		free_shell(shell);
 		exit(127);
 	}
+	printf("comman found\n");
 	execve(cmd_path, argv, env_arr);
 	perror(argv[0]);
 	split_free(env_arr);
@@ -87,8 +89,8 @@ void	exec_child_one(t_ast *ast, t_shell *shell)
 
 void	exec_child_pipe_left(t_ast *ast, t_shell *shell, int fd[2])
 {
-	signal(SIGINT, sigint);
-	signal(SIGQUIT, SIG_DFL);
+	// signal(SIGINT, SIG_DFL);
+	// signal(SIGQUIT, SIG_DFL);
 	close(fd[0]);
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[1]);
@@ -99,8 +101,8 @@ void	exec_child_pipe_left(t_ast *ast, t_shell *shell, int fd[2])
 
 void	exec_child_pipe_right(t_ast *ast, t_shell *shell, int fd[2])
 {
-	signal(SIGINT, sigint);
-	signal(SIGQUIT, SIG_DFL);
+	// signal(SIGINT, SIG_DFL);
+	// signal(SIGQUIT, SIG_DFL);
 	close(fd[1]);
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);

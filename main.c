@@ -358,10 +358,10 @@ int	main(int ac, char **av, char **envp)
 	shell.tokens = NULL;
 	shell.ast = NULL;
 	shell.env = get_env(envp);
-	set_signals();
     // int i = 0;
 	while (1)
 	{     
+        set_signals();
         // printf("exit status = %d\n", shell.exit_status);
 		line = readline("minishell$ ");
 		if (!line)
@@ -388,6 +388,7 @@ int	main(int ac, char **av, char **envp)
 		}
         tokens = shell.tokens;
 		shell.ast = parse(&tokens);
+        // print_ast(shell.ast, 0);
 		if (shell.ast)
 			expand_word(shell.ast, shell.env, shell.exit_status);
 		execution(shell.ast, &shell, 0);
@@ -397,6 +398,8 @@ int	main(int ac, char **av, char **envp)
         shell.ast = NULL;
         free(line);
         // i++; 
+        g_child_running = 0;
+        // rl_clear_history();
 	}
 	free_env(shell.env);
 	return (0);

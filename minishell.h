@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/17 16:10:18 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/18 13:59:20 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,5 +229,7 @@ void				rl_replace_line(const char *text, int clear_undo);
 const char *token_type_str(t_token_type type);
 const char *quote_type_str(t_quote q);
 void print_tokens(t_token *tokens);
+
+
 
 #endif
