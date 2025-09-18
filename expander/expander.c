@@ -6,13 +6,13 @@
 /*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 12:04:50 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/14 13:02:24 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/17 21:24:36 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*process_arg(char *arg, t_env *env, int exit_status)
+static char	*process_arg(char *arg, t_env *env, int exit_status)
 {
 	int		start;
 	int		end;
@@ -36,10 +36,10 @@ char	*process_arg(char *arg, t_env *env, int exit_status)
 	return (arg);
 }
 
-void	expand_argv(t_argv *argv, t_env *env, int exit_status)
+static void	expand_argv(t_argv *argv, t_env *env, int exit_status)
 {
-	t_argv *curr;
-	t_word *w;
+	t_argv	*curr;
+	t_word	*w;
 
 	curr = argv;
 	while (curr)
@@ -58,40 +58,24 @@ void	expand_argv(t_argv *argv, t_env *env, int exit_status)
 	}
 }
 
-void	expand_files(t_ast *ast, t_env *env, int exit_status)
+static void	expand_word_list(t_word *list, t_env *env, int exit_status)
 {
-	t_word *curr;
+	while (list)
+	{
+		if (list->quote_type != Q_SINGLE)
+		{
+			list->value = expand_tilde(list->value, env, exit_status);
+			list->value = process_arg(list->value, env, exit_status);
+		}
+		list = list->next;
+	}
+}
 
-	curr = ast->cmd.infile;
-	while (curr)
-	{
-		if (curr->quote_type != Q_SINGLE)
-		{
-			curr->value = expand_tilde(curr->value, env, exit_status);
-			curr->value = process_arg(curr->value, env, exit_status);
-		}
-		curr = curr->next;
-	}
-	curr = ast->cmd.outfile;
-	while (curr)
-	{
-		if (curr->quote_type != Q_SINGLE)
-		{
-			curr->value = expand_tilde(curr->value, env, exit_status);
-			curr->value = process_arg(curr->value, env, exit_status);	
-		}
-		curr = curr->next;
-	}
-	curr = ast->cmd.delimiter;
-	while (curr)
-	{
-		if (curr->quote_type != Q_SINGLE)
-		{
-			curr->value = expand_tilde(curr->value, env, exit_status);
-			curr->value = process_arg(curr->value, env, exit_status);
-		}
-		curr = curr->next;
-	}
+static void	expand_files(t_ast *ast, t_env *env, int exit_status)
+{
+	expand_word_list(ast->cmd.infile, env, exit_status);
+	expand_word_list(ast->cmd.outfile, env, exit_status);
+	expand_word_list(ast->cmd.delimiter, env, exit_status);
 }
 
 int	expand_word(t_ast *ast, t_env *env, int exit_status)

@@ -6,7 +6,7 @@
 /*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 22:25:33 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/16 21:48:18 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/17 21:29:16 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ int	builtin_export(char **argv, t_shell *shell)
 				free(var_value);
 				shell->exit_status = 1;
 				i++;
-				break ; 
+				break ;
 			}
 			env_set(&shell->env, var_name, var_value);
 			free(var_name);

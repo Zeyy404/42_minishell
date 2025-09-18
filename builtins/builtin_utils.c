@@ -6,7 +6,7 @@
 /*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 15:50:45 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/09 21:09:06 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/17 21:34:21 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,27 +33,32 @@ void	assign_builtin(t_builtin *builtins, t_shell *shell)
 	builtins[7].f = NULL;
 }
 
+static int	update_env_var(t_env *env, char *key, char *value)
+{
+	while (env)
+	{
+		if (ft_strcmp(env->key, key) == 0)
+		{
+			free(env->value);
+			if (value)
+				env->value = ft_strdup(value);
+			else
+				env->value = NULL;
+			return (1);
+		}
+		env = env->next;
+	}
+	return (0);
+}
+
 void	env_set(t_env **env, char *key, char *value)
 {
-	t_env	*tmp;
 	t_env	*new;
 	char	*dup_key;
 	char	*dup_value;
 
-	tmp = *env;
-	while (tmp)
-	{
-		if (ft_strcmp(tmp->key, key) == 0)
-		{
-			free(tmp->value);
-			if (value)
-				tmp->value = ft_strdup(value);
-			else
-				tmp->value = NULL;
-			return ;
-		}
-		tmp = tmp->next;
-	}
+	if (update_env_var(*env, key, value))
+		return ;
 	dup_key = ft_strdup(key);
 	if (value)
 		dup_value = ft_strdup(value);

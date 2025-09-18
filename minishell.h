@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/09/18 13:59:20 by yalkhidi         ###   ########.fr       */
+=======
+/*   Updated: 2025/09/17 21:25:34 by zsalih           ###   ########.fr       */
+>>>>>>> 8f4788012c432fd1799380786a85c30cb932a54b
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +23,10 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdbool.h>
+# include <stdio.h>
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include <stdio.h>
 
 extern int			g_child_running;
 // tokenizer
@@ -60,8 +64,6 @@ typedef struct s_token
 	t_word			*words;
 	t_token_type	type;
 	char			*value;
-	// int				quotes;
-	// int				dquotes;
 	struct s_token	*next;
 }					t_token;
 
@@ -70,14 +72,14 @@ void				add_token(t_token **tokens, t_token *new_token);
 void				free_tokens(t_token *tokens);
 t_word				*new_word(char *value, t_quote quote_type);
 void				add_word(t_word **words, t_word *new_word);
-void 				free_word_list(t_word *words);
+void				free_word_list(t_word *words);
 t_token				*tokenize(const char *input);
 int					token_word(const char *input, size_t *i, t_token **tokens);
-int					token_quotes(const char *input, size_t *i,
-						t_word **words);
+int					token_quotes(const char *input, size_t *i, t_word **words);
 int					token_operators(const char *input, size_t *i,
 						t_token **tokens);
 int					check_syntax(t_token *tokens);
+int					handle_word(const char *input, size_t *i, t_word **words);
 bool				ft_isops(char c);
 bool				ft_isspace(char c);
 int					is_redir(t_token_type t);
@@ -86,7 +88,6 @@ int					is_quote(char c);
 // tokenizer
 
 // parser
-
 typedef struct s_argv
 {
 	t_word			*words;
@@ -101,9 +102,6 @@ typedef struct s_cmd
 	int				append;
 	int				here_doc;
 	t_word			*delimiter;
-	// int				*quotes;
-	// int				*out_quotes;
-	// int				argc;
 }					t_cmd;
 
 typedef enum e_node_type
@@ -123,13 +121,17 @@ typedef struct s_ast
 	t_cmd			cmd;
 }					t_ast;
 
-t_ast				*ast_new_node(t_node_type nt, t_ast *l, t_ast *r);
-// int					add_str(char ***arr, int *count, t_word *words);
 t_ast				*parse_cmd(t_token **tokens);
 t_ast				*parse_pipeline(t_token **tokens);
 t_ast				*parse_and_or(t_token **tokens);
 t_ast				*parse_group(t_token **tokens);
 t_ast				*parse(t_token **tokens);
+t_ast				*ast_new_node(t_node_type nt, t_ast *l, t_ast *r);
+t_argv				*new_argv(t_word *words);
+void				add_argv(t_argv **argv_list, t_word *words);
+void				transfer_words(t_word **dst, t_word *src);
+int					handle_redirection(t_ast *node, t_token **tokens);
+
 // parser
 
 // env
@@ -161,10 +163,7 @@ char				*get_env_value(const char *name, t_env *env,
 void				get_bounds(char *arg, int *start, int *end);
 char				*join_before_after(char *arg, char *value, int start,
 						int end);
-char				*process_arg(char *arg, t_env *env, int exit_status);
 char				*expand_tilde(char *arg, t_env *env, int exit_status);
-void				expand_argv(t_argv *argv, t_env *env, int exit_status);
-void				expand_files(t_ast *ast, t_env *env, int exit_status);
 int					expand_word(t_ast *ast, t_env *env, int exit_status);
 
 // execution
@@ -216,7 +215,7 @@ char				*env_get(t_env *env, const char *key);
 int					is_valid_key(const char *str);
 
 void				free_shell(t_shell *shell);
-void free_ast(t_ast *node);
+void				free_ast(t_ast *node);
 
 void				sigint(int sig);
 void				set_signals(void);
@@ -224,11 +223,10 @@ void				sigint_heredoc(int sig);
 
 void				rl_replace_line(const char *text, int clear_undo);
 
-
-//print functions (NOT IMPORTANT)
-const char *token_type_str(t_token_type type);
-const char *quote_type_str(t_quote q);
-void print_tokens(t_token *tokens);
+// print functions (NOT IMPORTANT)
+const char			*token_type_str(t_token_type type);
+const char			*quote_type_str(t_quote q);
+void				print_tokens(t_token *tokens);
 
 
 
