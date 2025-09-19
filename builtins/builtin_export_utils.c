@@ -12,8 +12,7 @@
 
 #include "../minishell.h"
 
-	t_env *
-	copy_list(t_env *env)
+t_env	*copy_list(t_env *env)
 {
 	t_env	*copy;
 	t_env	*new;
