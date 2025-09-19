@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 15:50:23 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/16 15:48:39 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/19 13:06:34 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,27 @@ static int	get_target(char **target, char **argv, t_env **env)
 	return (0);
 }
 
+static void	update_pwd(t_env **env, char *old_pwd)
+{
+	char	*new_pwd;
+
+	if (old_pwd)
+	{
+		env_set(env, "OLDPWD", old_pwd);
+		free(old_pwd);
+	}
+	new_pwd = getcwd(NULL, 0);
+	if (new_pwd)
+	{
+		env_set(env, "PWD", new_pwd);
+		free(new_pwd);
+	}
+}
+
 int	builtin_cd(char **argv, t_shell *shell)
 {
 	char	*buf;
 	char	*target;
-	char	*new_pwd;
 
 	if (!argv)
 		return (1);
@@ -56,16 +72,6 @@ int	builtin_cd(char **argv, t_shell *shell)
 		ft_putendl_fd(": No such file or directory", 2);
 		return (free(buf), free_argv(argv), 1);
 	}
-	if (buf)
-	{
-		env_set(&shell->env, "OLDPWD", buf);
-		free(buf);
-	}
-	new_pwd = getcwd(NULL, 0);
-	if (new_pwd)
-	{
-		env_set(&shell->env, "PWD", new_pwd);
-		free(new_pwd);
-	}
+	update_pwd(&shell->env, buf);
 	return (0);
 }

@@ -6,76 +6,18 @@
 /*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 22:25:33 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/17 21:29:16 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/19 13:37:25 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static t_env	*copy_list(t_env *env)
+static void	export_error(char *arg, t_shell *shell)
 {
-	t_env	*copy;
-	t_env	*tail;
-	t_env	*new_node;
-
-	copy = NULL;
-	tail = NULL;
-	while (env)
-	{
-		new_node = malloc(sizeof(t_env));
-		if (!new_node)
-			return (NULL);
-		new_node->key = ft_strdup(env->key);
-		if (env->value)
-			new_node->value = ft_strdup(env->value);
-		else
-			new_node->value = NULL;
-		new_node->next = NULL;
-		if (!copy)
-		{
-			copy = new_node;
-			tail = new_node;
-		}
-		else
-		{
-			tail->next = new_node;
-			tail = new_node;
-		}
-		env = env->next;
-	}
-	return (copy);
-}
-
-static t_env	*sort_list(t_env *head)
-{
-	t_env	*current;
-	char	*tmp_key;
-	char	*tmp_value;
-	int		swapped;
-
-	if (!head)
-		return (NULL);
-	swapped = 1;
-	while (swapped)
-	{
-		swapped = 0;
-		current = head;
-		while (current && current->next)
-		{
-			if (ft_strcmp(current->key, current->next->key) > 0)
-			{
-				tmp_key = current->key;
-				tmp_value = current->value;
-				current->key = current->next->key;
-				current->value = current->next->value;
-				current->next->key = tmp_key;
-				current->next->value = tmp_value;
-				swapped = 1;
-			}
-			current = current->next;
-		}
-	}
-	return (head);
+	ft_putstr_fd("export: `", 2);
+	ft_putstr_fd(arg, 2);
+	ft_putendl_fd("': not a valid identifier", 2);
+	shell->exit_status = 1;
 }
 
 static void	print_export(t_env *env)
@@ -96,12 +38,44 @@ static void	print_export(t_env *env)
 	free_env(copy);
 }
 
-int	builtin_export(char **argv, t_shell *shell)
+static void	handle_variable(char *arg, t_shell *shell)
 {
-	int		i;
+	char	*var_name;
+
+	if (!is_valid_key(arg))
+		return (export_error(arg, shell));
+	if (!env_get(shell->env, arg))
+	{
+		var_name = ft_strdup(arg);
+		env_set(&shell->env, var_name, NULL);
+		free(var_name);
+	}
+}
+
+static void	handle_assignment(char *arg, t_shell *shell)
+{
 	char	*equal_sign;
 	char	*var_name;
 	char	*var_value;
+
+	equal_sign = ft_strchr(arg, '=');
+	var_name = ft_substr(arg, 0, equal_sign - arg);
+	var_value = ft_strdup(equal_sign + 1);
+	if (!is_valid_key(var_name))
+	{
+		export_error(arg, shell);
+		free(var_name);
+		free(var_value);
+		return ;
+	}
+	env_set(&shell->env, var_name, var_value);
+	free(var_name);
+	free(var_value);
+}
+
+int	builtin_export(char **argv, t_shell *shell)
+{
+	int		i;
 
 	i = 1;
 	if (argv[1] == NULL)
@@ -111,42 +85,10 @@ int	builtin_export(char **argv, t_shell *shell)
 	}
 	while (argv[i])
 	{
-		equal_sign = ft_strchr(argv[i], '=');
-		if (equal_sign)
-		{
-			var_name = ft_substr(argv[i], 0, equal_sign - argv[i]);
-			var_value = ft_strdup(equal_sign + 1);
-			if (!is_valid_key(var_name))
-			{
-				ft_putstr_fd("export: `", 2);
-				ft_putstr_fd(argv[i], 2);
-				ft_putendl_fd("': not a valid identifier", 2);
-				free(var_name);
-				free(var_value);
-				shell->exit_status = 1;
-				i++;
-				break ;
-			}
-			env_set(&shell->env, var_name, var_value);
-			free(var_name);
-			free(var_value);
-		}
+		if (ft_strchr(argv[i], '='))
+			handle_assignment(argv[i], shell);
 		else
-		{
-			if (!is_valid_key(argv[i]))
-			{
-				ft_putstr_fd("export: `", 2);
-				ft_putstr_fd(argv[i], 2);
-				ft_putendl_fd("': not a valid identifier", 2);
-				shell->exit_status = 1;
-			}
-			else if (!env_get(shell->env, argv[i]))
-			{
-				var_name = ft_strdup(argv[i]);
-				env_set(&shell->env, var_name, NULL);
-				free(var_name);
-			}
-		}
+			handle_variable(argv[i], shell);
 		i++;
 	}
 	return (shell->exit_status);

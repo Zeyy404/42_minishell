@@ -6,11 +6,7 @@
 /*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/09/18 13:59:20 by yalkhidi         ###   ########.fr       */
-=======
-/*   Updated: 2025/09/17 21:25:34 by zsalih           ###   ########.fr       */
->>>>>>> 8f4788012c432fd1799380786a85c30cb932a54b
+/*   Updated: 2025/09/19 13:24:34 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,6 +209,8 @@ void				assign_builtin(t_builtin *builtins, t_shell *shell);
 void				env_set(t_env **env, char *key, char *value);
 char				*env_get(t_env *env, const char *key);
 int					is_valid_key(const char *str);
+t_env				*sort_list(t_env *head);
+t_env				*copy_list(t_env *env);
 
 void				free_shell(t_shell *shell);
 void				free_ast(t_ast *node);
@@ -227,7 +225,5 @@ void				rl_replace_line(const char *text, int clear_undo);
 const char			*token_type_str(t_token_type type);
 const char			*quote_type_str(t_quote q);
 void				print_tokens(t_token *tokens);
-
-
 
 #endif

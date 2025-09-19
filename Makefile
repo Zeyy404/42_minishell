@@ -25,6 +25,7 @@ FILES:= tokenizer/token_list.c \
 		builtins/builtin_echo.c \
 		builtins/builtin_exit.c \
 		builtins/builtin_export.c \
+		builtins/builtin_export_utils.c \
 		builtins/builtin_pwd.c \
 		builtins/builtin_unset.c \
 		builtins/builtin_env.c \
