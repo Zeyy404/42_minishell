@@ -17,6 +17,8 @@ FILES:= tokenizer/token_list.c \
 		expander/expand_utils.c \
 		expander/expander.c \
 		execution/find_path.c \
+		execution/flatten_argv.c \
+		execution/execute_cmd.c \
 		execution/execute_utils.c \
 		execution/execute_builtins.c \
 		execution/execute_redirects.c \

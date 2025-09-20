@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/19 13:24:34 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/20 11:00:43 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ char				*expand_tilde(char *arg, t_env *env, int exit_status);
 int					expand_word(t_ast *ast, t_env *env, int exit_status);
 
 // execution
-void				split_free(char **split);
+void				free_argv(char **split);
 char				*concat(char *path, char slash, char *cmd);
 char				**env_to_char_array(t_env *env);
 char				*get_path(t_env *env);
@@ -173,17 +173,22 @@ int					execute_builtins(char *cmd, t_ast *ast, t_shell *shell);
 void				wait_update_status(pid_t pid, int *exit_status);
 int					builtin_child(t_ast *ast, t_shell *shell);
 int					builtin_parent(t_ast *ast, t_shell *shell);
-void				exec_child_one(t_ast *ast, t_shell *shell);
+void				free_child_cmd(char **argv, char **env_arr, t_shell *shell,
+						int exit_code);
+void				print_cmd_error(char *cmd);
+void				exec_child_cmd(t_ast *ast, t_shell *shell);
 void				exec_child_pipe_left(t_ast *ast, t_shell *shell, int fd[2]);
 void				exec_child_pipe_right(t_ast *ast, t_shell *shell,
 						int fd[2]);
+void				group_child(t_ast *ast, t_shell *shell, int in_child);
 int					open_outfile(char *file, int append, int *fd);
+void				execute_cmd(t_ast *ast, t_shell *shell, int in_child);
 int					execute_redirect_out(t_cmd *cmd);
-int					execute_redirect_in(t_cmd *cmd, int *exit_status);
+int					execute_redirect_in(t_cmd *cmd);
 int					heredoc_loop(int *fd, char *delimiter);
 int					execute_herdoc(t_cmd *cmd);
 void				execution(t_ast *ast, t_shell *shell, int in_child);
-void				execute_one_cmd(t_ast *ast, t_shell *shell);
+void				one_cmd(t_ast *ast, t_shell *shell);
 void				execute_pipe(t_ast *ast, t_shell *shell);
 void				execute_and_or(t_ast *ast, t_shell *shell, int in_child);
 void				execute_group(t_ast *ast, t_shell *shell, int in_child);
@@ -225,5 +230,4 @@ void				rl_replace_line(const char *text, int clear_undo);
 const char			*token_type_str(t_token_type type);
 const char			*quote_type_str(t_quote q);
 void				print_tokens(t_token *tokens);
-
 #endif

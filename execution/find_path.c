@@ -1,28 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_utils.c                                    :+:      :+:    :+:   */
+/*   find_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:44:11 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/03 15:21:40 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/20 09:54:47 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	split_free(char **split)
+void	free_argv(char **argv)
 {
 	int	i;
 
+	if (!argv)
+		return ;
 	i = 0;
-	while (split[i])
+	while (argv[i])
 	{
-		free(split[i]);
+		free(argv[i]);
 		i++;
 	}
-	free(split);
+	free(argv);
 }
 
 char	*concat(char *path, char slash, char *cmd)
@@ -111,10 +113,10 @@ char	*find_cmd_path(char *cmd, t_env *env)
 	{
 		joined_path = concat(split_path[i], '/', cmd);
 		if (!access(joined_path, X_OK))
-			return (split_free(split_path), joined_path);
+			return (free_argv(split_path), joined_path);
 		free(joined_path);
 		i++;
 	}
-	split_free(split_path);
+	free_argv(split_path);
 	return (NULL);
 }

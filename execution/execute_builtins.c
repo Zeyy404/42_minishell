@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:43:07 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/16 20:27:12 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/20 10:39:37 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ int	execute_builtins(char *cmd, t_ast *ast, t_shell *shell)
 {
 	t_builtin	builtins[8];
 	int			i;
-	char **argv;
-	int return_val;
+	char		**argv;
+	int			return_val;
 
 	assign_builtin(builtins, shell);
 	i = 0;
@@ -48,8 +48,7 @@ int	execute_builtins(char *cmd, t_ast *ast, t_shell *shell)
 		{
 			return_val = builtins[i].f(argv, shell);
 			free_argv(argv);
-			return(return_val);
-			// break ;
+			return (return_val);
 		}
 		i++;
 	}
@@ -59,10 +58,9 @@ int	execute_builtins(char *cmd, t_ast *ast, t_shell *shell)
 
 int	builtin_child(t_ast *ast, t_shell *shell)
 {
-	char **argv;
-	// char *cmd;
+	char	**argv;
 
-	if (execute_redirect_in(&ast->cmd, &shell->exit_status))
+	if (execute_redirect_in(&ast->cmd))
 	{
 		shell->exit_status = 1;
 		return (1);
@@ -84,14 +82,11 @@ int	builtin_child(t_ast *ast, t_shell *shell)
 		free_argv(argv);
 		return (0);
 	}
-	// argv = flatten_argv(ast->cmd.argv);
-	// shell->exit_status = 1;
 	return (1);
 }
 
 int	builtin_parent(t_ast *ast, t_shell *shell)
 {
-	// printf("in parent\n");
 	int	in;
 	int	out;
 
@@ -99,7 +94,6 @@ int	builtin_parent(t_ast *ast, t_shell *shell)
 	out = dup(STDOUT_FILENO);
 	if (builtin_child(ast, shell))
 		return (1);
-	// printf("child executed \n");
 	dup2(in, STDIN_FILENO);
 	dup2(out, STDOUT_FILENO);
 	close(in);

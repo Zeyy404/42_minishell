@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 15:51:57 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/18 18:03:48 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/20 10:39:26 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,61 +36,10 @@ void	wait_update_status(pid_t pid, int *exit_status)
 	}
 }
 
-void	exec_child_one(t_ast *ast, t_shell *shell)
-{
-	char	*cmd_path;
-	char	**env_arr;
-	char	**argv;
-
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-	int ret = execute_redirect_in(&ast->cmd, &shell->exit_status);
-	if (ret && g_child_running == 2)
-	{
-		free_shell(shell);
-		exit(1);
-	}
-	else if (ret)
-	{
-		free_shell(shell);
-		exit(0);
-	}
-	if (execute_redirect_out(&ast->cmd))
-	{
-		free_shell(shell);
-		exit(1);
-	}
-	argv = flatten_argv(ast->cmd.argv);
-	if (!argv || !argv[0])
-	{
-		free_argv(argv);
-		free_shell(shell);
-		exit(0);
-	}
-	cmd_path = find_cmd_path(argv[0], shell->env);
-	env_arr = env_to_char_array(shell->env);
-	if (!cmd_path)
-	{
-		ft_putstr_fd(argv[0], 2);
-		ft_putendl_fd(": command not found", 2);
-		free_argv(argv);
-		split_free(env_arr);
-		free_shell(shell);
-		exit(127);
-	}
-	printf("comman found\n");
-	execve(cmd_path, argv, env_arr);
-	perror(argv[0]);
-	split_free(env_arr);
-	free_argv(argv);
-	free_shell(shell);
-	exit(1);
-}
-
 void	exec_child_pipe_left(t_ast *ast, t_shell *shell, int fd[2])
 {
-	// signal(SIGINT, SIG_DFL);
-	// signal(SIGQUIT, SIG_DFL);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	close(fd[0]);
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[1]);
@@ -101,12 +50,40 @@ void	exec_child_pipe_left(t_ast *ast, t_shell *shell, int fd[2])
 
 void	exec_child_pipe_right(t_ast *ast, t_shell *shell, int fd[2])
 {
-	// signal(SIGINT, SIG_DFL);
-	// signal(SIGQUIT, SIG_DFL);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	close(fd[1]);
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
 	execution(ast->right, shell, 1);
 	free_shell(shell);
 	exit(shell->exit_status);
+}
+
+void	group_child(t_ast *ast, t_shell *shell, int in_child)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	if (!in_child && ast->cmd.outfile)
+	{
+		if (execute_redirect_out(&ast->cmd))
+		{
+			shell->exit_status = 1;
+			exit(1);
+		}
+	}
+	if (ast->cmd.infile)
+	{
+		if (execute_redirect_in(&ast->cmd))
+		{
+			shell->exit_status = 1;
+			exit(1);
+		}
+	}
+	if (ast->cmd.here_doc)
+	{
+		if (execute_herdoc(&ast->cmd))
+			exit(1);
+	}
+	execution(ast->left, shell, 1);
 }

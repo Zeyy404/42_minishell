@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:43:42 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/18 17:38:18 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/20 10:39:57 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ int	open_outfile(char *file, int append, int *fd)
 
 int	execute_redirect_out(t_cmd *cmd)
 {
-	int	fd;
-	int	err;
-	t_word *curr;
+	int		fd;
+	int		err;
+	t_word	*curr;
 
 	err = 0;
 	if (!cmd->outfile)
@@ -39,7 +39,6 @@ int	execute_redirect_out(t_cmd *cmd)
 	curr = cmd->outfile;
 	while (curr)
 	{
-		// printf("file: %s\n", curr->value);
 		err = open_outfile(curr->value, cmd->append, &fd);
 		if (err)
 			return (1);
@@ -57,18 +56,15 @@ int	execute_redirect_out(t_cmd *cmd)
 	return (0);
 }
 
-int	execute_redirect_in(t_cmd *cmd, int *exit_status)
+int	execute_redirect_in(t_cmd *cmd)
 {
-	int	fd;
-	t_word *curr;
+	int		fd;
+	t_word	*curr;
 
 	if (cmd->here_doc == 1)
 	{
 		if (execute_herdoc(cmd) == 1)
-		{
-			*exit_status = 0;
 			return (1);
-		}
 	}
 	if (!cmd->infile)
 		return (0);
@@ -77,20 +73,13 @@ int	execute_redirect_in(t_cmd *cmd, int *exit_status)
 	{
 		fd = open(curr->value, O_RDONLY);
 		if (fd == -1)
-		{
-			perror(curr->value);
-			return (1);
-		}
+			return (perror(curr->value), 1);
 		if (curr->next)
 			close(fd);
 		curr = curr->next;
 	}
 	if (dup2(fd, STDIN_FILENO) == -1)
-	{
-		perror("dup2 error\n");
-		close(fd);
-		return (1);
-	}
+		return (perror("dup2 error\n"), close(fd), 1);
 	return (close(fd), 0);
 }
 
@@ -122,7 +111,7 @@ int	heredoc_loop(int *fd, char *delimiter)
 int	execute_herdoc(t_cmd *cmd)
 {
 	int		fd[2];
-	t_word *curr;
+	t_word	*curr;
 
 	curr = cmd->delimiter;
 	while (curr)
