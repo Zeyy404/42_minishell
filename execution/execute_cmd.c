@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 10:35:59 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/21 21:01:44 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/22 02:40:27 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	exec_child_cmd(t_ast *ast, t_shell *shell)
 	char	**env_arr;
 	char	**argv;
 	int		redirect;
-	int		exev;
+	struct stat	st;
 
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
@@ -66,13 +66,19 @@ void	exec_child_cmd(t_ast *ast, t_shell *shell)
 	if (!argv || !argv[0])
 		clean_and_exit(argv, NULL, shell, 0);
 	cmd_path = find_cmd_path(argv[0], shell->env);
+	if (stat(cmd_path, &st) == 0 && S_ISDIR(st.st_mode))
+	{
+		ft_putstr_fd(argv[0], 2);
+		ft_putendl_fd(": Is a directory", 2);
+		clean_and_exit(argv, NULL, shell, 126);
+	}
 	env_arr = env_to_char_array(shell->env);
 	if (!cmd_path)
 	{
 		print_cmd_error(argv[0]);
 		clean_and_exit(argv, env_arr, shell, 127);
 	}
-	exev = execve(cmd_path, argv, env_arr);
+	execve(cmd_path, argv, env_arr);
 	perror(argv[0]);
 	clean_and_exit(argv, env_arr, shell, 1);
 }
