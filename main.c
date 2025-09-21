@@ -1,99 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/22 02:21:49 by zsalih            #+#    #+#             */
+/*   Updated: 2025/09/22 02:21:50 by zsalih           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-#include "string.h"
 
-int g_signal_mode = 0;
-// void	print_env(t_env *env)
-// {
-// 	while(env)
-// 	{
-// 		ft_putstr_fd(env->key, 1);
-// 		ft_putchar_fd('=', 1);
-// 		ft_putendl_fd(env->value, 1);
-// 		env = env->next;
-// 	}
-// }
-
-// void	free_ast(t_ast *ast)
-// {
-// 	if (!ast)
-// 		return ;
-// 	free_ast(ast->left);
-// 	free_ast(ast->right);
-// 	if (ast->cmd.argv)
-// 		free_word_list(ast->cmd.argv->words);
-// 	if (ast->cmd.delimiter)
-// 		free_word_list(ast->cmd.delimiter);
-// 	if (ast->cmd.infile)
-// 		free_word_list(ast->cmd.infile);
-// 	if (ast->cmd.outfile)
-// 		free_word_list(ast->cmd.outfile);
-// 	free(ast);
-// }
-
-
-#include <stdlib.h>
-
-static void free_words(t_word *w)
-{
-    t_word *tmp;
-
-    while (w)
-    {
-        tmp = w->next;
-        free(w->value);
-        free(w);
-        w = tmp;
-    }
-}
-
-static void free_arg(t_argv *argv)
-{
-    t_argv *tmp;
-
-    while (argv)
-    {
-        tmp = argv->next;
-        if (argv->words)
-            free_words(argv->words);
-        free(argv);
-        argv = tmp;
-    }
-}
-
-static void free_cmd(t_cmd *cmd)
-{
-    if (!cmd)
-        return;
-    if (cmd->argv)
-        free_arg(cmd->argv);
-    if (cmd->infile)
-        free_arg(cmd->infile);
-    if (cmd->outfile)
-        free_arg(cmd->outfile);
-    if (cmd->delimiter)
-        free_words(cmd->delimiter);
-}
-
-void free_ast(t_ast *node)
-{
-    if (!node)
-        return;
-    free_ast(node->left);
-    free_ast(node->right);
-    free_cmd(&node->cmd);
-    free(node);
-}
-
-
-void	free_shell(t_shell	*shell)
-{
-	if (shell->env)
-		free_env(shell->env);
-	if (shell->tokens)
-		free_tokens(shell->tokens);
-	if (shell->ast)
-		free_ast(shell->ast);
-}
+int			g_signal_mode = 0;
 
 // #include <stdio.h>
 
@@ -103,18 +22,18 @@ void	free_shell(t_shell	*shell)
 // {
 //     switch (type)
 //     {
-//         case WORD: return "WORD";
-//         case PIPE: return "PIPE";
-//         case REDIR_OUT: return "REDIR_OUT";
-//         case REDIR_IN: return "REDIR_IN";
-//         case APPEND: return "APPEND";
-//         case HEREDOC: return "HEREDOC";
-//         case AND_AND: return "AND_AND";
-//         case OR_OR: return "OR_OR";
-//         case AMPERSAND: return "AMPERSAND";
-//         case LPAREN: return "LPAREN";
-//         case RPAREN: return "RPAREN";
-//         default: return "UNKNOWN";
+//         case WORD: return ("WORD");
+//         case PIPE: return ("PIPE");
+//         case REDIR_OUT: return ("REDIR_OUT");
+//         case REDIR_IN: return ("REDIR_IN");
+//         case APPEND: return ("APPEND");
+//         case HEREDOC: return ("HEREDOC");
+//         case AND_AND: return ("AND_AND");
+//         case OR_OR: return ("OR_OR");
+//         case AMPERSAND: return ("AMPERSAND");
+//         case LPAREN: return ("LPAREN");
+//         case RPAREN: return ("RPAREN");
+//         default: return ("UNKNOWN");
 //     }
 // }
 
@@ -122,10 +41,10 @@ void	free_shell(t_shell	*shell)
 // {
 //     switch (q)
 //     {
-//         case Q_NONE: return "NONE";
-//         case Q_SINGLE: return "SINGLE";
-//         case Q_DOUBLE: return "DOUBLE";
-//         default: return "UNKNOWN";
+//         case Q_NONE: return ("NONE");
+//         case Q_SINGLE: return ("SINGLE");
+//         case Q_DOUBLE: return ("DOUBLE");
+//         default: return ("UNKNOWN");
 //     }
 // }
 
@@ -174,7 +93,7 @@ void	free_shell(t_shell	*shell)
 // void print_ast(t_ast *ast, int depth)
 // {
 //     if (!ast)
-//         return;
+//         return ;
 
 //     for (int i = 0; i < depth; i++)
 //         printf("  "); // indent
@@ -308,7 +227,7 @@ void	free_shell(t_shell	*shell)
 //         if (!shell.tokens)
 //         {
 //             printf("Tokenization failed!\n");
-//             continue;
+//             continue ;
 //         }
 //         print_tokens(shell.tokens);
 //         if (!check_syntax(shell.tokens))
@@ -324,7 +243,7 @@ void	free_shell(t_shell	*shell)
 //         {
 //             printf("ast failed\n");
 //             free_tokens(shell.tokens);
-//             continue ; 
+//             continue ;
 //         }
 //         if (!expand_word(shell.ast, shell.env, shell.exit_status))
 //         {
@@ -346,82 +265,23 @@ void	free_shell(t_shell	*shell)
 //     return 0;
 // }
 
-int	main(int ac, char **av, char **envp)
-{
-	(void)ac;
-	(void)av;
-	char	*line;
-	t_shell	shell;
-    t_token *tokens;
-
-	shell.exit_status = 0;
-	shell.tokens = NULL;
-	shell.ast = NULL;
-	shell.env = get_env(envp);
-    // int i = 0;
-	while (1)
-	{     
-        set_signals();
-        // printf("exit status = %d\n", shell.exit_status);
-		line = readline("minishell$ ");
-		if (!line)
-		{
-			ft_putendl_fd("exit", 1);
-			free_shell(&shell);
-			exit(shell.exit_status);
-		}
-		if (*line)
-			add_history(line);
-		shell.tokens = tokenize(line);
-		if (!shell.tokens)
-		{
-			free(line);
-			continue;
-		}
-		if (check_syntax(shell.tokens) == 258)
-		{
-            shell.exit_status = 258;
-			free_tokens(shell.tokens);
-            shell.tokens = NULL;
-			free(line);
-			continue;
-		}
-        tokens = shell.tokens;
-        // print_tokens(shell.tokens);
-		shell.ast = parse(&tokens);
-        // print_ast(shell.ast, 0);
-		if (shell.ast)
-			expand_word(shell.ast, shell.env, shell.exit_status);
-		execution(shell.ast, &shell, 0);
-        free_tokens(shell.tokens);
-        // free_ast(shell.ast);
-        shell.tokens = NULL;
-        shell.ast = NULL;
-        free(line);
-        // i++; 
-        g_signal_mode = 0;
-	}
-	free_env(shell.env);
-    // rl_clear_history();
-	return (0);
-}
-
 // int	main(int ac, char **av, char **envp)
 // {
 // 	(void)ac;
 // 	(void)av;
 // 	char	*line;
-// 	t_token *tokens;
 // 	t_shell	shell;
-// 	shell.exit_status = 0;
+//     t_token *tokens;
 
+// 	shell.exit_status = 0;
 // 	shell.tokens = NULL;
 // 	shell.ast = NULL;
 // 	shell.env = get_env(envp);
-// 	set_signals();
-//     // print_env(shell.env);
+//     // int i = 0;
 // 	while (1)
 // 	{
+//         set_signals();
+//         // printf("exit status = %d\n", shell.exit_status);
 // 		line = readline("minishell$ ");
 // 		if (!line)
 // 		{
@@ -431,44 +291,113 @@ int	main(int ac, char **av, char **envp)
 // 		}
 // 		if (*line)
 // 			add_history(line);
-// 		tokens = tokenize(line);
-// 		// print_tokens(tokens);
-// 		if (!tokens)
+// 		shell.tokens = tokenize(line);
+// 		if (!shell.tokens)
 // 		{
 // 			free(line);
-// 			printf("debug: syntax error\n");
-// 			continue;
+// 			continue ;
 // 		}
-		
-// 		if (!check_syntax(tokens))
+// 		if (check_syntax(shell.tokens) == 258)
 // 		{
-// 			free_tokens(tokens);
+//             shell.exit_status = 258;
+// 			free_tokens(shell.tokens);
+//             shell.tokens = NULL;
 // 			free(line);
-// 			continue;
+// 			continue ;
 // 		}
-// 		// print_tokens(shell.tokens);
-// 		shell.tokens = tokens;
-// 		// if (!shell.tokens)
-// 		// 	printf("tokens is not working\n");
-// 		// else
-// 		// 	printf("tokens is working\n");
-// 		// print_tokens(shell.tokens);
+//         tokens = shell.tokens;
+//         // print_tokens(shell.tokens);
 // 		shell.ast = parse(&tokens);
-// 	// 	// if (!shell.ast)
-// 	// 	// 	printf("ast is not working\n");
-// 	// 	// else
-// 	// 	// 	printf("ast is working\n");
-// 		// print_ast(shell.ast, 0);
-// 		if (!shell.ast)
-// 			printf("AST is Null\n");
-// 		else
+//         // print_ast(shell.ast, 0);
+// 		if (shell.ast)
 // 			expand_word(shell.ast, shell.env, shell.exit_status);
-// 		// print_ast(shell.ast, 0);
 // 		execution(shell.ast, &shell, 0);
-// 	// // 	free(line);
-// 	// 	free_tokens(shell.tokens);
-// 	// 	free_ast(shell.ast);
+//         free_tokens(shell.tokens);
+//         // free_ast(shell.ast);
+//         shell.tokens = NULL;
+//         shell.ast = NULL;
+//         free(line);
+//         // i++;
+//         g_signal_mode = 0;
 // 	}
-// 	// free_env(shell.env);
+// 	free_env(shell.env);
+//     // rl_clear_history();
 // 	return (0);
 // }
+
+// ******************************* final main.c *********************************
+
+static void	handle_eof(t_shell *shell, char *line)
+{
+	ft_putendl_fd("exit", 1);
+	free(line);
+	free_shell(shell);
+	exit(shell->exit_status);
+}
+
+static int	handle_syntax(t_shell *shell, char *line)
+{
+	if (check_syntax(shell->tokens) == 258)
+	{
+		shell->exit_status = 258;
+		free_tokens(shell->tokens);
+		shell->tokens = NULL;
+		free(line);
+		return (0);
+	}
+	return (1);
+}
+
+static int	handle_ast(t_shell *shell, t_token *tokens, char *line)
+{
+	shell->ast = parse(&tokens);
+	if (shell->ast && !expand_word(shell->ast, shell->env, shell->exit_status))
+	{
+		free_tokens(shell->tokens);
+		shell->tokens = NULL;
+		free_ast(shell->ast);
+		shell->ast = NULL;
+		free(line);
+		return (0);
+	}
+	return (1);
+}
+
+static void	cleanup_iteration(t_shell *shell, char *line)
+{
+	free_tokens(shell->tokens);
+	free_ast(shell->ast);
+	shell->tokens = NULL;
+	shell->ast = NULL;
+	free(line);
+	g_signal_mode = 0;
+}
+
+int	main(int ac, char **av, char **envp)
+{
+	t_shell	shell;
+	t_token	*tokens;
+	char	*line;
+
+	(void)ac;
+	(void)av;
+	shell = (t_shell){get_env(envp), NULL, NULL, 0};
+	while (1)
+	{
+		set_signals();
+		line = readline("minishell$ ");
+		if (!line)
+			handle_eof(&shell, line);
+		if (*line)
+			add_history(line);
+		shell.tokens = tokenize(line);
+		if (!shell.tokens || !handle_syntax(&shell, line))
+			continue ;
+		tokens = shell.tokens;
+		if (!handle_ast(&shell, tokens, line))
+			continue ;
+		execution(shell.ast, &shell, 0);
+		cleanup_iteration(&shell, line);
+	}
+	return (free_env(shell.env), 0);
+}

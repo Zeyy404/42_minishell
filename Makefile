@@ -34,6 +34,7 @@ FILES:= tokenizer/token_list.c \
 		builtins/builtin_env.c \
 		builtins/builtin_utils.c \
 		signals/signals.c \
+		cleanup_utils.c \
 		main.c
 
 HEADER:= minishell.h
