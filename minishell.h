@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/21 19:47:32 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/22 01:42:10 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-int			g_signal_mode;
+extern int			g_signal_mode;
 // tokenizer
 typedef enum e_token_type
 {
@@ -80,6 +80,7 @@ bool				ft_isops(char c);
 bool				ft_isspace(char c);
 int					is_redir(t_token_type t);
 int					is_logic_op(t_token_type t);
+int					is_operator(t_token_type t);
 int					is_quote(char c);
 // tokenizer
 

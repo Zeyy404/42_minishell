@@ -3,28 +3,71 @@
 /*                                                        :::      ::::::::   */
 /*   token_syntax.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 16:27:00 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/17 16:09:08 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/22 01:47:26 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	is_logic_op(t_token_type t)
+static int	check_start_token(t_token *tok)
 {
-	return (t == PIPE || t == AND_AND || t == OR_OR || t == AMPERSAND);
+	if (is_logic_op(tok->type))
+	{
+		printf("syntax error near unexpected token `%s'\n", tok->value);
+		return (258);
+	}
+	if (is_redir(tok->type) && (!tok->next || is_operator(tok->next->type)))
+	{
+		if (!tok->next)
+			printf("syntax error near unexpected token `newline'\n");
+		else
+			printf("syntax error near unexpected token `%s'\n",
+				tok->next->value);
+		return (258);
+	}
+	return (0);
 }
 
-int	is_redir(t_token_type t)
+static int	check_after_logic_op(t_token *tok)
 {
-	return (t == REDIR_IN || t == REDIR_OUT || t == APPEND || t == HEREDOC);
+	if (is_logic_op(tok->type))
+	{
+		printf("syntax error near unexpected token `%s'\n", tok->value);
+		return (258);
+	}
+	if (is_redir(tok->type) && (!tok->next || is_operator(tok->next->type)))
+	{
+		if (!tok->next)
+			printf("syntax error near unexpected token `newline'\n");
+		else
+			printf("syntax error near unexpected token `%s'\n",
+				tok->next->value);
+		return (258);
+	}
+	return (0);
 }
 
-static int	is_operator(t_token_type t)
+static int	check_after_redir(t_token *tok)
 {
-	return (is_logic_op(t) || is_redir(t));
+	if (is_operator(tok->type))
+	{
+		printf("syntax error near unexpected token `%s'\n", tok->value);
+		return (258);
+	}
+	return (0);
+}
+
+static int	check_end_token(t_token *tok)
+{
+	if (is_logic_op(tok->type) || is_redir(tok->type))
+	{
+		printf("syntax error near unexpected token `newline'\n");
+		return (258);
+	}
+	return (0);
 }
 
 int	check_syntax(t_token *tokens)
@@ -34,23 +77,19 @@ int	check_syntax(t_token *tokens)
 	prev = NULL;
 	while (tokens)
 	{
-		if (!prev && is_logic_op(tokens->type))
+		if (!prev)
 		{
-			printf("syntax error near unexpected token `%s'\n", tokens->value);
-			return (258);
+			if (check_start_token(tokens))
+				return (258);
 		}
-		else if (prev && is_operator(prev->type) && is_operator(tokens->type))
-		{
-			printf("syntax error near unexpected token `%s'\n", tokens->value);
+		else if (is_logic_op(prev->type) && check_after_logic_op(tokens))
 			return (258);
-		}
+		else if (is_redir(prev->type) && check_after_redir(tokens))
+			return (258);
 		prev = tokens;
 		tokens = tokens->next;
 	}
-	if (prev && (is_logic_op(prev->type) || is_redir(prev->type)))
-	{
-		printf("syntax error near unexpected token `newline'\n");
+	if (prev && check_end_token(prev))
 		return (258);
-	}
 	return (0);
 }

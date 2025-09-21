@@ -6,6 +6,7 @@ LIBFT:= libft/libft.a
 FILES:= tokenizer/token_list.c \
 		tokenizer/word_list.c \
 		tokenizer/token_syntax.c \
+		tokenizer/syntax_utils.c \
 		tokenizer/token_utils.c \
 		tokenizer/tokenize_core.c \
 		tokenizer/tokenize_ops.c \
