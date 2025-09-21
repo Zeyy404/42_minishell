@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:40:45 by zsalih            #+#    #+#             */
-/*   Updated: 2024/12/24 12:18:36 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/21 19:36:22 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,3 @@ int	ft_atoi(const char *nptr)
 	}
 	return (result * sign);
 }
-
-/*
-#include <stdio.h>
-#include <stdlib.h>
-
-int	main(void)
-{
-	printf("%d\n", ft_atoi("8565946695946468464431"));
-	printf("%d\n", atoi("8565946695946468464431"));
-}
-*/

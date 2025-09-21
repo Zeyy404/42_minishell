@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 15:50:23 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/19 13:06:34 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/21 18:32:02 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,10 @@ int	builtin_cd(char **argv, t_shell *shell)
 		ft_putstr_fd("cd: ", 2);
 		ft_putstr_fd(target, 2);
 		ft_putendl_fd(": No such file or directory", 2);
-		return (free(buf), free_argv(argv), 1);
+		free(buf);
+		// free_argv(argv);
+		return(1);
+		// return (free(buf), free_argv(argv), 1);
 	}
 	update_pwd(&shell->env, buf);
 	return (0);

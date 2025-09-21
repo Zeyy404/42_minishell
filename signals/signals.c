@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 12:22:41 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/20 09:37:48 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/21 17:19:11 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	sigint(int sig)
 {
 	(void)sig;
-	if (!g_child_running)
+	if (!g_signal_mode)
 	{
 		ft_putstr_fd("\n", 1);
 		rl_on_new_line();
@@ -33,7 +33,7 @@ void	set_signals(void)
 void	sigint_heredoc(int sig)
 {
 	(void)sig;
-	g_child_running = 2;
+	g_signal_mode = 2;
 	write(1, "\n", 1);
 	close(STDIN_FILENO);
 }

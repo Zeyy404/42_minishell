@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:43:07 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/20 10:39:37 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/21 19:21:59 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,21 @@ int	builtin_child(t_ast *ast, t_shell *shell)
 {
 	char	**argv;
 
-	if (execute_redirect_in(&ast->cmd))
+	if (ast->cmd.infile)
 	{
-		shell->exit_status = 1;
-		return (1);
+		if (execute_redirect_in(&ast->cmd))
+		{
+			shell->exit_status = 1;
+			return (1);
+		}
 	}
-	if (execute_redirect_out(&ast->cmd))
-	{
-		shell->exit_status = 1;
-		return (1);
+	if (ast->cmd.outfile)
+	{		
+		if (execute_redirect_out(&ast->cmd))
+		{
+			shell->exit_status = 1;
+			return (1);
+		}
 	}
 	argv = flatten_argv(ast->cmd.argv);
 	if (ft_strcmp(argv[0], "exit") == 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 15:45:36 by zsalih            #+#    #+#             */
-/*   Updated: 2024/12/24 19:10:54 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/21 19:36:08 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,24 +29,3 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 		return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 	return (0);
 }
-
-/*
-#include <stdio.h>
-#include <string.h>
-
-int main()
-{
-  char *s1;
-  char *s2;
-  int result;
-  int result1;
-
-  s1 = "test\200";
-  s2 = "test\0";
-  result = ft_strncmp(s1, s2, 6);
-  result1 = strncmp(s1, s2, 6);
-  printf("my func result = %d\n", result);
-  printf("orginal func result = %d\n", result1);
-  return (0);
-}
-*/

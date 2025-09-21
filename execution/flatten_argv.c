@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 09:53:25 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/20 10:58:19 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/21 19:09:34 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static size_t	get_wrods_length(t_word *words)
 	return (len);
 }
 
-static char	*flatten_word_list(t_word *words)
+char	*flatten_word_list(t_word *words)
 {
 	size_t	total_len;
 	t_word	*curr;

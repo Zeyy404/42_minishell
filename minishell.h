@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/20 11:00:43 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/21 19:47:32 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-extern int			g_child_running;
+int			g_signal_mode;
 // tokenizer
 typedef enum e_token_type
 {
@@ -93,8 +93,8 @@ typedef struct s_argv
 typedef struct s_cmd
 {
 	t_argv			*argv;
-	t_word			*infile;
-	t_word			*outfile;
+	t_argv			*infile;
+	t_argv			*outfile;
 	int				append;
 	int				here_doc;
 	t_word			*delimiter;
@@ -173,7 +173,7 @@ int					execute_builtins(char *cmd, t_ast *ast, t_shell *shell);
 void				wait_update_status(pid_t pid, int *exit_status);
 int					builtin_child(t_ast *ast, t_shell *shell);
 int					builtin_parent(t_ast *ast, t_shell *shell);
-void				free_child_cmd(char **argv, char **env_arr, t_shell *shell,
+void				clean_and_exit(char **argv, char **env_arr, t_shell *shell,
 						int exit_code);
 void				print_cmd_error(char *cmd);
 void				exec_child_cmd(t_ast *ast, t_shell *shell);
@@ -188,10 +188,10 @@ int					execute_redirect_in(t_cmd *cmd);
 int					heredoc_loop(int *fd, char *delimiter);
 int					execute_herdoc(t_cmd *cmd);
 void				execution(t_ast *ast, t_shell *shell, int in_child);
-void				one_cmd(t_ast *ast, t_shell *shell);
 void				execute_pipe(t_ast *ast, t_shell *shell);
 void				execute_and_or(t_ast *ast, t_shell *shell, int in_child);
 void				execute_group(t_ast *ast, t_shell *shell, int in_child);
+char				*flatten_word_list(t_word *words);
 char				**flatten_argv(t_argv *argv_list);
 void				free_argv(char **argv);
 

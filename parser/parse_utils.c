@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 12:26:34 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/17 21:14:43 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/21 19:48:13 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,14 +82,14 @@ int	handle_redirection(t_ast *node, t_token **tokens)
 	{
 		*tokens = (*tokens)->next;
 		node->cmd.here_doc = 0;
-		transfer_words(&node->cmd.infile, (*tokens)->words);
+		add_argv(&node->cmd.infile, (*tokens)->words);
 		(*tokens)->words = NULL;
 	}
 	else if ((*tokens)->type == REDIR_OUT || (*tokens)->type == APPEND)
 	{
 		node->cmd.append = ((*tokens)->type == APPEND);
 		*tokens = (*tokens)->next;
-		transfer_words(&node->cmd.outfile, (*tokens)->words);
+		add_argv(&node->cmd.outfile, (*tokens)->words);
 		(*tokens)->words = NULL;
 	}
 	else if ((*tokens)->type == HEREDOC)

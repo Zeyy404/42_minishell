@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:43:42 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/20 10:39:57 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/21 20:04:12 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ int	open_outfile(char *file, int append, int *fd)
 		*fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (*fd == -1)
 	{
-		printf("%s\n", file);
 		perror(file);
 		return (1);
 	}
@@ -31,27 +30,25 @@ int	execute_redirect_out(t_cmd *cmd)
 {
 	int		fd;
 	int		err;
-	t_word	*curr;
+	int		i;
+	char	**outfile;
 
-	err = 0;
-	if (!cmd->outfile)
+	outfile = flatten_argv(cmd->outfile);
+	if (!outfile)
 		return (0);
-	curr = cmd->outfile;
-	while (curr)
+	err = 0;
+	i = 0;
+	while (outfile[i])
 	{
-		err = open_outfile(curr->value, cmd->append, &fd);
+		err = open_outfile(outfile[i], cmd->append, &fd);
 		if (err)
 			return (1);
-		if (curr->next)
+		if (outfile[i + 1])
 			close(fd);
-		curr = curr->next;
+		i++;
 	}
 	if (dup2(fd, STDOUT_FILENO) == -1)
-	{
-		perror("dup2 error\n");
-		close(fd);
-		return (1);
-	}
+		return (perror("dup2: "), close(fd), 1);
 	close(fd);
 	return (0);
 }
@@ -59,27 +56,29 @@ int	execute_redirect_out(t_cmd *cmd)
 int	execute_redirect_in(t_cmd *cmd)
 {
 	int		fd;
-	t_word	*curr;
-
+	char 	**infile;
+	int		i;
+	
+	infile = flatten_argv(cmd->infile);
+	if (!infile)
+		return (0);
+	i = 0;
 	if (cmd->here_doc == 1)
 	{
 		if (execute_herdoc(cmd) == 1)
 			return (1);
 	}
-	if (!cmd->infile)
-		return (0);
-	curr = cmd->infile;
-	while (curr)
-	{
-		fd = open(curr->value, O_RDONLY);
+	while(infile[i])
+	{		
+		fd = open(infile[i], O_RDONLY);
 		if (fd == -1)
-			return (perror(curr->value), 1);
-		if (curr->next)
+			return (perror(infile[i]), 1);
+		if (infile[i + 1])
 			close(fd);
-		curr = curr->next;
+		i++;
 	}
 	if (dup2(fd, STDIN_FILENO) == -1)
-		return (perror("dup2 error\n"), close(fd), 1);
+		return (perror("dup2: "), close(fd), 1);
 	return (close(fd), 0);
 }
 
@@ -92,9 +91,8 @@ int	heredoc_loop(int *fd, char *delimiter)
 		line = readline("> ");
 		if (!line)
 		{
-			close(fd[0]);
-			close(fd[1]);
-			return (1);
+			g_signal_mode = 3;
+			break ;
 		}
 		if (ft_strcmp(line, delimiter) == 0)
 		{
@@ -104,7 +102,11 @@ int	heredoc_loop(int *fd, char *delimiter)
 		write(fd[1], line, ft_strlen(line));
 		write(fd[1], "\n", 1);
 		free(line);
+		if (g_signal_mode == 2)
+			break ;
 	}
+	if (g_signal_mode == 2)
+		return (1);
 	return (0);
 }
 
@@ -116,20 +118,20 @@ int	execute_herdoc(t_cmd *cmd)
 	curr = cmd->delimiter;
 	while (curr)
 	{
-		if (pipe(fd) == -1)
-		{
-			perror("pipe error\n");
-			return (1);
-		}
 		signal(SIGINT, sigint_heredoc);
 		signal(SIGQUIT, SIG_IGN);
+		if (pipe(fd) == -1)
+		{
+			perror("pipe\n");
+			return (1);
+		}
 		if (heredoc_loop(fd, curr->value))
 			return (close(fd[0]), close(fd[1]), 1);
 		close(fd[1]);
 		if (curr->next == NULL)
 		{
 			if (dup2(fd[0], STDIN_FILENO) == -1)
-				return (perror("dup2 error\n"), close(fd[0]), 1);
+				return (perror("dup2: \n"), close(fd[0]), 1);
 		}
 		close(fd[0]);
 		curr = curr->next;

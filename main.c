@@ -1,7 +1,7 @@
 #include "minishell.h"
 #include "string.h"
 
-int g_child_running = 0;
+int g_signal_mode = 0;
 // void	print_env(t_env *env)
 // {
 // 	while(env)
@@ -67,9 +67,9 @@ static void free_cmd(t_cmd *cmd)
     if (cmd->argv)
         free_arg(cmd->argv);
     if (cmd->infile)
-        free_words(cmd->infile);
+        free_arg(cmd->infile);
     if (cmd->outfile)
-        free_words(cmd->outfile);
+        free_arg(cmd->outfile);
     if (cmd->delimiter)
         free_words(cmd->delimiter);
 }
@@ -95,140 +95,140 @@ void	free_shell(t_shell	*shell)
 		free_ast(shell->ast);
 }
 
-#include <stdio.h>
+// #include <stdio.h>
 
-// --- Debug helpers ---
+// // --- Debug helpers ---
 
-const char *token_type_str(t_token_type type)
-{
-    switch (type)
-    {
-        case WORD: return "WORD";
-        case PIPE: return "PIPE";
-        case REDIR_OUT: return "REDIR_OUT";
-        case REDIR_IN: return "REDIR_IN";
-        case APPEND: return "APPEND";
-        case HEREDOC: return "HEREDOC";
-        case AND_AND: return "AND_AND";
-        case OR_OR: return "OR_OR";
-        case AMPERSAND: return "AMPERSAND";
-        case LPAREN: return "LPAREN";
-        case RPAREN: return "RPAREN";
-        default: return "UNKNOWN";
-    }
-}
+// const char *token_type_str(t_token_type type)
+// {
+//     switch (type)
+//     {
+//         case WORD: return "WORD";
+//         case PIPE: return "PIPE";
+//         case REDIR_OUT: return "REDIR_OUT";
+//         case REDIR_IN: return "REDIR_IN";
+//         case APPEND: return "APPEND";
+//         case HEREDOC: return "HEREDOC";
+//         case AND_AND: return "AND_AND";
+//         case OR_OR: return "OR_OR";
+//         case AMPERSAND: return "AMPERSAND";
+//         case LPAREN: return "LPAREN";
+//         case RPAREN: return "RPAREN";
+//         default: return "UNKNOWN";
+//     }
+// }
 
-const char *quote_type_str(t_quote q)
-{
-    switch (q)
-    {
-        case Q_NONE: return "NONE";
-        case Q_SINGLE: return "SINGLE";
-        case Q_DOUBLE: return "DOUBLE";
-        default: return "UNKNOWN";
-    }
-}
+// const char *quote_type_str(t_quote q)
+// {
+//     switch (q)
+//     {
+//         case Q_NONE: return "NONE";
+//         case Q_SINGLE: return "SINGLE";
+//         case Q_DOUBLE: return "DOUBLE";
+//         default: return "UNKNOWN";
+//     }
+// }
 
-// --- Token printer ---
+// // --- Token printer ---
 
-void print_tokens(t_token *tokens)
-{
-    int i = 0;
-    while (tokens)
-    {
-        printf("Token %d: type=%s, value='%s'\n",
-               i, token_type_str(tokens->type),
-               tokens->value ? tokens->value : "(null)");
+// void print_tokens(t_token *tokens)
+// {
+//     int i = 0;
+//     while (tokens)
+//     {
+//         printf("Token %d: type=%s, value='%s'\n",
+//                i, token_type_str(tokens->type),
+//                tokens->value ? tokens->value : "(null)");
 
-        t_word *w = tokens->words;
-        int j = 0;
-        while (w)
-        {
-            printf("   Word %d: value='%s', quote=%s\n",
-                   j, w->value ? w->value : "(null)",
-                   quote_type_str(w->quote_type));
-            w = w->next;
-            j++;
-        }
+//         t_word *w = tokens->words;
+//         int j = 0;
+//         while (w)
+//         {
+//             printf("   Word %d: value='%s', quote=%s\n",
+//                    j, w->value ? w->value : "(null)",
+//                    quote_type_str(w->quote_type));
+//             w = w->next;
+//             j++;
+//         }
 
-        tokens = tokens->next;
-        i++;
-    }
-}
+//         tokens = tokens->next;
+//         i++;
+//     }
+// }
 
-// --- AST printer ---
+// // --- AST printer ---
 
-static const char *node_type_str(t_node_type type)
-{
-    switch (type)
-    {
-        case NODE_CMD: return "CMD";
-        case NODE_AND: return "AND";
-        case NODE_OR: return "OR";
-        case NODE_PIPE: return "PIPE";
-        case NODE_GROUP: return "GROUP";
-        default: return "UNKNOWN";
-    }
-}
+// static const char *node_type_str(t_node_type type)
+// {
+//     switch (type)
+//     {
+//         case NODE_CMD: return "CMD";
+//         case NODE_AND: return "AND";
+//         case NODE_OR: return "OR";
+//         case NODE_PIPE: return "PIPE";
+//         case NODE_GROUP: return "GROUP";
+//         default: return "UNKNOWN";
+//     }
+// }
 
-void print_ast(t_ast *ast, int depth)
-{
-    if (!ast)
-        return;
+// void print_ast(t_ast *ast, int depth)
+// {
+//     if (!ast)
+//         return;
 
-    for (int i = 0; i < depth; i++)
-        printf("  "); // indent
+//     for (int i = 0; i < depth; i++)
+//         printf("  "); // indent
 
-    printf("Node: %s\n", node_type_str(ast->type));
+//     printf("Node: %s\n", node_type_str(ast->type));
 
-    if (ast->type == NODE_CMD)
-    {
-        // Print command arguments
-        t_argv *a = ast->cmd.argv;
-        int argn = 0;
-        while (a)
-        {
-            t_word *w = a->words;
-            printf("%*s Arg %d:", depth*2 + 2, "", argn);
-            while (w)
-            {
-                printf(" '%s'", w->value ? w->value : "(null)");
-                w = w->next;
-            }
-            printf("\n");
-            a = a->next;
-            argn++;
-        }
+//     if (ast->type == NODE_CMD)
+//     {
+//         // Print command arguments
+//         t_argv *a = ast->cmd.argv;
+//         int argn = 0;
+//         while (a)
+//         {
+//             t_word *w = a->words;
+//             printf("%*s Arg %d:", depth*2 + 2, "", argn);
+//             while (w)
+//             {
+//                 printf(" '%s'", w->value ? w->value : "(null)");
+//                 w = w->next;
+//             }
+//             printf("\n");
+//             a = a->next;
+//             argn++;
+//         }
 
-        // Print redirections
-        if (ast->cmd.infile)
-            printf("%*s Infile: '%s'\n", depth*2 + 2, "",
-                   ast->cmd.infile->value ? ast->cmd.infile->value : "(null)");
-        if (ast->cmd.outfile)
-            printf("%*s Outfile: '%s' (append=%d)\n", depth*2 + 2, "",
-                   ast->cmd.outfile->value ? ast->cmd.outfile->value : "(null)",
-                   ast->cmd.append);
-        if (ast->cmd.here_doc && ast->cmd.delimiter)
-            printf("%*s Heredoc delimiter: '%s'\n", depth*2 + 2, "",
-                   ast->cmd.delimiter->value ? ast->cmd.delimiter->value : "(null)");
-    }
+//         // Print redirections
+//         if (ast->cmd.infile)
+//             printf("%*s Infile: '%s'\n", depth*2 + 2, "",
+//                    ast->cmd.infile->value ? ast->cmd.infile->value : "(null)");
+//         if (ast->cmd.outfile)
+//             printf("%*s Outfile: '%s' (append=%d)\n", depth*2 + 2, "",
+//                    ast->cmd.outfile->value ? ast->cmd.outfile->value : "(null)",
+//                    ast->cmd.append);
+//         if (ast->cmd.here_doc && ast->cmd.delimiter)
+//             printf("%*s Heredoc delimiter: '%s'\n", depth*2 + 2, "",
+//                    ast->cmd.delimiter->value ? ast->cmd.delimiter->value : "(null)");
+//     }
 
-    // Recursive printing of left/right
-    if (ast->left)
-    {
-        for (int i = 0; i < depth; i++)
-            printf("  ");
-        printf(" Left:\n");
-        print_ast(ast->left, depth + 1);
-    }
-    if (ast->right)
-    {
-        for (int i = 0; i < depth; i++)
-            printf("  ");
-        printf(" Right:\n");
-        print_ast(ast->right, depth + 1);
-    }
-}
+//     // Recursive printing of left/right
+//     if (ast->left)
+//     {
+//         for (int i = 0; i < depth; i++)
+//             printf("  ");
+//         printf(" Left:\n");
+//         print_ast(ast->left, depth + 1);
+//     }
+//     if (ast->right)
+//     {
+//         for (int i = 0; i < depth; i++)
+//             printf("  ");
+//         printf(" Right:\n");
+//         print_ast(ast->right, depth + 1);
+//     }
+// }
 
 // int main(int ac, char **av, char **envp)
 // {
@@ -387,21 +387,22 @@ int	main(int ac, char **av, char **envp)
 			continue;
 		}
         tokens = shell.tokens;
+        // print_tokens(shell.tokens);
 		shell.ast = parse(&tokens);
         // print_ast(shell.ast, 0);
 		if (shell.ast)
 			expand_word(shell.ast, shell.env, shell.exit_status);
 		execution(shell.ast, &shell, 0);
         free_tokens(shell.tokens);
-        free_ast(shell.ast);
+        // free_ast(shell.ast);
         shell.tokens = NULL;
         shell.ast = NULL;
         free(line);
         // i++; 
-        g_child_running = 0;
-        // rl_clear_history();
+        g_signal_mode = 0;
 	}
 	free_env(shell.env);
+    // rl_clear_history();
 	return (0);
 }
 

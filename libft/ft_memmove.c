@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:40:12 by zsalih            #+#    #+#             */
-/*   Updated: 2024/12/24 17:22:32 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/21 19:36:19 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,3 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 	}
 	return (dest);
 }
-
-/*
-#include <stdio.h>
-
-int main()
-{
-	char	src[10] = "abcdefghi";
-	printf("%s", ft_memmove(src + 5, src, 3));
-	return (0);	
-}
-*/

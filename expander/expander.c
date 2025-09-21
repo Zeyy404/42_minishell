@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 12:04:50 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/17 21:24:36 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/21 19:49:10 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ static void	expand_word_list(t_word *list, t_env *env, int exit_status)
 
 static void	expand_files(t_ast *ast, t_env *env, int exit_status)
 {
-	expand_word_list(ast->cmd.infile, env, exit_status);
-	expand_word_list(ast->cmd.outfile, env, exit_status);
+	expand_argv(ast->cmd.infile, env, exit_status);
+	expand_argv(ast->cmd.outfile, env, exit_status);
 	expand_word_list(ast->cmd.delimiter, env, exit_status);
 }
 
