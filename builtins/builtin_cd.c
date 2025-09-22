@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 15:50:23 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/22 01:00:26 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/22 12:22:31 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@ static int	get_target(char **target, char **argv, t_env **env)
 		*target = prev_dir;
 		printf("%s\n", *target);
 	}
-	else if (argv[1] && argv[2])
-		return (ft_putendl_fd("cd: too many arguments", 2), 1);
 	else
 		*target = argv[1];
 	return (0);

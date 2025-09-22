@@ -3,27 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 12:04:54 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/09 18:53:42 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/22 12:17:21 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	ft_strcmp(const char *s1, const char *s2)
+char	*handle_ambiguous_redirect(char *arg, int start, int end)
 {
-	int	i;
+	char	*var_name;
 
-	i = 0;
-	if (s1[i] == 0 && s2[i] == 0)
-		return (0);
-	while ((s1[i] == s2[i]) && (s1[i] != '\0' || s2[i] != '\0'))
-	{
-		i++;
-	}
-	return (s1[i] - s2[i]);
+	var_name = ft_substr(arg, start, end - start);
+	ft_putstr_fd(var_name, 2);
+	ft_putendl_fd(": ambiguous redirect", 2);
+	free(var_name);
+	free(arg);
+	return (NULL);
 }
 
 char	*get_env_value(const char *name, t_env *env, int exit_status)
@@ -36,7 +34,7 @@ char	*get_env_value(const char *name, t_env *env, int exit_status)
 			return (ft_strdup(env->value));
 		env = env->next;
 	}
-	return (ft_strdup(""));
+	return (NULL);
 }
 
 void	get_bounds(char *arg, int *start, int *end)

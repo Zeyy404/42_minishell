@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 12:04:50 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/21 19:49:10 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/22 12:58:33 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static char	*process_arg(char *arg, t_env *env, int exit_status)
+static char	*process_arg(char *arg, int file, t_env *env, int exit_status)
 {
 	int		start;
 	int		end;
@@ -28,6 +28,8 @@ static char	*process_arg(char *arg, t_env *env, int exit_status)
 		var_name = ft_substr(arg, start + 1, end - (start + 1));
 		value = get_env_value(var_name, env, exit_status);
 		free(var_name);
+		if (!value && file)
+			return (handle_ambiguous_redirect(arg, start, end));
 		new_arg = join_before_after(arg, value, start, end);
 		free(value);
 		free(arg);
@@ -36,7 +38,7 @@ static char	*process_arg(char *arg, t_env *env, int exit_status)
 	return (arg);
 }
 
-static void	expand_argv(t_argv *argv, t_env *env, int exit_status)
+static int	expand_argv(t_argv *argv, int file, t_env *env, int exit_status)
 {
 	t_argv	*curr;
 	t_word	*w;
@@ -50,32 +52,42 @@ static void	expand_argv(t_argv *argv, t_env *env, int exit_status)
 			if (w->quote_type != Q_SINGLE)
 			{
 				w->value = expand_tilde(w->value, env, exit_status);
-				w->value = process_arg(w->value, env, exit_status);
+				w->value = process_arg(w->value, file, env, exit_status);
+				if (!w->value)
+					return (0);
 			}
 			w = w->next;
 		}
 		curr = curr->next;
 	}
+	return (1);
 }
 
-static void	expand_word_list(t_word *list, t_env *env, int exit_status)
+static int	expand_word_list(t_word *list, int file, t_env *env, int exit_status)
 {
 	while (list)
 	{
 		if (list->quote_type != Q_SINGLE)
 		{
 			list->value = expand_tilde(list->value, env, exit_status);
-			list->value = process_arg(list->value, env, exit_status);
+			list->value = process_arg(list->value, file, env, exit_status);
+			if (!list->value)
+				return (0);
 		}
 		list = list->next;
 	}
+	return (1);
 }
 
-static void	expand_files(t_ast *ast, t_env *env, int exit_status)
+static int	expand_files(t_ast *ast, t_env *env, int exit_status)
 {
-	expand_argv(ast->cmd.infile, env, exit_status);
-	expand_argv(ast->cmd.outfile, env, exit_status);
-	expand_word_list(ast->cmd.delimiter, env, exit_status);
+	if (!expand_argv(ast->cmd.infile, 1, env, exit_status))
+		return (0);
+	if (!expand_argv(ast->cmd.outfile, 1, env, exit_status))
+		return (0);
+	if (!expand_word_list(ast->cmd.delimiter, 0, env, exit_status))
+		return (0);
+	return (1);
 }
 
 int	expand_word(t_ast *ast, t_env *env, int exit_status)
@@ -85,8 +97,10 @@ int	expand_word(t_ast *ast, t_env *env, int exit_status)
 	if (ast->type == NODE_CMD && (ast->cmd.argv || ast->cmd.infile
 			|| ast->cmd.outfile))
 	{
-		expand_argv(ast->cmd.argv, env, exit_status);
-		expand_files(ast, env, exit_status);
+		if (!expand_argv(ast->cmd.argv, 0, env, exit_status))
+			return (0);
+		if (!expand_files(ast, env, exit_status))
+			return (0);
 	}
 	if (ast->left)
 		expand_word(ast->left, env, exit_status);

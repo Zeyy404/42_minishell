@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/22 02:35:44 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/22 12:16:51 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <sys/wait.h>
 # include <sys/stat.h>
+# include <sys/wait.h>
 # include <unistd.h>
 
 extern int			g_signal_mode;
@@ -155,7 +155,7 @@ void				add_to_env(t_env **env, t_env *new_var);
 void				free_env(t_env *env);
 
 // expander
-int					ft_strcmp(const char *s1, const char *s2);
+char				*handle_ambiguous_redirect(char *arg, int start, int end);
 char				*get_env_value(const char *name, t_env *env,
 						int exit_status);
 void				get_bounds(char *arg, int *start, int *end);
