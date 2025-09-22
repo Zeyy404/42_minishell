@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/22 12:16:51 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/22 18:54:01 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <errno.h>
 
 extern int			g_signal_mode;
 // tokenizer
@@ -100,6 +101,7 @@ typedef struct s_cmd
 	int				append;
 	int				here_doc;
 	t_word			*delimiter;
+	int				cmd_not_found;
 }					t_cmd;
 
 typedef enum e_node_type
@@ -169,7 +171,7 @@ void				free_argv(char **split);
 char				*concat(char *path, char slash, char *cmd);
 char				**env_to_char_array(t_env *env);
 char				*get_path(t_env *env);
-char				*find_cmd_path(char *cmd, t_env *env);
+char				*find_cmd_path(char *cmd, t_env *env, int *cmd_not_found);
 bool				is_builtin(char *cmd, t_shell *shell);
 int					execute_builtins(char *cmd, t_ast *ast, t_shell *shell);
 void				wait_update_status(pid_t pid, int *exit_status);

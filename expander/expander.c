@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 12:04:50 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/22 12:58:33 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/22 16:22:37 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ static char	*process_arg(char *arg, int file, t_env *env, int exit_status)
 		free(var_name);
 		if (!value && file)
 			return (handle_ambiguous_redirect(arg, start, end));
+		if (!value)
+			value = ft_strdup("");
 		new_arg = join_before_after(arg, value, start, end);
 		free(value);
 		free(arg);

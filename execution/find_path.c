@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:44:11 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/20 09:54:47 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/22 18:54:01 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,13 +94,19 @@ char	*get_path(t_env *env)
 	return (NULL);
 }
 
-char	*find_cmd_path(char *cmd, t_env *env)
+char	*find_cmd_path(char *cmd, t_env *env, int *cmd_not_found)
 {
 	char	*path;
 	char	**split_path;
 	int		i;
 	char	*joined_path;
 
+	*cmd_not_found = 0;
+	if (cmd[0] == '\0')
+	{
+		printf("cmd is empty\n");
+		return (cmd);
+	}
 	path = NULL;
 	if (!access(cmd, X_OK))
 		return (cmd);
@@ -118,5 +124,6 @@ char	*find_cmd_path(char *cmd, t_env *env)
 		i++;
 	}
 	free_argv(split_path);
-	return (NULL);
+	*cmd_not_found = 1;
+	return (cmd);
 }

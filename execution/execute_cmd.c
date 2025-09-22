@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 10:35:59 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/22 02:40:27 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/22 19:34:46 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,11 @@ void	clean_and_exit(char **argv, char **env_arr, t_shell *shell,
 
 void	print_cmd_error(char *cmd)
 {
-	if (cmd[0] == '/')
-		perror(cmd);
+	if (ft_strchr(cmd, '/'))
+	{
+		ft_putstr_fd(cmd, 2);
+		ft_putendl_fd(": Not a directory", 2);
+	}
 	else
 	{
 		ft_putstr_fd(cmd, 2);
@@ -37,6 +40,7 @@ void	print_cmd_error(char *cmd)
 
 void	exec_child_cmd(t_ast *ast, t_shell *shell)
 {
+	// printf("exec child\n");
 	char	*cmd_path;
 	char	**env_arr;
 	char	**argv;
@@ -62,23 +66,78 @@ void	exec_child_cmd(t_ast *ast, t_shell *shell)
 	}
 
 	argv = flatten_argv(ast->cmd.argv);
-
+	// printf("argv[0]: '%s'\n", argv[0]);
 	if (!argv || !argv[0])
 		clean_and_exit(argv, NULL, shell, 0);
-	cmd_path = find_cmd_path(argv[0], shell->env);
-	if (stat(cmd_path, &st) == 0 && S_ISDIR(st.st_mode))
-	{
-		ft_putstr_fd(argv[0], 2);
-		ft_putendl_fd(": Is a directory", 2);
-		clean_and_exit(argv, NULL, shell, 126);
-	}
-	env_arr = env_to_char_array(shell->env);
-	if (!cmd_path)
+	cmd_path = find_cmd_path(argv[0], shell->env, &ast->cmd.cmd_not_found);
+	// printf("cmd:'%s'\n", cmd_path);	
+	if (ast->cmd.cmd_not_found)
 	{
 		print_cmd_error(argv[0]);
-		clean_and_exit(argv, env_arr, shell, 127);
+		clean_and_exit(argv, NULL, shell, 127);
 	}
-	execve(cmd_path, argv, env_arr);
-	perror(argv[0]);
-	clean_and_exit(argv, env_arr, shell, 1);
+	if (!cmd_path)
+	{
+		ft_putstr_fd(argv[0], 2);
+		ft_putendl_fd(": No such file or directory", 2);
+		clean_and_exit(argv, NULL, shell, 127);
+	}
+	if (cmd_path)
+	{
+		if (stat(cmd_path, &st) == 0 && S_ISDIR(st.st_mode))
+		{
+			ft_putstr_fd(argv[0], 2);
+			ft_putendl_fd(": is a directory", 2);
+			clean_and_exit(argv, NULL, shell, 126);
+		}
+	}
+	env_arr = env_to_char_array(shell->env);
+
+	if (execve(cmd_path, argv, env_arr) == -1)
+	{
+		
+		// printf("execfail errno: %d\n", errno);
+		if (errno == ENOENT)
+		{
+			perror(argv[0]);
+			clean_and_exit(argv, env_arr, shell, 127);
+		}
+		else
+		{
+			perror(argv[0]);
+			clean_and_exit(argv, env_arr, shell, 126);
+		}
+		if (errno == EISDIR)
+		{
+			// printf("EISDIR\n");
+			perror(argv[0]);
+			clean_and_exit(argv, env_arr, shell, 126);
+		}
+		else if (errno == ENOENT)
+		{
+			// printf("ENOENT\n");
+			perror(argv[0]);
+			clean_and_exit(argv, env_arr, shell, 127);
+		}
+		else if (errno == EACCES)
+		{
+			// printf("EACCES\n");
+			perror(argv[0]);
+			clean_and_exit(argv, env_arr, shell, 126);
+		}
+		else if (errno == ENOTDIR)
+		{
+			// printf("ENOTDIR\n");
+			perror(argv[0]);
+			clean_and_exit(argv, env_arr, shell, 126);
+		}
+		else if (errno == ENOEXEC)
+		{
+			// printf("ENOEXEC\n");
+			perror(argv[0]);
+			clean_and_exit(argv, env_arr, shell, 126);
+		}
+	}
 }
+
+
