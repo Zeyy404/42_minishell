@@ -21,6 +21,7 @@ FILES:= tokenizer/token_list.c \
 		execution/flatten_argv.c \
 		execution/execute_cmd.c \
 		execution/execute_utils.c \
+		execution/error_handles.c \
 		execution/execute_builtins.c \
 		execution/execute_redirects.c \
 		execution/execution.c \

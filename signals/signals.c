@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 12:22:41 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/21 17:19:11 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/23 09:10:43 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,11 @@ void	sigint(int sig)
 	}
 }
 
-
+void	set_signals(void)
+{
+	signal(SIGINT, sigint);
+	signal(SIGQUIT, SIG_IGN);
+}
 
 void	sigint_heredoc(int sig)
 {

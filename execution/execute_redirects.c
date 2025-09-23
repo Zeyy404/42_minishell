@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:43:42 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/21 20:04:12 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/23 11:13:57 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,23 +42,23 @@ int	execute_redirect_out(t_cmd *cmd)
 	{
 		err = open_outfile(outfile[i], cmd->append, &fd);
 		if (err)
-			return (1);
+			return (free_argv(outfile), 1);
 		if (outfile[i + 1])
 			close(fd);
 		i++;
 	}
 	if (dup2(fd, STDOUT_FILENO) == -1)
-		return (perror("dup2: "), close(fd), 1);
+		return (free_argv(outfile), perror("dup2: "), close(fd), 1);
 	close(fd);
-	return (0);
+	return (free_argv(outfile), 0);
 }
 
 int	execute_redirect_in(t_cmd *cmd)
 {
 	int		fd;
-	char 	**infile;
+	char	**infile;
 	int		i;
-	
+
 	infile = flatten_argv(cmd->infile);
 	if (!infile)
 		return (0);
@@ -66,20 +66,20 @@ int	execute_redirect_in(t_cmd *cmd)
 	if (cmd->here_doc == 1)
 	{
 		if (execute_herdoc(cmd) == 1)
-			return (1);
+			return (free_argv(infile), 1);
 	}
-	while(infile[i])
-	{		
+	while (infile[i])
+	{
 		fd = open(infile[i], O_RDONLY);
 		if (fd == -1)
-			return (perror(infile[i]), 1);
+			return (free_argv(infile), perror(infile[i]), 1);
 		if (infile[i + 1])
 			close(fd);
 		i++;
 	}
 	if (dup2(fd, STDIN_FILENO) == -1)
-		return (perror("dup2: "), close(fd), 1);
-	return (close(fd), 0);
+		return (free_argv(infile), perror("dup2: "), close(fd), 1);
+	return (free_argv(infile), close(fd), 0);
 }
 
 int	heredoc_loop(int *fd, char *delimiter)

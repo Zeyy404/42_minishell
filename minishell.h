@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/22 12:16:51 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/23 11:03:02 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,8 +130,7 @@ t_argv				*new_argv(t_word *words);
 void				add_argv(t_argv **argv_list, t_word *words);
 void				transfer_words(t_word **dst, t_word *src);
 int					handle_redirection(t_ast *node, t_token **tokens);
-
-// parser
+void				free_ast(t_ast *node);
 
 // env
 typedef struct s_env
@@ -140,6 +139,11 @@ typedef struct s_env
 	char			*value;
 	struct s_env	*next;
 }					t_env;
+t_env				*get_env(char **envp);
+char				*get_key_value(char *envp, const char *code);
+t_env				*new_var(char *key, char *value);
+void				add_to_env(t_env **env, t_env *new_var);
+void				free_env(t_env *env);
 
 typedef struct s_shell
 {
@@ -148,12 +152,7 @@ typedef struct s_shell
 	t_ast			*ast;
 	int				exit_status;
 }					t_shell;
-
-t_env				*get_env(char **envp);
-char				*get_key_value(char *envp, const char *code);
-t_env				*new_var(char *key, char *value);
-void				add_to_env(t_env **env, t_env *new_var);
-void				free_env(t_env *env);
+void				free_shell(t_shell *shell);
 
 // expander
 char				*handle_ambiguous_redirect(char *arg, int start, int end);
@@ -166,7 +165,6 @@ char				*expand_tilde(char *arg, t_env *env, int exit_status);
 int					expand_word(t_ast *ast, t_env *env, int exit_status);
 
 // execution
-void				free_argv(char **split);
 char				*concat(char *path, char slash, char *cmd);
 char				**env_to_char_array(t_env *env);
 char				*get_path(t_env *env);
@@ -197,6 +195,10 @@ void				execute_group(t_ast *ast, t_shell *shell, int in_child);
 char				*flatten_word_list(t_word *words);
 char				**flatten_argv(t_argv *argv_list);
 void				free_argv(char **argv);
+void				clean_and_exit(char **argv, char **env_arr, t_shell *shell,
+						int exit_code);
+void				print_error_messages(char *argv, char *message);
+int					check_if_directory(char *arg);
 
 // builtins
 typedef struct s_builtin
@@ -220,17 +222,12 @@ int					is_valid_key(const char *str);
 t_env				*sort_list(t_env *head);
 t_env				*copy_list(t_env *env);
 
-void				free_shell(t_shell *shell);
-void				free_ast(t_ast *node);
-
+//Signals
 void				sigint(int sig);
 void				set_signals(void);
 void				sigint_heredoc(int sig);
 
+//Readline
 void				rl_replace_line(const char *text, int clear_undo);
 
-// print functions (NOT IMPORTANT)
-const char			*token_type_str(t_token_type type);
-const char			*quote_type_str(t_quote q);
-void				print_tokens(t_token *tokens);
 #endif
