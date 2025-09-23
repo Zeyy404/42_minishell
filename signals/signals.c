@@ -24,11 +24,7 @@ void	sigint(int sig)
 	}
 }
 
-void	set_signals(void)
-{
-	signal(SIGINT, sigint);
-	signal(SIGQUIT, SIG_IGN);
-}
+
 
 void	sigint_heredoc(int sig)
 {

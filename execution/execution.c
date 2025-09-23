@@ -55,7 +55,7 @@ void	execute_cmd(t_ast *ast, t_shell *shell, int in_child)
 }
 
 void	execute_pipe(t_ast *ast, t_shell *shell)
-{;
+{
 	int		fd[2];
 	pid_t	left_pid;
 	pid_t	right_pid;

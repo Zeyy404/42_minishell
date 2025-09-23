@@ -94,29 +94,62 @@ char	*get_path(t_env *env)
 	return (NULL);
 }
 
-char	*find_cmd_path(char *cmd, t_env *env)
-{
-	char	*path;
-	char	**split_path;
-	int		i;
-	char	*joined_path;
+// char	*find_cmd_path(char *cmd, t_env *env)
+// {
+// 	char	*path;
+// 	char	**split_path;
+// 	int		i;
+// 	char	*joined_path;
 
-	path = NULL;
-	if (!access(cmd, X_OK))
-		return (cmd);
-	path = get_path(env);
-	if (!path)
-		return (NULL);
-	split_path = ft_split(path, ':');
-	i = 0;
-	while (split_path[i])
-	{
-		joined_path = concat(split_path[i], '/', cmd);
-		if (!access(joined_path, X_OK))
-			return (free_argv(split_path), joined_path);
-		free(joined_path);
-		i++;
-	}
-	free_argv(split_path);
-	return (NULL);
+// 	path = NULL;
+// 	if (!access(cmd, X_OK))
+// 		return (cmd);
+// 	path = get_path(env);
+// 	if (!path)
+// 		return (NULL);
+// 	split_path = ft_split(path, ':');
+// 	i = 0;
+// 	while (split_path[i])
+// 	{
+// 		joined_path = concat(split_path[i], '/', cmd);
+// 		if (!access(joined_path, X_OK))
+// 			return (free_argv(split_path), joined_path);
+// 		free(joined_path);
+// 		i++;
+// 	}
+// 	free_argv(split_path);
+// 	return (NULL);
+// }
+
+char *find_cmd_path(char *cmd, t_env *env)
+{
+    char *path;
+    char **split_path;
+    int i;
+    char *joined_path;
+
+    path = get_path(env);
+    if (!path)
+        return ((char *)-1); // special marker for PATH not set
+
+    split_path = ft_split(path, ':');
+    if (!split_path)
+        return (NULL);
+
+    i = 0;
+    while (split_path[i])
+    {
+        joined_path = concat(split_path[i], '/', cmd);
+        if (!joined_path)
+        {
+            free_argv(split_path);
+            return (NULL);
+        }
+        if (!access(joined_path, X_OK))
+            return (free_argv(split_path), joined_path);
+        free(joined_path);
+        i++;
+    }
+    free_argv(split_path);
+    return (NULL); // searched, not found
 }
