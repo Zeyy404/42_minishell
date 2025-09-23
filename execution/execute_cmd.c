@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 10:35:59 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/23 15:26:40 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/23 18:33:49 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@ static void	handle_redirects(t_cmd *cmd, t_shell *shell)
 	if (cmd->here_doc)
 	{
 		if (execute_herdoc(cmd))
-			exit(0);
+			clean_and_exit(NULL, NULL, shell, 0);
 		else
-			exit(1);
+			clean_and_exit(NULL, NULL, shell, 1);
 	}
 	if (cmd->infile)
 	{
 		redirect = execute_redirect_in(cmd);
-		if (redirect )
+		if (redirect)
 			clean_and_exit(NULL, NULL, shell, 1);
 		else if (redirect)
 			clean_and_exit(NULL, NULL, shell, 1);
@@ -102,6 +102,11 @@ void	exec_child_cmd(t_ast *ast, t_shell *shell)
 	env = env_to_char_array(shell->env);
 	if (!env)
 		clean_and_exit(argv, NULL, shell, 1);
+	if (argv[0][0] == '\0')
+	{
+		print_error_messages(argv[0], " : command not found");
+		clean_and_exit(argv, env, shell, 0);
+	}
 	if (argv[0][0] == '/' || argv[0][0] == '.')
 		exec_with_path(argv, env, shell);
 	else

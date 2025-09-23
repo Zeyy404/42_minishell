@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 02:21:49 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/23 12:49:22 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/23 19:31:39 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,46 +50,43 @@ static int	handle_ast(t_shell *shell, t_token *tokens, char *line)
 	return (1);
 }
 
-static void	cleanup_iteration(t_shell *shell, char *line)
+static void	shell_loop(t_shell *shell)
 {
-	free_tokens(shell->tokens);
-	free_ast(shell->ast);
-	shell->tokens = NULL;
-	shell->ast = NULL;
-	free(line);
-	g_signal_mode = -1;
-}
-
-int	main(int ac, char **av, char **envp)
-{
-	t_shell	shell;
 	t_token	*tokens;
 	char	*line;
 
-	(void)ac;
-	(void)av;
-	shell = (t_shell){get_env(envp), NULL, NULL, 0};
 	while (1)
 	{
 		set_signals();
 		line = readline("minishell$ ");
 		if (!line)
-			handle_eof(&shell, line);
+			handle_eof(shell, line);
 		if (*line)
 			add_history(line);
 		if (g_signal_mode == SIGINT)
 		{
-			shell.exit_status = 1;
+			shell->exit_status = 1;
 			g_signal_mode = -1;
 		}
-		shell.tokens = tokenize(line);
-		if (!shell.tokens || !handle_syntax(&shell, line))
+		shell->tokens = tokenize(line);
+		if (!shell->tokens || !handle_syntax(shell, line))
 			continue ;
-		tokens = shell.tokens;
-		if (!handle_ast(&shell, tokens, line))
+		tokens = shell->tokens;
+		if (!handle_ast(shell, tokens, line))
 			continue ;
-		execution(shell.ast, &shell, 0);
-		cleanup_iteration(&shell, line);
+		execution(shell->ast, shell, 0);
+		cleanup_iteration(shell, line);
 	}
-	return (free_env(shell.env), 0);
+}
+
+int	main(int ac, char **av, char **envp)
+{
+	t_shell	shell;
+
+	(void)ac;
+	(void)av;
+	shell = (t_shell){get_env(envp), NULL, NULL, 0};
+	shell_loop(&shell);
+	free_env(shell.env);
+	return (0);
 }

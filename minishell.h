@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/23 15:26:03 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/23 21:53:25 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,20 @@
 
 # include "libft/libft.h"
 # include <dirent.h>
+# include <errno.h>
 # include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <signal.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include <errno.h>
-# include <signal.h>
+
 extern int			g_signal_mode;
+
 // tokenizer
 typedef enum e_token_type
 {
@@ -152,7 +154,9 @@ typedef struct s_shell
 	t_ast			*ast;
 	int				exit_status;
 }					t_shell;
+
 void				free_shell(t_shell *shell);
+void				cleanup_iteration(t_shell *shell, char *line);
 
 // expander
 char				*handle_ambiguous_redirect(char *arg, int start, int end);
@@ -161,6 +165,10 @@ char				*get_env_value(const char *name, t_env *env,
 void				get_bounds(char *arg, int *start, int *end);
 char				*join_before_after(char *arg, char *value, int start,
 						int end);
+char				*process_arg(char *arg, int file, t_env *env,
+						int exit_status);
+int					expand_argv(t_argv **argv, int file, t_env *env,
+						int exit_status);
 char				*expand_tilde(char *arg, t_env *env, int exit_status);
 int					expand_word(t_ast *ast, t_env *env, int exit_status);
 
@@ -222,14 +230,14 @@ int					is_valid_key(const char *str);
 t_env				*sort_list(t_env *head);
 t_env				*copy_list(t_env *env);
 
-//Signals
+// Signals
 void				sigint(int sig);
 void				set_signals(void);
 void				sigint_heredoc(int sig);
 void				main_handler(int sig);
 void				set_heredoc_signals(void);
 void				set_non_interactive_signals(void);
-//Readline
+// Readline
 void				rl_replace_line(const char *text, int clear_undo);
 
 #endif

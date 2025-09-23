@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   flatten_argv.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 09:53:25 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/21 19:09:34 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/23 20:12:47 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static int	argv_list_size(t_argv *list)
 	return (count);
 }
 
-static size_t	get_wrods_length(t_word *words)
+static size_t	get_words_length(t_word *words)
 {
 	size_t	len;
 	t_word	*curr;
@@ -61,7 +61,7 @@ char	*flatten_word_list(t_word *words)
 	char	*ptr;
 	size_t	len;
 
-	total_len = get_wrods_length(words);
+	total_len = get_words_length(words);
 	result = malloc(total_len + 1);
 	if (!result)
 		return (NULL);

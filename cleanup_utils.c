@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 02:05:52 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/23 11:07:53 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/23 19:27:35 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,14 @@ void	free_shell(t_shell *shell)
 		free_tokens(shell->tokens);
 	if (shell->ast)
 		free_ast(shell->ast);
+}
+
+void	cleanup_iteration(t_shell *shell, char *line)
+{
+	free_tokens(shell->tokens);
+	free_ast(shell->ast);
+	shell->tokens = NULL;
+	shell->ast = NULL;
+	free(line);
+	g_signal_mode = -1;
 }
