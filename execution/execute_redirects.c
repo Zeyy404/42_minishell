@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:43:42 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/23 11:13:57 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/23 15:17:54 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,59 +82,58 @@ int	execute_redirect_in(t_cmd *cmd)
 	return (free_argv(infile), close(fd), 0);
 }
 
-int	heredoc_loop(int *fd, char *delimiter)
+int heredoc_loop(int *fd, char *delimiter)
 {
-	char	*line;
+    char *line;
 
-	while (1)
-	{
-		line = readline("> ");
-		if (!line)
-		{
-			g_signal_mode = 3;
-			break ;
-		}
-		if (ft_strcmp(line, delimiter) == 0)
-		{
-			free(line);
-			break ;
-		}
-		write(fd[1], line, ft_strlen(line));
-		write(fd[1], "\n", 1);
-		free(line);
-		if (g_signal_mode == 2)
-			break ;
-	}
-	if (g_signal_mode == 2)
-		return (1);
-	return (0);
+    while (1)
+    {
+        line = readline("> ");
+        if (!line)
+        {
+            if (g_signal_mode == SIGINT)
+                return (0);
+            break;
+        }
+        if (ft_strcmp(line, delimiter) == 0)
+        {
+            free(line);
+            break;
+        }
+        write(fd[1], line, ft_strlen(line));
+        write(fd[1], "\n", 1);
+        free(line);
+    }
+    return (1);
 }
 
-int	execute_herdoc(t_cmd *cmd)
+
+int execute_herdoc(t_cmd *cmd)
 {
-	int		fd[2];
-	t_word	*curr;
+    int     fd[2];
+    t_word  *curr;
 
 	curr = cmd->delimiter;
-	while (curr)
-	{
-		signal(SIGINT, sigint_heredoc);
-		signal(SIGQUIT, SIG_IGN);
-		if (pipe(fd) == -1)
-		{
-			perror("pipe\n");
-			return (1);
-		}
-		if (heredoc_loop(fd, curr->value))
-			return (close(fd[0]), close(fd[1]), 1);
-		close(fd[1]);
-		if (curr->next == NULL)
-		{
-			if (dup2(fd[0], STDIN_FILENO) == -1)
-				return (perror("dup2: \n"), close(fd[0]), 1);
-		}
-		close(fd[0]);
-		curr = curr->next;
-	}
-	return (0);
+    while (curr)
+    {
+		set_heredoc_signals();
+        if (pipe(fd) == -1)
+            return (perror("pipe"), 1);
+        if (!heredoc_loop(fd, curr->value))
+        {
+            if (g_signal_mode == SIGINT)
+                return (close(fd[0]), close(fd[1]), 0);
+            return (close(fd[0]), close(fd[1]), 1);
+        }
+        close(fd[1]);
+        if (curr->next == NULL)
+        {
+            if (dup2(fd[0], STDIN_FILENO) == -1)
+                return (perror("dup2"), close(fd[0]), 1);
+        }
+        else
+            close(fd[0]);
+        curr = curr->next;
+    }
+    return (1);
 }

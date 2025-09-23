@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 10:35:59 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/23 10:59:55 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/23 15:26:40 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,23 @@ static void	handle_redirects(t_cmd *cmd, t_shell *shell)
 {
 	int	redirect;
 
-	if (cmd->outfile && execute_redirect_out(cmd))
-		clean_and_exit(NULL, NULL, shell, 1);
+	if (cmd->here_doc)
+	{
+		if (execute_herdoc(cmd))
+			exit(0);
+		else
+			exit(1);
+	}
 	if (cmd->infile)
 	{
 		redirect = execute_redirect_in(cmd);
-		if (redirect && g_signal_mode == 2)
+		if (redirect )
 			clean_and_exit(NULL, NULL, shell, 1);
-		else if (redirect && g_signal_mode == 3)
-			clean_and_exit(NULL, NULL, shell, 0);
 		else if (redirect)
 			clean_and_exit(NULL, NULL, shell, 1);
 	}
+	if (cmd->outfile && execute_redirect_out(cmd))
+		clean_and_exit(NULL, NULL, shell, 1);
 }
 
 static void	exec_with_path(char **argv, char **env, t_shell *shell)
@@ -89,8 +94,7 @@ void	exec_child_cmd(t_ast *ast, t_shell *shell)
 	char	**argv;
 	char	**env;
 
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	set_non_interactive_signals();
 	handle_redirects(&ast->cmd, shell);
 	argv = flatten_argv(ast->cmd.argv);
 	if (!argv || !argv[0])

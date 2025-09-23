@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:49:18 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/21 19:36:49 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/23 12:10:14 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	execute_cmd(t_ast *ast, t_shell *shell, int in_child)
 	{
 		free_argv(argv);
 		pid = fork();
-		g_signal_mode = 1;
+		g_signal_mode = 0;
 		if (pid == 0)
 			exec_child_cmd(ast, shell);
 		else
@@ -63,11 +63,11 @@ void	execute_pipe(t_ast *ast, t_shell *shell)
 	if (pipe(fd) == -1)
 		return (perror("pipe"));
 	left_pid = fork();
-	g_signal_mode = 1;
+	g_signal_mode = 0;
 	if (left_pid == 0)
 		exec_child_pipe_left(ast, shell, fd);
 	right_pid = fork();
-	g_signal_mode = 1;
+	g_signal_mode = 0;
 	if (right_pid == 0)
 		exec_child_pipe_right(ast, shell, fd);
 	close(fd[0]);
@@ -95,7 +95,7 @@ void	execute_group(t_ast *ast, t_shell *shell, int in_child)
 		return ;
 	}
 	pid = fork();
-	g_signal_mode = 1;
+	g_signal_mode = 0;
 	if (pid == -1)
 	{
 		perror("fork");

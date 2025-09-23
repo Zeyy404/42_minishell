@@ -6,13 +6,13 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 02:21:49 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/23 11:12:54 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/23 12:49:22 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int			g_signal_mode = 0;
+int			g_signal_mode = -1;
 
 static void	handle_eof(t_shell *shell, char *line)
 {
@@ -57,7 +57,7 @@ static void	cleanup_iteration(t_shell *shell, char *line)
 	shell->tokens = NULL;
 	shell->ast = NULL;
 	free(line);
-	g_signal_mode = 0;
+	g_signal_mode = -1;
 }
 
 int	main(int ac, char **av, char **envp)
@@ -77,6 +77,11 @@ int	main(int ac, char **av, char **envp)
 			handle_eof(&shell, line);
 		if (*line)
 			add_history(line);
+		if (g_signal_mode == SIGINT)
+		{
+			shell.exit_status = 1;
+			g_signal_mode = -1;
+		}
 		shell.tokens = tokenize(line);
 		if (!shell.tokens || !handle_syntax(&shell, line))
 			continue ;

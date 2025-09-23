@@ -6,34 +6,60 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 12:22:41 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/23 09:10:43 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/23 15:25:22 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	sigint(int sig)
+void main_handler(int sig)
 {
-	(void)sig;
-	if (!g_signal_mode)
+	if (g_signal_mode == 0)
+		return ;
+    g_signal_mode = sig;
+    if (sig == SIGINT)
 	{
 		ft_putstr_fd("\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
+    	rl_on_new_line();
+    	rl_replace_line("", 0);
+    	rl_redisplay();
 	}
 }
 
-void	set_signals(void)
+void set_signals(void)
 {
-	signal(SIGINT, sigint);
-	signal(SIGQUIT, SIG_IGN);
+    struct sigaction sa;
+    ft_bzero(&sa, sizeof(sa));
+    sa.sa_handler = &main_handler;
+    sa.sa_flags = SA_RESTART;
+
+    if (sigaction(SIGINT, &sa, NULL) < 0)
+        perror("SIGINT ");
+    if (sigaction(SIGQUIT, &sa, NULL) < 0)
+        perror("SIGQUIT ");
 }
 
 void	sigint_heredoc(int sig)
 {
-	(void)sig;
-	g_signal_mode = 2;
+	if (sig == SIGINT)
+		g_signal_mode = sig;
 	write(1, "\n", 1);
 	close(STDIN_FILENO);
 }
+
+void	set_heredoc_signals(void)
+{
+	if (signal(SIGINT, sigint_heredoc))
+		perror("SIGINT ");
+	if (signal(SIGQUIT, SIG_IGN))
+		perror("SIGQUIT ");
+}
+
+void	set_non_interactive_signals(void)
+{
+	if (signal(SIGINT, SIG_DFL))
+		perror("SIGINT ");
+	if (signal(SIGQUIT, SIG_DFL))
+		perror("SIGQUIT ");
+}
+

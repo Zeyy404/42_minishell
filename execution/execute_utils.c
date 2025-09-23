@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 15:51:57 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/21 19:35:33 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/23 15:27:09 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ void	wait_update_status(pid_t pid, int *exit_status)
 
 void	exec_child_pipe_left(t_ast *ast, t_shell *shell, int fd[2])
 {
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	set_non_interactive_signals();
 	close(fd[0]);
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[1]);
@@ -50,8 +49,7 @@ void	exec_child_pipe_left(t_ast *ast, t_shell *shell, int fd[2])
 
 void	exec_child_pipe_right(t_ast *ast, t_shell *shell, int fd[2])
 {
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	set_non_interactive_signals();
 	close(fd[1]);
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
@@ -62,8 +60,7 @@ void	exec_child_pipe_right(t_ast *ast, t_shell *shell, int fd[2])
 
 void	group_child(t_ast *ast, t_shell *shell, int in_child)
 {
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	set_non_interactive_signals();
 	if (!in_child && ast->cmd.outfile)
 	{
 		if (execute_redirect_out(&ast->cmd))

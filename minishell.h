@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/23 11:03:02 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/23 15:26:03 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 # include <errno.h>
-
+# include <signal.h>
 extern int			g_signal_mode;
 // tokenizer
 typedef enum e_token_type
@@ -226,7 +226,9 @@ t_env				*copy_list(t_env *env);
 void				sigint(int sig);
 void				set_signals(void);
 void				sigint_heredoc(int sig);
-
+void				main_handler(int sig);
+void				set_heredoc_signals(void);
+void				set_non_interactive_signals(void);
 //Readline
 void				rl_replace_line(const char *text, int clear_undo);
 
