@@ -6,7 +6,7 @@
 /*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 02:21:49 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/23 19:31:39 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/24 09:00:11 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static int	handle_syntax(t_shell *shell, char *line)
 static int	handle_ast(t_shell *shell, t_token *tokens, char *line)
 {
 	shell->ast = parse(&tokens);
-	if (shell->ast && !expand_word(shell->ast, shell->env, shell->exit_status))
+	if (!shell->ast)
 	{
 		free_tokens(shell->tokens);
 		shell->tokens = NULL;
@@ -47,6 +47,7 @@ static int	handle_ast(t_shell *shell, t_token *tokens, char *line)
 		free(line);
 		return (0);
 	}
+	expand_word(shell->ast, shell->env, shell->exit_status);
 	return (1);
 }
 

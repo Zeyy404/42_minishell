@@ -6,7 +6,7 @@
 /*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 20:48:29 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/23 21:54:43 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/24 07:58:24 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static void	expand_words_in_argv(t_argv *curr, int file, t_env *env,
 	}
 }
 
-int	expand_argv(t_argv **argv, int file, t_env *env, int exit_status)
+void	expand_argv(t_argv **argv, int file, t_env *env, int exit_status)
 {
 	t_argv	*curr;
 	t_argv	*prev;
@@ -99,5 +99,4 @@ int	expand_argv(t_argv **argv, int file, t_env *env, int exit_status)
 		prev = curr;
 		curr = curr->next;
 	}
-	return (1);
 }

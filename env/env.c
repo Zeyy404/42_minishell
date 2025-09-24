@@ -58,6 +58,8 @@ t_env	*new_var(char *key, char *value)
 	t_env	*env_var;
 
 	env_var = malloc(sizeof(t_env));
+	if (!env_var)
+		return (NULL);
 	env_var->key = key;
 	env_var->value = value;
 	env_var->next = NULL;

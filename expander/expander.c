@@ -6,7 +6,7 @@
 /*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 12:04:50 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/23 21:08:25 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/24 07:58:15 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*process_arg(char *arg, int file, t_env *env, int exit_status)
 	return (arg);
 }
 
-static int	expand_word_list(t_word *list, int file, t_env *env,
+static void	expand_word_list(t_word *list, int file, t_env *env,
 		int exit_status)
 {
 	while (list)
@@ -54,35 +54,25 @@ static int	expand_word_list(t_word *list, int file, t_env *env,
 		}
 		list = list->next;
 	}
-	return (1);
 }
 
-static int	expand_files(t_ast *ast, t_env *env, int exit_status)
+static void	expand_files(t_ast *ast, t_env *env, int exit_status)
 {
-	if (!expand_argv(&ast->cmd.infile, 1, env, exit_status))
-		return (0);
-	if (!expand_argv(&ast->cmd.outfile, 1, env, exit_status))
-		return (0);
-	if (!expand_word_list(ast->cmd.delimiter, 0, env, exit_status))
-		return (0);
-	return (1);
+	expand_argv(&ast->cmd.infile, 1, env, exit_status);
+	expand_argv(&ast->cmd.outfile, 1, env, exit_status);
+	expand_word_list(ast->cmd.delimiter, 0, env, exit_status);
 }
 
-int	expand_word(t_ast *ast, t_env *env, int exit_status)
+void	expand_word(t_ast *ast, t_env *env, int exit_status)
 {
-	if (!ast)
-		return (0);
 	if (ast->type == NODE_CMD && (ast->cmd.argv || ast->cmd.infile
 			|| ast->cmd.outfile))
 	{
-		if (!expand_argv(&ast->cmd.argv, 0, env, exit_status))
-			return (0);
-		if (!expand_files(ast, env, exit_status))
-			return (0);
+		expand_argv(&ast->cmd.argv, 0, env, exit_status);
+		expand_files(ast, env, exit_status);
 	}
 	if (ast->left)
 		expand_word(ast->left, env, exit_status);
 	if (ast->right)
 		expand_word(ast->right, env, exit_status);
-	return (1);
 }

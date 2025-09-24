@@ -6,7 +6,7 @@
 /*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:49:18 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/23 16:26:39 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/24 09:38:03 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	execute_cmd(t_ast *ast, t_shell *shell, int in_child)
 	{
 		free_argv(argv);
 		if (in_child)
-			builtin_child(ast, shell);
+			builtin_child(ast, shell, -1, -1);
 		else
 			builtin_parent(ast, shell);
 	}

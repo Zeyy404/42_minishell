@@ -6,7 +6,7 @@
 /*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:43:42 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/23 19:19:05 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/24 10:11:25 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,6 @@ int	execute_redirect_in(t_cmd *cmd)
 	if (!infile)
 		return (0);
 	i = 0;
-	if (cmd->here_doc == 1)
-	{
-		if (execute_herdoc(cmd) == 1)
-			return (free_argv(infile), 1);
-	}
 	while (infile[i])
 	{
 		fd = open(infile[i], O_RDONLY);
@@ -86,25 +81,25 @@ int	execute_redirect_in(t_cmd *cmd)
 
 int	heredoc_loop(int *fd, char *delimiter)
 {
-	char	*line;
+	char	buffer[1024];
+	ssize_t	n;
 
 	while (1)
 	{
-		line = readline("> ");
-		if (!line)
+		write(1, "> ", 2);
+		n = read(STDIN_FILENO, buffer, sizeof(buffer) - 1);
+		if (n <= 0)
 		{
 			if (g_signal_mode == SIGINT)
-				return (0);
+				return (close(fd[0]), close(fd[1]), 0);
 			break ;
 		}
-		if (ft_strcmp(line, delimiter) == 0)
-		{
-			free(line);
+		buffer[n] = '\0';
+		if (n > 0 && buffer[n - 1] == '\n')
+			buffer[n - 1] = '\0';
+		if (ft_strcmp(buffer, delimiter) == 0)
 			break ;
-		}
-		write(fd[1], line, ft_strlen(line));
-		write(fd[1], "\n", 1);
-		free(line);
+		ft_putendl_fd(buffer, 1);
 	}
 	return (1);
 }
@@ -122,19 +117,18 @@ int	execute_herdoc(t_cmd *cmd)
 			return (perror("pipe"), 1);
 		if (!heredoc_loop(fd, curr->value))
 		{
-			if (g_signal_mode == SIGINT)
-				return (close(fd[0]), close(fd[1]), 0);
-			return (close(fd[0]), close(fd[1]), 1);
+			return (0);
 		}
 		close(fd[1]);
 		if (curr->next == NULL)
 		{
 			if (dup2(fd[0], STDIN_FILENO) == -1)
-				return (perror("dup2"), close(fd[0]), 1);
+				return (perror("dup2"), 1);
 		}
 		else
 			close(fd[0]);
 		curr = curr->next;
 	}
+	close(fd[0]);
 	return (1);
 }

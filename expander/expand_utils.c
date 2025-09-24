@@ -6,7 +6,7 @@
 /*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 12:04:54 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/23 17:07:20 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/24 08:07:39 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ char	*expand_tilde(char *arg, t_env *env, int exit_status)
 
 	if (!arg || arg[0] != '~')
 		return (arg);
-	if (arg[1] == '\0' || arg[1] == '/' || arg[1] == ' ' || arg[1] == '$')
+	if (arg[1] == '\0' || arg[1] == '/' || arg[1] == ' ')
 	{
 		home = get_env_value("HOME", env, exit_status);
 		if (arg[1] == '\0')

@@ -6,7 +6,7 @@
 /*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 17:15:39 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/23 21:53:25 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/24 09:58:47 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,10 +167,10 @@ char				*join_before_after(char *arg, char *value, int start,
 						int end);
 char				*process_arg(char *arg, int file, t_env *env,
 						int exit_status);
-int					expand_argv(t_argv **argv, int file, t_env *env,
+void				expand_argv(t_argv **argv, int file, t_env *env,
 						int exit_status);
 char				*expand_tilde(char *arg, t_env *env, int exit_status);
-int					expand_word(t_ast *ast, t_env *env, int exit_status);
+void				expand_word(t_ast *ast, t_env *env, int exit_status);
 
 // execution
 char				*concat(char *path, char slash, char *cmd);
@@ -180,8 +180,8 @@ char				*find_cmd_path(char *cmd, t_env *env);
 bool				is_builtin(char *cmd, t_shell *shell);
 int					execute_builtins(char *cmd, t_ast *ast, t_shell *shell);
 void				wait_update_status(pid_t pid, int *exit_status);
-int					builtin_child(t_ast *ast, t_shell *shell);
-int					builtin_parent(t_ast *ast, t_shell *shell);
+int					builtin_child(t_ast *ast, t_shell *shell, int in, int out);
+void				builtin_parent(t_ast *ast, t_shell *shell);
 void				clean_and_exit(char **argv, char **env_arr, t_shell *shell,
 						int exit_code);
 void				print_cmd_error(char *cmd);
@@ -207,6 +207,7 @@ void				clean_and_exit(char **argv, char **env_arr, t_shell *shell,
 						int exit_code);
 void				print_error_messages(char *argv, char *message);
 int					check_if_directory(char *arg);
+void				close_tmp_fds(int in, int out);
 
 // builtins
 typedef struct s_builtin

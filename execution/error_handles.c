@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_handles.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 10:58:21 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/23 10:58:39 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/24 10:03:39 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,13 @@ int	check_if_directory(char *arg)
 		return (1);
 	}
 	return (0);
+}
+
+void	close_tmp_fds(int in, int out)
+{
+	if (in != -1 && out != -1)
+	{
+		close(in);
+		close(out);
+	}
 }
