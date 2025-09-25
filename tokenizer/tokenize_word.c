@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_word.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 16:26:33 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/24 18:49:38 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/25 13:56:28 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,12 @@ int	token_word(const char *input, size_t *i, t_token **tokens)
 		if (is_quote(input[*i]))
 		{
 			if (!token_quotes(input, i, &words))
-			{
-				free_word_list(words);
-				return (0);
-			}
+				return (free_word_list(words), 0);
 		}
 		else
 		{
 			if (!handle_word(input, i, &words))
-				return (0);
+				return (free_word_list(words), 0);
 		}
 	}
 	if (words)

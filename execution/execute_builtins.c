@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtins.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:43:07 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/24 10:02:43 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/25 13:55:30 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,9 +109,9 @@ void	builtin_parent(t_ast *ast, t_shell *shell)
 	if (builtin_child(ast, shell, in, out))
 		return ;
 	if (dup2(in, STDIN_FILENO) == -1)
-		return (perror("dup2: "));
+		return ;
 	if (dup2(out, STDOUT_FILENO) == -1)
-		return (perror("dup2: "));
+		return ;
 	close(in);
 	close(out);
 }
