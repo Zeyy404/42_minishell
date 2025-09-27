@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtins.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:43:07 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/25 13:55:30 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/27 14:02:42 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ bool	is_builtin(char *cmd, t_shell *shell)
 	return (false);
 }
 
-int	execute_builtins(char *cmd, t_ast *ast, t_shell *shell)
+static int	execute_builtins(char *cmd, t_ast *ast, t_shell *shell)
 {
 	t_builtin	builtins[8];
 	int			i;
@@ -80,16 +80,8 @@ static int	run_child_func(t_ast *ast, t_shell *shell, int in, int out)
 
 int	builtin_child(t_ast *ast, t_shell *shell, int in, int out)
 {
-	if (ast->cmd.infile)
-	{
-		if (execute_redirect_in(&ast->cmd))
-			return (shell->exit_status = 1, 1);
-	}
-	if (ast->cmd.outfile)
-	{
-		if (execute_redirect_out(&ast->cmd))
-			return (shell->exit_status = 1, 1);
-	}
+	if (execute_redirections(&ast->cmd, shell))
+		return (shell->exit_status = 1, 1);
 	if (!run_child_func(ast, shell, in, out))
 		return (0);
 	return (1);
@@ -107,7 +99,11 @@ void	builtin_parent(t_ast *ast, t_shell *shell)
 	if (out == -1)
 		return (perror("dup: "));
 	if (builtin_child(ast, shell, in, out))
+	{
+		dup2(in, STDIN_FILENO);
+		dup2(out, STDOUT_FILENO);
 		return ;
+	}
 	if (dup2(in, STDIN_FILENO) == -1)
 		return ;
 	if (dup2(out, STDOUT_FILENO) == -1)

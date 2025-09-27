@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 02:21:49 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/24 09:00:11 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/27 11:13:21 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ int	main(int ac, char **av, char **envp)
 
 	(void)ac;
 	(void)av;
+	disable_echoctl();
 	shell = (t_shell){get_env(envp), NULL, NULL, 0};
 	shell_loop(&shell);
 	free_env(shell.env);

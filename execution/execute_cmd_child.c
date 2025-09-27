@@ -1,38 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_cmd.c                                      :+:      :+:    :+:   */
+/*   execute_cmd_child.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 10:35:59 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/23 18:33:49 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/27 14:01:42 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void	handle_redirects(t_cmd *cmd, t_shell *shell)
+int	execute_redirections(t_cmd *cmd, t_shell *shell)
 {
-	int	redirect;
+	t_redirects	*curr_redirection;
 
-	if (cmd->here_doc)
+	curr_redirection = cmd->redirections;
+	while (curr_redirection)
 	{
-		if (execute_herdoc(cmd))
-			clean_and_exit(NULL, NULL, shell, 0);
-		else
-			clean_and_exit(NULL, NULL, shell, 1);
+		if (curr_redirection->type == REDIR_IN
+			&& redirect_in(curr_redirection->files))
+			return (1);
+		else if ((curr_redirection->type == REDIR_OUT
+				|| curr_redirection->type == APPEND)
+			&& redirect_out(curr_redirection->files, cmd->append))
+			return (1);
+		else if (curr_redirection->type == HEREDOC)
+		{
+			if (heredoc(cmd, shell))
+				return (0);
+			else
+				return (1);
+		}
+		curr_redirection = curr_redirection->next;
 	}
-	if (cmd->infile)
-	{
-		redirect = execute_redirect_in(cmd);
-		if (redirect)
-			clean_and_exit(NULL, NULL, shell, 1);
-		else if (redirect)
-			clean_and_exit(NULL, NULL, shell, 1);
-	}
-	if (cmd->outfile && execute_redirect_out(cmd))
-		clean_and_exit(NULL, NULL, shell, 1);
+	return (0);
 }
 
 static void	exec_with_path(char **argv, char **env, t_shell *shell)
@@ -93,9 +96,13 @@ void	exec_child_cmd(t_ast *ast, t_shell *shell)
 {
 	char	**argv;
 	char	**env;
+	int		redirect;
 
-	set_non_interactive_signals();
-	handle_redirects(&ast->cmd, shell);
+	redirect = execute_redirections(&ast->cmd, shell);
+	if (redirect)
+		clean_and_exit(NULL, NULL, shell, 1);
+	else if (!redirect && g_signal_mode == SIGINT)
+		clean_and_exit(NULL, NULL, shell, 0);
 	argv = flatten_argv(ast->cmd.argv);
 	if (!argv || !argv[0])
 		clean_and_exit(argv, NULL, shell, 0);

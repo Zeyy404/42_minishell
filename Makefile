@@ -20,11 +20,12 @@ FILES:= tokenizer/token_list.c \
 		expander/expand_argv.c \
 		execution/find_path.c \
 		execution/flatten_argv.c \
-		execution/execute_cmd.c \
+		execution/execute_cmd_child.c \
 		execution/execute_utils.c \
 		execution/error_handles.c \
 		execution/execute_builtins.c \
 		execution/execute_redirects.c \
+		execution/execute_heredoc.c \
 		execution/execution.c \
 		builtins/builtin_cd.c \
 		builtins/builtin_echo.c \

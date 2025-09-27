@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 12:04:50 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/24 07:58:15 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/27 15:51:59 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,33 +40,22 @@ char	*process_arg(char *arg, int file, t_env *env, int exit_status)
 	return (arg);
 }
 
-static void	expand_word_list(t_word *list, int file, t_env *env,
-		int exit_status)
-{
-	while (list)
-	{
-		if (list->quote_type != Q_SINGLE)
-		{
-			list->value = expand_tilde(list->value, env, exit_status);
-			list->value = process_arg(list->value, file, env, exit_status);
-			if (!list->value)
-				list->value = ft_strdup("");
-		}
-		list = list->next;
-	}
-}
-
 static void	expand_files(t_ast *ast, t_env *env, int exit_status)
 {
-	expand_argv(&ast->cmd.infile, 1, env, exit_status);
-	expand_argv(&ast->cmd.outfile, 1, env, exit_status);
-	expand_word_list(ast->cmd.delimiter, 0, env, exit_status);
+	t_redirects	*redir;
+
+	redir = ast->cmd.redirections;
+	while (redir)
+	{
+		if (redir->type != HEREDOC)
+			expand_argv(&redir->files, 1, env, exit_status);
+		redir = redir->next;
+	}
 }
 
 void	expand_word(t_ast *ast, t_env *env, int exit_status)
 {
-	if (ast->type == NODE_CMD && (ast->cmd.argv || ast->cmd.infile
-			|| ast->cmd.outfile))
+	if (ast->type == NODE_CMD && (ast->cmd.argv || ast->cmd.redirections))
 	{
 		expand_argv(&ast->cmd.argv, 0, env, exit_status);
 		expand_files(ast, env, exit_status);

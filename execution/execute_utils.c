@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 15:51:57 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/23 15:27:09 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/27 15:33:21 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	wait_update_status(pid_t pid, int *exit_status)
 
 void	exec_child_pipe_left(t_ast *ast, t_shell *shell, int fd[2])
 {
-	set_non_interactive_signals();
 	close(fd[0]);
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[1]);
@@ -49,7 +48,6 @@ void	exec_child_pipe_left(t_ast *ast, t_shell *shell, int fd[2])
 
 void	exec_child_pipe_right(t_ast *ast, t_shell *shell, int fd[2])
 {
-	set_non_interactive_signals();
 	close(fd[1]);
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
@@ -58,29 +56,13 @@ void	exec_child_pipe_right(t_ast *ast, t_shell *shell, int fd[2])
 	exit(shell->exit_status);
 }
 
-void	group_child(t_ast *ast, t_shell *shell, int in_child)
+void	group_child(t_ast *ast, t_shell *shell)
 {
-	set_non_interactive_signals();
-	if (!in_child && ast->cmd.outfile)
+	if (execute_redirections(&ast->cmd, shell))
 	{
-		if (execute_redirect_out(&ast->cmd))
-		{
-			shell->exit_status = 1;
-			exit(1);
-		}
-	}
-	if (ast->cmd.infile)
-	{
-		if (execute_redirect_in(&ast->cmd))
-		{
-			shell->exit_status = 1;
-			exit(1);
-		}
-	}
-	if (ast->cmd.here_doc)
-	{
-		if (execute_herdoc(&ast->cmd))
-			exit(1);
+		shell->exit_status = 1;
+		free_shell(shell);
+		exit(1);
 	}
 	execution(ast->left, shell, 1);
 }

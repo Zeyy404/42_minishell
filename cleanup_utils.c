@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 02:05:52 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/23 19:27:35 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/27 14:29:10 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,23 @@ static void	free_argv_list(t_argv *argv)
 
 static void	free_cmd(t_cmd *cmd)
 {
+	t_redirects	*tmp;
+
 	if (!cmd)
 		return ;
 	if (cmd->argv)
 		free_argv_list(cmd->argv);
-	if (cmd->infile)
-		free_argv_list(cmd->infile);
-	if (cmd->outfile)
-		free_argv_list(cmd->outfile);
-	if (cmd->delimiter)
-		free_word_list(cmd->delimiter);
+	if (cmd->redirections)
+	{
+		while (cmd->redirections)
+		{
+			tmp = cmd->redirections->next;
+			if (cmd->redirections->files)
+				free_argv_list(cmd->redirections->files);
+			free(cmd->redirections);
+			cmd->redirections = tmp;
+		}
+	}
 }
 
 void	free_ast(t_ast *node)

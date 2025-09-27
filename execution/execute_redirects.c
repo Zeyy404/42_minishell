@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   execute_redirects.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:43:42 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/24 10:11:25 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/27 12:19:30 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	open_outfile(char *file, int append, int *fd)
+static int	open_outfile(char *file, int append, int *fd)
 {
 	if (file[0] == '\0')
 		return (1);
@@ -28,21 +28,21 @@ int	open_outfile(char *file, int append, int *fd)
 	return (0);
 }
 
-int	execute_redirect_out(t_cmd *cmd)
+int	redirect_out(t_argv *argv_files, int append)
 {
 	int		fd;
 	int		err;
 	int		i;
 	char	**outfile;
 
-	outfile = flatten_argv(cmd->outfile);
+	outfile = flatten_argv(argv_files);
 	if (!outfile)
 		return (0);
 	err = 0;
 	i = 0;
 	while (outfile[i])
 	{
-		err = open_outfile(outfile[i], cmd->append, &fd);
+		err = open_outfile(outfile[i], append, &fd);
 		if (err)
 			return (free_argv(outfile), 1);
 		if (outfile[i + 1])
@@ -55,13 +55,13 @@ int	execute_redirect_out(t_cmd *cmd)
 	return (free_argv(outfile), 0);
 }
 
-int	execute_redirect_in(t_cmd *cmd)
+int	redirect_in(t_argv *argv_files)
 {
 	int		fd;
 	char	**infile;
 	int		i;
 
-	infile = flatten_argv(cmd->infile);
+	infile = flatten_argv(argv_files);
 	if (!infile)
 		return (0);
 	i = 0;
@@ -69,7 +69,7 @@ int	execute_redirect_in(t_cmd *cmd)
 	{
 		fd = open(infile[i], O_RDONLY);
 		if (fd == -1)
-			return (free_argv(infile), perror(infile[i]), 1);
+			return (perror(infile[i]), free_argv(infile), 1);
 		if (infile[i + 1])
 			close(fd);
 		i++;
@@ -77,58 +77,4 @@ int	execute_redirect_in(t_cmd *cmd)
 	if (dup2(fd, STDIN_FILENO) == -1)
 		return (free_argv(infile), perror("dup2: "), close(fd), 1);
 	return (free_argv(infile), close(fd), 0);
-}
-
-int	heredoc_loop(int *fd, char *delimiter)
-{
-	char	buffer[1024];
-	ssize_t	n;
-
-	while (1)
-	{
-		write(1, "> ", 2);
-		n = read(STDIN_FILENO, buffer, sizeof(buffer) - 1);
-		if (n <= 0)
-		{
-			if (g_signal_mode == SIGINT)
-				return (close(fd[0]), close(fd[1]), 0);
-			break ;
-		}
-		buffer[n] = '\0';
-		if (n > 0 && buffer[n - 1] == '\n')
-			buffer[n - 1] = '\0';
-		if (ft_strcmp(buffer, delimiter) == 0)
-			break ;
-		ft_putendl_fd(buffer, 1);
-	}
-	return (1);
-}
-
-int	execute_herdoc(t_cmd *cmd)
-{
-	int		fd[2];
-	t_word	*curr;
-
-	curr = cmd->delimiter;
-	while (curr)
-	{
-		set_heredoc_signals();
-		if (pipe(fd) == -1)
-			return (perror("pipe"), 1);
-		if (!heredoc_loop(fd, curr->value))
-		{
-			return (0);
-		}
-		close(fd[1]);
-		if (curr->next == NULL)
-		{
-			if (dup2(fd[0], STDIN_FILENO) == -1)
-				return (perror("dup2"), 1);
-		}
-		else
-			close(fd[0]);
-		curr = curr->next;
-	}
-	close(fd[0]);
-	return (1);
 }

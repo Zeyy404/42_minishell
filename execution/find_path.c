@@ -6,26 +6,11 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:44:11 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/23 10:57:20 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/27 14:23:54 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	free_argv(char **argv)
-{
-	int	i;
-
-	if (!argv)
-		return ;
-	i = 0;
-	while (argv[i])
-	{
-		free(argv[i]);
-		i++;
-	}
-	free(argv);
-}
 
 char	*concat(char *path, char slash, char *cmd)
 {
@@ -80,7 +65,7 @@ char	**env_to_char_array(t_env *env)
 	return (arr);
 }
 
-char	*get_path(t_env *env)
+static char	*get_path(t_env *env)
 {
 	t_env	*tmp;
 

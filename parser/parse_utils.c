@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 12:26:34 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/23 13:59:29 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/27 15:24:47 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,48 +59,53 @@ void	add_argv(t_argv **argv_list, t_word *words)
 	}
 }
 
-void	transfer_words(t_word **dst, t_word *src)
+void	add_redirect(t_redirects **redirect_list, int type, t_word *words)
 {
-	t_word	*current;
+	t_redirects	*new_node;
+	t_redirects	*curr;
 
-	if (!dst || !src)
+	new_node = malloc(sizeof(t_redirects));
+	if (!new_node)
 		return ;
-	if (!*dst)
-		*dst = src;
+	new_node->type = type;
+	new_node->files = new_argv(words);
+	new_node->next = NULL;
+	if (!*redirect_list)
+		*redirect_list = new_node;
 	else
 	{
-		current = *dst;
-		while (current->next)
-			current = current->next;
-		current->next = src;
+		curr = *redirect_list;
+		while (curr->next)
+			curr = curr->next;
+		curr->next = new_node;
 	}
 }
 
 int	handle_redirection(t_ast *node, t_token **tokens)
 {
-	if ((*tokens)->type == REDIR_IN)
+	int	type;
+
+	type = (*tokens)->type;
+	*tokens = (*tokens)->next;
+	if (!*tokens || (*tokens)->type != WORD)
+		return (0);
+	if (type == REDIR_IN)
+		add_redirect(&node->cmd.redirections, REDIR_IN, (*tokens)->words);
+	else if (type == REDIR_OUT)
+		add_redirect(&node->cmd.redirections, REDIR_OUT, (*tokens)->words);
+	else if (type == APPEND)
 	{
-		*tokens = (*tokens)->next;
-		node->cmd.here_doc = 0;
-		add_argv(&node->cmd.infile, (*tokens)->words);
-		(*tokens)->words = NULL;
+		node->cmd.append = 1;
+		add_redirect(&node->cmd.redirections, APPEND, (*tokens)->words);
 	}
-	else if ((*tokens)->type == REDIR_OUT || (*tokens)->type == APPEND)
+	else if (type == HEREDOC)
 	{
-		node->cmd.append = ((*tokens)->type == APPEND);
-		*tokens = (*tokens)->next;
-		add_argv(&node->cmd.outfile, (*tokens)->words);
-		(*tokens)->words = NULL;
-	}
-	else if ((*tokens)->type == HEREDOC)
-	{
-		*tokens = (*tokens)->next;
 		node->cmd.here_doc = 1;
-		transfer_words(&node->cmd.delimiter, (*tokens)->words);
-		(*tokens)->words = NULL;
+		add_redirect(&node->cmd.redirections, HEREDOC, (*tokens)->words);
 	}
 	else
 		return (0);
+	(*tokens)->words = NULL;
 	*tokens = (*tokens)->next;
 	return (1);
 }

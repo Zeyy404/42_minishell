@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   flatten_argv.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 09:53:25 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/23 20:12:47 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/27 12:10:48 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static size_t	get_words_length(t_word *words)
 	return (len);
 }
 
-char	*flatten_word_list(t_word *words)
+static char	*flatten_word_list(t_word *words)
 {
 	size_t	total_len;
 	t_word	*curr;

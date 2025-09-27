@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_handles.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 10:58:21 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/24 10:03:39 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/27 12:23:00 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,19 @@ void	close_tmp_fds(int in, int out)
 		close(in);
 		close(out);
 	}
+}
+
+void	free_argv(char **argv)
+{
+	int	i;
+
+	if (!argv)
+		return ;
+	i = 0;
+	while (argv[i])
+	{
+		free(argv[i]);
+		i++;
+	}
+	free(argv);
 }

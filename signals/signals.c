@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 12:22:41 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/24 09:41:38 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/27 12:06:38 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,9 @@ void	main_handler(int sig)
 
 void	set_signals(void)
 {
-	struct sigaction	sa;
-
-	ft_bzero(&sa, sizeof(sa));
-	sa.sa_handler = &main_handler;
-	sa.sa_flags = SA_RESTART;
-	if (sigaction(SIGINT, &sa, NULL) < 0)
+	if (signal(SIGINT, main_handler) == SIG_ERR)
 		perror("SIGINT ");
-	if (sigaction(SIGQUIT, &sa, NULL) < 0)
+	if (signal(SIGQUIT, main_handler) == SIG_ERR)
 		perror("SIGQUIT ");
 }
 
@@ -55,10 +50,12 @@ void	set_heredoc_signals(void)
 		perror("SIGQUIT ");
 }
 
-void	set_non_interactive_signals(void)
+void	disable_echoctl(void)
 {
-	if (signal(SIGINT, SIG_DFL) == SIG_ERR)
-		perror("SIGINT ");
-	if (signal(SIGQUIT, SIG_DFL) == SIG_ERR)
-		perror("SIGQUIT ");
+	struct termios	term;
+
+	if (tcgetattr(STDIN_FILENO, &term) == -1)
+		return ;
+	term.c_lflag &= ~ECHOCTL;
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }

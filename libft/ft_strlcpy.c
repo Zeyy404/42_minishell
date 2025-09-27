@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 16:38:24 by zsalih            #+#    #+#             */
-/*   Updated: 2024/12/18 16:56:47 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/27 12:04:03 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,24 +33,3 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t size)
 	}
 	return (i);
 }
-/*
-#include <stdio.h>
-#include <stdlib.h>
-
-int main()
-{
-	char *dest;
-	char *src;
-	unsigned int n;
-	unsigned int i;
-
-	src = "Hello, World!";
-	dest = (char *)malloc(10 * sizeof(char));
-	n = 10;
-	i = ft_strlcpy(dest, src, n);
-	printf("%s\n", dest);
-	printf("%d\n", i);
-	free(dest);
-	return (0);
-}
-*/

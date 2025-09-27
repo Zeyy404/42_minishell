@@ -3,32 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 07:49:18 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/24 09:38:03 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/27 12:14:52 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	execution(t_ast *ast, t_shell *shell, int in_child)
-{
-	if (!ast)
-		return ;
-	if (ast->type == NODE_CMD)
-	{
-		execute_cmd(ast, shell, in_child);
-	}
-	else if (ast->type == NODE_PIPE)
-		execute_pipe(ast, shell);
-	else if (ast->type == NODE_AND || ast->type == NODE_OR)
-		execute_and_or(ast, shell, in_child);
-	else if (ast->type == NODE_GROUP)
-		execute_group(ast, shell, in_child);
-}
-
-void	execute_cmd(t_ast *ast, t_shell *shell, int in_child)
+static void	execute_cmd(t_ast *ast, t_shell *shell, int in_child)
 {
 	char	**argv;
 	pid_t	pid;
@@ -54,7 +38,7 @@ void	execute_cmd(t_ast *ast, t_shell *shell, int in_child)
 	}
 }
 
-void	execute_pipe(t_ast *ast, t_shell *shell)
+static void	execute_pipe(t_ast *ast, t_shell *shell)
 {
 	int		fd[2];
 	pid_t	left_pid;
@@ -76,7 +60,7 @@ void	execute_pipe(t_ast *ast, t_shell *shell)
 	wait_update_status(right_pid, &shell->exit_status);
 }
 
-void	execute_and_or(t_ast *ast, t_shell *shell, int in_child)
+static void	execute_and_or(t_ast *ast, t_shell *shell, int in_child)
 {
 	execution(ast->left, shell, in_child);
 	if (ast->type == NODE_AND && shell->exit_status == 0)
@@ -85,7 +69,7 @@ void	execute_and_or(t_ast *ast, t_shell *shell, int in_child)
 		execution(ast->right, shell, in_child);
 }
 
-void	execute_group(t_ast *ast, t_shell *shell, int in_child)
+static void	execute_group(t_ast *ast, t_shell *shell)
 {
 	pid_t	pid;
 
@@ -104,10 +88,24 @@ void	execute_group(t_ast *ast, t_shell *shell, int in_child)
 	}
 	else if (pid == 0)
 	{
-		group_child(ast, shell, in_child);
+		group_child(ast, shell);
 		free_shell(shell);
 		exit(shell->exit_status);
 	}
 	else
 		wait_update_status(pid, &shell->exit_status);
+}
+
+void	execution(t_ast *ast, t_shell *shell, int in_child)
+{
+	if (!ast)
+		return ;
+	if (ast->type == NODE_CMD)
+		execute_cmd(ast, shell, in_child);
+	else if (ast->type == NODE_PIPE)
+		execute_pipe(ast, shell);
+	else if (ast->type == NODE_AND || ast->type == NODE_OR)
+		execute_and_or(ast, shell, in_child);
+	else if (ast->type == NODE_GROUP)
+		execute_group(ast, shell);
 }
