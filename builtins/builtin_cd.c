@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zsalih <zsalih@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: zsalih <zsalih@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 15:50:23 by zsalih            #+#    #+#             */
-/*   Updated: 2025/09/24 21:48:30 by zsalih           ###   ########.fr       */
+/*   Updated: 2025/09/27 17:23:46 by zsalih           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,19 @@ static void	set_newpwd(t_env **env, char *target)
 	}
 }
 
-static void	print_getcwd_error(void)
+static void	check_getcwd_error(void)
 {
-	ft_putstr_fd("cd: error retrieving current directory: getcwd: cannot"
-		"access parent directories: ", 2);
-	ft_putendl_fd(strerror(errno), 2);
+	char	*buf;
+
+	buf = getcwd(NULL, 0);
+	if (!buf)
+	{
+		ft_putstr_fd("cd: error retrieving current directory: getcwd: cannot"
+			"access parent directories: ", 2);
+		ft_putendl_fd(strerror(errno), 2);
+	}
+	else
+		free(buf);
 }
 
 int	builtin_cd(char **argv, t_shell *shell)
@@ -94,21 +102,23 @@ int	builtin_cd(char **argv, t_shell *shell)
 
 	if (!argv)
 		return (1);
-	buf = getcwd(NULL, 0);
-	if (!buf)
-		print_getcwd_error();
 	target = NULL;
 	if (get_target(&target, argv, &shell->env) != 0)
-		return (free(buf), 1);
+		return (1);
+	buf = env_get(shell->env, "PWD");
+	if (buf)
+		buf = ft_strdup(buf);
 	if (chdir(target) != 0)
 	{
 		ft_putstr_fd("cd: ", 2);
 		ft_putstr_fd(target, 2);
 		perror(" ");
-		free(buf);
+		if (buf)
+			free(buf);
 		return (1);
 	}
 	set_oldpwd(&shell->env, buf);
 	set_newpwd(&shell->env, target);
+	check_getcwd_error();
 	return (0);
 }
