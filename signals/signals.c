@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 12:22:41 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/27 12:06:38 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/29 09:18:36 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	main_handler(int sig)
 	{
 		ft_putstr_fd("\n", 1);
 		rl_on_new_line();
-		rl_replace_line("", 0);
+		rl_replace_line("", ));
 		rl_redisplay();
 	}
 }

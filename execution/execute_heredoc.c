@@ -6,7 +6,7 @@
 /*   By: yalkhidi <yalkhidi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 12:08:44 by yalkhidi          #+#    #+#             */
-/*   Updated: 2025/09/27 14:25:41 by yalkhidi         ###   ########.fr       */
+/*   Updated: 2025/09/29 09:02:48 by yalkhidi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static int	heredoc_redir(t_redirects *redir, int fd[2],
 			close(*last_fd);
 		*last_fd = fd[0];
 	}
-	return (0);
+	return (1);
 }
 
 int	heredoc(t_cmd *cmd, t_shell *shell)
@@ -73,7 +73,8 @@ int	heredoc(t_cmd *cmd, t_shell *shell)
 	redir = cmd->redirections;
 	while (redir)
 	{
-		heredoc_redir(redir, fd, &last_fd, shell);
+		if (!heredoc_redir(redir, fd, &last_fd, shell))
+			return (0);
 		redir = redir->next;
 	}
 	if (last_fd != -1)
